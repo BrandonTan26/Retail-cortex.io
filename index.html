@@ -1,1096 +1,1285 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Retail-Cortex.io — Retail Services</title>
 
-  <!-- Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-  <!-- Bootstrap + FA -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-
-  <!-- PDF.js (viewer watermark) -->
-  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --nav-h:72px;
+      --bg:#050718;
+      --bg2:#070a1b;
+      --card:rgba(10,12,32,.92);
+      --card2:rgba(12,14,40,.88);
+      --text:#f8fafc;
+      --muted:#9ca3af;
 
-      /* DARK */
-      --bg-page: radial-gradient(circle at top, #1b1b3a 0%, #050718 55%, #000 100%);
-      --bg-surface: rgba(10, 12, 32, 0.86);
-      --bg-card: rgba(8, 11, 30, 0.95);
+      --line:rgba(148,163,184,.28);
+      --line2:rgba(129,140,248,.45);
 
-      --text-main:#e5e7eb;
-      --text-muted:#9ca3af;
+      --c1:#22d3ee;
+      --c2:#8b5cf6;
+      --c3:#4f8cff;
 
-      --border: rgba(148,163,184,.35);
-      --shadow: 0 18px 45px rgba(0,0,0,.8);
-      --shadow-hover: 0 28px 70px rgba(0,0,0,.92);
+      --shadow:0 18px 55px rgba(0,0,0,.65);
+      --shadow2:0 28px 80px rgba(0,0,0,.78);
 
-      --grad: linear-gradient(135deg, #7c3aed 0%, #22d3ee 55%, #e5f6ff 100%);
-      --grad-2: linear-gradient(135deg, #22d3ee 0%, #a855f7 55%, #7c3aed 100%);
-      --success:#22c55e;
-      --danger:#ef4444;
-      --warn:#f59e0b;
+      --r16:16px;
+      --r20:20px;
+      --r24:24px;
 
-      --radius:18px;
+      --navH:70px;
+      --fast:.22s ease;
     }
 
     html[data-theme="light"]{
-      --bg-page: linear-gradient(135deg,#1d4ed8 0%,#7c3aed 45%,#22d3ee 100%);
-      --bg-surface: rgba(255,255,255,.82);
-      --bg-card: #ffffff;
+      --bg:#f7f8ff;
+      --bg2:#eef2ff;
+      --card:rgba(255,255,255,.86);
+      --card2:rgba(255,255,255,.92);
+      --text:#0b1220;
+      --muted:#475569;
 
-      --text-main:#0b1220;
-      --text-muted:#475569;
+      --line:rgba(15,23,42,.14);
+      --line2:rgba(79,70,229,.22);
 
-      --border: rgba(226,232,240,1);
-      --shadow: 0 10px 28px rgba(15,23,42,.20);
-      --shadow-hover: 0 22px 52px rgba(15,23,42,.28);
+      --shadow:0 14px 40px rgba(15,23,42,.12);
+      --shadow2:0 24px 65px rgba(15,23,42,.16);
     }
 
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      background: var(--bg-page);
-      color: var(--text-main);
-      min-height: 100vh;
+      margin:0;
+      font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 15% 0%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(circle at 95% 40%, rgba(34,211,238,.18), transparent 55%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
       overflow-x:hidden;
     }
+    a{color:inherit}
+    .container{max-width:1120px;margin:0 auto;padding:0 18px}
+    section{padding:64px 0}
+    h1,h2,h3{margin:0}
+    .mono{font-family:Orbitron,system-ui; letter-spacing:.14em; text-transform:uppercase}
+    .muted{color:var(--muted)}
+    .btn{
+      border:none; cursor:pointer;
+      border-radius:999px;
+      padding:12px 18px;
+      font-weight:700;
+      letter-spacing:.06em;
+      transition:transform var(--fast), filter var(--fast), box-shadow var(--fast), background var(--fast);
+      display:inline-flex; align-items:center; gap:10px;
+      user-select:none;
+      -webkit-tap-highlight-color:transparent;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn-primary{
+      background:linear-gradient(135deg,var(--c2),var(--c1));
+      color:#06101a;
+      box-shadow:0 14px 32px rgba(34,211,238,.22), 0 0 24px rgba(139,92,246,.18);
+    }
+    .btn-primary:hover{filter:saturate(1.08); box-shadow:0 18px 40px rgba(34,211,238,.26), 0 0 28px rgba(139,92,246,.22)}
+    .btn-ghost{
+      background:transparent;
+      border:1px dashed var(--line2);
+      color:var(--text);
+      opacity:.92;
+    }
+    .btn-ghost:hover{border-style:solid; opacity:1}
+    .chip{
+      display:inline-flex; align-items:center; gap:8px;
+      border:1px solid var(--line2);
+      background:rgba(15,23,42,.25);
+      padding:7px 12px;
+      border-radius:999px;
+      font-size:12px;
+      color:var(--muted);
+      box-shadow:0 10px 26px rgba(0,0,0,.18);
+    }
+    html[data-theme="light"] .chip{background:rgba(255,255,255,.65)}
 
-    /* subtle moving grid */
+    /* BG grid + orbs */
     .bg-grid{
       position:fixed; inset:0; pointer-events:none; z-index:0;
-      opacity:.16;
+      opacity:.14;
       background-image:
-        linear-gradient(rgba(129, 140, 248, 0.2) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(129, 140, 248, 0.2) 1px, transparent 1px);
-      background-size: 56px 56px;
-      animation: gridShift 22s linear infinite;
+        linear-gradient(rgba(129,140,248,.22) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(129,140,248,.22) 1px, transparent 1px);
+      background-size:54px 54px;
+      animation:gridShift 22s linear infinite;
     }
-    @keyframes gridShift{
-      0%{background-position:0 0,0 0}
-      100%{background-position:120px 120px,120px 120px}
-    }
+    @keyframes gridShift{0%{background-position:0 0,0 0}100%{background-position:120px 120px,120px 120px}}
+    .orb{position:fixed; border-radius:999px; filter:blur(4px); opacity:.32; pointer-events:none; z-index:0; mix-blend-mode:screen}
+    .orb.a{width:420px;height:420px; top:-70px; right:-140px; background:radial-gradient(circle, rgba(139,92,246,.78), transparent 70%); animation:floatOrb 18s ease-in-out infinite}
+    .orb.b{width:360px;height:360px; bottom:-100px; left:-80px; background:radial-gradient(circle, rgba(34,211,238,.72), transparent 70%); animation:floatOrb 20s ease-in-out infinite reverse}
+    @keyframes floatOrb{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,30px)}}
 
     /* NAV */
-    .nav-glass{
-      position:sticky; top:0; z-index:1100;
-      backdrop-filter: blur(14px) saturate(1.2);
-      background: rgba(2,6,23,.70);
-      border-bottom: 1px solid var(--border);
+    .nav{
+      position:sticky; top:0; z-index:60;
+      backdrop-filter:blur(14px);
+      background:linear-gradient(to right, rgba(10,10,31,.92), rgba(15,23,42,.86));
+      border-bottom:1px solid var(--line2);
     }
-    html[data-theme="light"] .nav-glass{
-      background: rgba(255,255,255,.62);
+    html[data-theme="light"] .nav{
+      background:rgba(255,255,255,.76);
     }
-
+    .nav-inner{
+      max-width:1120px; margin:0 auto; padding:10px 18px;
+      display:flex; align-items:center; justify-content:space-between; gap:14px;
+    }
     .brand{
-      display:flex; align-items:center; gap:.65rem;
-      text-decoration:none;
-      color: var(--text-main);
+      display:flex; align-items:center; gap:12px; min-width:0;
     }
-    .brand-badge{
-      width:40px; height:40px;
-      border-radius: 14px;
-      background: var(--grad);
-      box-shadow: 0 14px 34px rgba(34,211,238,.25);
-      display:flex; align-items:center; justify-content:center;
-      color:#0b1220;
-      font-weight:900;
-      letter-spacing:.06em;
-      font-family: Orbitron, system-ui;
+    .brand img{
+      width:42px;height:42px; border-radius:14px;
+      box-shadow:0 12px 26px rgba(0,0,0,.35);
     }
-    .brand-title{
-      font-family: Orbitron, system-ui;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      font-weight:700;
-      font-size:.95rem;
-      line-height:1.15;
-      margin:0;
+    .brand .t1{font-size:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+    .brand .t2{font-size:11px; letter-spacing:.20em; text-transform:uppercase; color:var(--muted)}
+    .nav-links{
+      display:flex; align-items:center; gap:14px;
+      font-size:12px; letter-spacing:.16em; text-transform:uppercase;
     }
-    .brand-sub{
-      font-size:.70rem;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      color: var(--text-muted);
-      margin:0;
+    .nav-links a{
+      text-decoration:none; color:var(--muted);
+      position:relative; padding:8px 6px;
     }
+    .nav-links a::after{
+      content:""; position:absolute; left:0; bottom:4px;
+      width:0; height:2px; border-radius:999px;
+      background:linear-gradient(90deg,var(--c1),var(--c2));
+      transition:width var(--fast);
+    }
+    .nav-links a:hover{color:var(--text)}
+    .nav-links a:hover::after{width:100%}
 
-    .nav-link{
-      font-weight:700;
-      border-radius:999px;
-      padding:.45rem .9rem !important;
-      font-size:.88rem;
-      color: var(--text-muted) !important;
-      letter-spacing:.02em;
-    }
-    .nav-link:hover{
-      background: rgba(148,163,184,.14);
-      color: var(--text-main) !important;
-    }
-    .nav-icon-btn{
-      width:44px; height:44px;
-      border-radius:14px;
-      border: 1px solid var(--border);
-      background: rgba(2,6,23,.55);
-      color: var(--text-main);
+    .nav-actions{display:flex; align-items:center; gap:10px}
+    .icon-btn{
+      width:44px;height:44px;
       display:inline-flex; align-items:center; justify-content:center;
-      box-shadow: var(--shadow);
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.32);
+      color:var(--text);
+      cursor:pointer;
+      transition:transform var(--fast), box-shadow var(--fast), background var(--fast), border-color var(--fast);
+      -webkit-tap-highlight-color:transparent;
     }
-    html[data-theme="light"] .nav-icon-btn{
-      background:#ffffff;
-    }
-    .nav-icon-btn:hover{ transform: translateY(-1px); }
+    html[data-theme="light"] .icon-btn{background:rgba(255,255,255,.72)}
+    .icon-btn:hover{transform:translateY(-1px); border-color:var(--line2); box-shadow:0 14px 30px rgba(0,0,0,.25)}
+    .hamburger{display:none}
 
-    /* HERO */
-    .hero{
-      position:relative;
-      z-index:1;
-      padding: 2.4rem 0 1.2rem;
+    @media (max-width:860px){
+      .nav-links{display:none}
+      .hamburger{display:inline-flex}
     }
-    .hero-card{
-      border-radius: calc(var(--radius) + 6px);
-      background:
-        radial-gradient(circle at top left, rgba(34,211,238,.22), transparent 55%),
-        radial-gradient(circle at bottom right, rgba(168,85,247,.18), transparent 55%),
-        var(--bg-surface);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      padding: 1.35rem 1.2rem;
+
+    /* MOBILE MENU */
+    .drawer{
+      position:fixed; inset:0; z-index:120;
+      background:rgba(0,0,0,.55);
+      display:none;
+    }
+    .drawer.open{display:block}
+    .drawer-panel{
+      position:absolute; right:14px; top:76px;
+      width:min(360px, calc(100% - 28px));
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow2);
       overflow:hidden;
     }
-    .hero-pill{
-      display:inline-flex; align-items:center; gap:.45rem;
-      padding:.35rem .75rem;
-      border-radius:999px;
-      border:1px solid var(--border);
-      background: rgba(2,6,23,.35);
-      color: var(--text-muted);
-      font-weight:700;
-      font-size:.78rem;
-      letter-spacing:.03em;
+    .drawer-panel a{
+      display:block; padding:14px 14px;
+      text-decoration:none; color:var(--text);
+      border-bottom:1px solid var(--line);
+      letter-spacing:.12em; text-transform:uppercase; font-size:12px;
     }
-    html[data-theme="light"] .hero-pill{
-      background: rgba(255,255,255,.65);
-    }
+    .drawer-panel a:last-child{border-bottom:none}
+    .drawer-panel a:hover{background:rgba(34,211,238,.08)}
 
-    .hero-title{
-      font-family: Orbitron, system-ui;
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-weight:800;
-      font-size: clamp(1.55rem, 3.7vw, 2.3rem);
-      margin: .85rem 0 .55rem;
+    /* HERO (perkenalan brand & fungsi) */
+    .hero{padding-top:34px; position:relative; z-index:1}
+    .hero-inner{
+      display:grid;
+      grid-template-columns: minmax(0,1.2fr) minmax(0,1fr);
+      gap:28px;
+      align-items:center;
     }
-    .hero-title .grad{
-      background: var(--grad);
+    @media (max-width:960px){.hero-inner{grid-template-columns:1fr}}
+    .hero-card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r24);
+      padding:22px 20px;
+      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-card:before{
+      content:""; position:absolute; inset:-2px;
+      background:radial-gradient(circle at 0 0, rgba(34,211,238,.14), transparent 55%),
+                 radial-gradient(circle at 100% 40%, rgba(139,92,246,.14), transparent 55%);
+      pointer-events:none;
+    }
+    .hero-card > *{position:relative; z-index:1}
+    .hero-title{
+      font-size:clamp(26px, 3.7vw, 40px);
+      line-height:1.08;
+      margin:12px 0 12px;
+    }
+    .hero-title .hl{
+      background:linear-gradient(135deg,var(--c1),var(--c2),#e5f6ff);
       -webkit-background-clip:text;
-      background-clip:text;
       color:transparent;
     }
     .hero-sub{
-      color: var(--text-muted);
-      font-size: .98rem;
-      max-width: 46rem;
-      margin-bottom: 1rem;
+      font-size:14px;
+      line-height:1.75;
+      color:var(--muted);
+      max-width:640px;
     }
-    .hero-actions{
-      display:flex; flex-wrap:wrap; gap:.6rem;
-      margin-top: .6rem;
+    .hero-actions{margin-top:16px; display:flex; flex-wrap:wrap; gap:12px}
+    .hero-points{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
     }
-    .btn-grad{
-      border:none;
-      background: var(--grad);
-      color:#0b1220;
-      font-weight:900;
-      letter-spacing:.06em;
-      border-radius:999px;
-      padding:.72rem 1.05rem;
-      box-shadow: 0 18px 45px rgba(34,211,238,.18);
+    @media (max-width:560px){.hero-points{grid-template-columns:1fr}}
+    .point{
+      background:rgba(15,23,42,.22);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 12px;
+      display:flex; gap:10px; align-items:flex-start;
     }
-    .btn-grad:hover{ filter: brightness(1.03); transform: translateY(-1px); }
-    .btn-ghost{
-      border-radius:999px;
-      border:1px dashed rgba(148,163,184,.7);
-      padding:.66rem 1.0rem;
-      background: rgba(2,6,23,.25);
-      color: var(--text-main);
-      font-weight:800;
-      letter-spacing:.04em;
-    }
-    html[data-theme="light"] .btn-ghost{
-      background: rgba(255,255,255,.55);
-    }
-    .btn-ghost:hover{ border-style: solid; }
+    html[data-theme="light"] .point{background:rgba(255,255,255,.6)}
+    .point b{display:block; font-size:12px; letter-spacing:.10em; text-transform:uppercase}
+    .point span{display:block; font-size:12px; color:var(--muted); margin-top:2px}
 
-    /* SECTION */
-    section{ position:relative; z-index:1; padding: 2.0rem 0; }
-    .section-title{
-      text-align:center;
-      font-weight:900;
-      letter-spacing:.04em;
-      margin-bottom:.15rem;
-    }
-    .section-sub{
-      text-align:center;
-      color: var(--text-muted);
-      margin-bottom: 1.1rem;
-      font-size:.95rem;
-    }
-
-    /* CARDS */
-    .service-card{
-      border-radius: var(--radius);
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      box-shadow: var(--shadow);
-      overflow:hidden;
-      height:100%;
-      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    .hero-visual{
+      height:320px;
       position:relative;
     }
-    .service-card::before{
-      content:"";
+    .visual-core{
       position:absolute; inset:0;
-      background: conic-gradient(from 180deg, rgba(34,211,238,.10), rgba(168,85,247,.10), rgba(124,58,237,.10), rgba(34,197,94,.08), rgba(34,211,238,.10));
-      opacity:0;
-      transition: opacity .25s ease;
+      border-radius:26px;
+      background:
+        radial-gradient(circle at 0 0, rgba(139,92,246,.30), transparent 60%),
+        radial-gradient(circle at 100% 100%, rgba(34,211,238,.26), transparent 60%),
+        rgba(15,23,42,.25);
+      border:1px solid var(--line2);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+    html[data-theme="light"] .visual-core{background:rgba(255,255,255,.72)}
+    .visual-core:before, .visual-core:after{
+      content:""; position:absolute;
+      width:160%; height:160%;
+      border-radius:999px;
+      top:-30%; left:-30%;
+      border:1px dashed rgba(129,140,248,.55);
+      animation:spin 20s linear infinite;
+    }
+    .visual-core:after{
+      border-style:solid;
+      border-color:rgba(139,92,246,.40);
+      animation-direction:reverse;
+      animation-duration:26s;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .visual-center{
+      position:absolute; inset:0;
+      display:flex; align-items:center; justify-content:center;
       pointer-events:none;
     }
-    .service-card:hover{
-      transform: translateY(-6px);
-      box-shadow: var(--shadow-hover);
-      border-color: rgba(226,232,240,.65);
+    .badge-box{
+      background:linear-gradient(135deg, rgba(34,211,238,.22), rgba(139,92,246,.18));
+      border:1px solid var(--line2);
+      border-radius:18px;
+      padding:14px 14px;
+      min-width:260px;
+      box-shadow:0 18px 46px rgba(0,0,0,.35);
+      text-align:left;
     }
-    .service-card:hover::before{ opacity:1; }
-    .service-card > *{ position:relative; z-index:1; }
+    html[data-theme="light"] .badge-box{background:rgba(255,255,255,.78)}
+    .badge-box .k{font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.18em}
+    .badge-box .v{margin-top:6px; font-weight:800; letter-spacing:.08em; text-transform:uppercase}
+    .mini-grid{
+      margin-top:10px;
+      display:grid; grid-template-columns:1fr 1fr; gap:10px;
+    }
+    .mini{
+      border:1px solid var(--line);
+      border-radius:14px;
+      padding:10px 10px;
+      background:rgba(15,23,42,.18);
+    }
+    html[data-theme="light"] .mini{background:rgba(255,255,255,.60)}
+    .mini .a{font-size:11px; color:var(--muted); letter-spacing:.16em; text-transform:uppercase}
+    .mini .b{margin-top:4px; font-weight:800}
 
-    .svc-top{
-      padding: 1.0rem 1.0rem .7rem;
-      display:flex; gap:.85rem; align-items:flex-start;
-    }
-    .svc-icon{
-      width:56px; height:56px;
-      border-radius: 16px;
-      background: rgba(2,6,23,.35);
-      border: 1px solid var(--border);
-      display:flex; align-items:center; justify-content:center;
-      font-size: 1.25rem;
-    }
-    html[data-theme="light"] .svc-icon{
-      background: rgba(255,255,255,.72);
-    }
-    .svc-tag{
-      font-size:.72rem;
-      color: var(--text-muted);
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      margin-bottom:.25rem;
-    }
-    .svc-name{
-      font-family: Orbitron, system-ui;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      font-weight:800;
-      font-size: .98rem;
-      margin:0 0 .35rem;
-    }
-    .svc-desc{
-      color: var(--text-muted);
-      font-size: .90rem;
-      margin: 0;
-      min-height: 3.1em;
-    }
-    .svc-bottom{
-      padding: .85rem 1.0rem 1.0rem;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:.6rem;
-    }
-    .chip{
-      font-size:.74rem;
-      padding:.22rem .6rem;
-      border-radius:999px;
-      border:1px solid var(--border);
-      color: var(--text-muted);
-      background: rgba(2,6,23,.18);
-      font-weight:800;
-      white-space:nowrap;
-    }
-    html[data-theme="light"] .chip{
-      background: rgba(255,255,255,.60);
-    }
-    .btn-detail{
-      border:none;
-      border-radius: 14px;
-      padding: .60rem .85rem;
-      font-weight:900;
-      letter-spacing:.04em;
-      background: var(--grad-2);
-      color:#0b1220;
-      display:inline-flex; align-items:center; gap:.5rem;
-      white-space:nowrap;
-    }
-    .btn-detail:hover{ filter: brightness(1.03); transform: translateY(-1px); }
+    /* SECTION HEAD */
+    .sec-head{text-align:center; margin-bottom:26px; position:relative; z-index:1}
+    .sec-head h2{font-size:22px}
+    .sec-head p{margin-top:8px; font-size:13px; color:var(--muted); max-width:720px; margin-left:auto; margin-right:auto}
 
-    /* MODAL */
-    .modal-content{
-      border:none;
-      border-radius: 18px;
+    /* MODULES */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:18px;
+      position:relative; z-index:1;
+    }
+    @media (max-width:980px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:640px){.grid{grid-template-columns:1fr}}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:var(--r20);
+      padding:16px 16px;
+      box-shadow:var(--shadow);
+      position:relative;
       overflow:hidden;
-      box-shadow: 0 30px 80px rgba(0,0,0,.75);
-      background: var(--bg-card);
-      color: var(--text-main);
+      transition:transform var(--fast), box-shadow var(--fast), border-color var(--fast);
     }
-    .modal-header{
-      border-bottom:1px solid var(--border);
-      background: var(--grad);
-      color:#0b1220;
+    .card:hover{transform:translateY(-4px); box-shadow:var(--shadow2); border-color:rgba(34,211,238,.22)}
+    .card:before{
+      content:""; position:absolute; width:120px; height:120px; border-radius:50%;
+      top:-42px; right:-48px;
+      background:radial-gradient(circle, rgba(139,92,246,.25), transparent 70%);
+      pointer-events:none;
     }
-    .btn-close{ filter: brightness(0) invert(1); }
-    html[data-theme="light"] .btn-close{ filter:none; }
-    .modal-footer{
-      border-top:1px solid var(--border);
+    .card .top{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom:10px;
+    }
+    .tag{
+      font-size:10px; color:var(--muted);
+      letter-spacing:.18em; text-transform:uppercase;
+    }
+    .icon{
+      width:44px;height:44px; border-radius:14px;
+      display:flex; align-items:center; justify-content:center;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.22);
+    }
+    html[data-theme="light"] .icon{background:rgba(255,255,255,.65)}
+    .name{font-size:14px; margin:6px 0 8px}
+    .desc{font-size:12.5px; color:var(--muted); line-height:1.7; min-height:54px}
+    .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    .btn-small{padding:10px 14px; font-size:12px}
+    .btn-outline{
+      background:transparent;
+      border:1px solid var(--line2);
+      color:var(--text);
+    }
+    .btn-outline:hover{border-color:rgba(34,211,238,.55)}
+
+    /* TESTI */
+    .testi{
+      display:grid;
+      grid-template-columns:repeat(3, minmax(0,1fr));
+      gap:14px;
+    }
+    @media (max-width:980px){.testi{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:640px){.testi{grid-template-columns:1fr}}
+    .tcard{
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 14px;
+      box-shadow:var(--shadow);
+    }
+    .stars{letter-spacing:2px; color:#fbbf24; font-size:14px}
+    .tname{font-weight:800}
+    .tmeta{font-size:12px; color:var(--muted); margin-top:2px}
+    .ttext{font-size:12.5px; color:var(--muted); margin-top:10px; line-height:1.7}
+
+    /* FOOTER */
+    footer{
+      padding:18px 0 28px;
+      text-align:center;
+      color:var(--muted);
+      border-top:1px solid var(--line);
+      position:relative; z-index:1;
+    }
+    footer .f1{letter-spacing:.14em; text-transform:uppercase; font-size:12px}
+    footer .f2{margin-top:6px; font-size:12px}
+
+    /* MODALS */
+    .modal{
+      position:fixed; inset:0; z-index:200;
+      background:rgba(0,0,0,.58);
+      display:none;
+      padding:14px;
+    }
+    .modal.open{display:flex; align-items:center; justify-content:center}
+    .modal-box{
+      width:min(920px, 100%);
+      max-height:calc(100vh - 28px);
+      background:var(--card2);
+      border:1px solid var(--line);
+      border-radius:20px;
+      box-shadow:var(--shadow2);
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+    }
+    .modal-head{
+      padding:14px 14px;
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background:linear-gradient(135deg, rgba(139,92,246,.22), rgba(34,211,238,.16));
+      border-bottom:1px solid var(--line);
+    }
+    html[data-theme="light"] .modal-head{background:rgba(255,255,255,.78)}
+    .modal-title{font-weight:900; letter-spacing:.10em; text-transform:uppercase; font-size:12px}
+    .modal-close{
+      width:42px;height:42px; border-radius:14px;
+      border:1px solid var(--line);
+      background:transparent;
+      color:var(--text);
+      cursor:pointer;
+    }
+    .modal-body{
+      padding:14px 14px 16px;
+      overflow:auto;
+    }
+    .form{
+      display:grid; gap:10px;
+    }
+    .row2{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    @media(max-width:700px){.row2{grid-template-columns:1fr}}
+    label{font-size:12px; color:var(--muted); letter-spacing:.08em; text-transform:uppercase}
+    .input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.18);
+      color:var(--text);
+      outline:none;
+    }
+    html[data-theme="light"] .input, html[data-theme="light"] select, html[data-theme="light"] textarea{
+      background:rgba(255,255,255,.72);
+    }
+    textarea{min-height:92px; resize:vertical}
+    .hint{font-size:12px; color:var(--muted); line-height:1.6}
+    .priceBox{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 12px;
+      background:rgba(15,23,42,.14);
+    }
+    html[data-theme="light"] .priceBox{background:rgba(255,255,255,.62)}
+    .priceLine{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:6px 0;
+      font-size:13px;
+    }
+    .priceLine b{color:var(--text)}
+    .modal-foot{
+      padding:12px 14px;
+      border-top:1px solid var(--line);
+      display:flex; gap:10px; justify-content:flex-end; flex-wrap:wrap;
+      background:rgba(0,0,0,.08);
+    }
+    html[data-theme="light"] .modal-foot{background:rgba(255,255,255,.60)}
+    .danger{
+      border:1px solid rgba(239,68,68,.35);
+      color:#fecaca;
+    }
+    html[data-theme="light"] .danger{color:#b91c1c}
+
+    /* PDF viewer */
+    .pdfWrap{
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      background:rgba(0,0,0,.10);
+    }
+    .pdfBar{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      padding:10px 10px;
+      border-bottom:1px solid var(--line);
+      background:rgba(15,23,42,.16);
+    }
+    html[data-theme="light"] .pdfBar{background:rgba(255,255,255,.72)}
+    .pdfBar .left{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+    .pdfFrame{
+      width:100%;
+      height:min(68vh, 640px);
+      border:0;
+      display:block;
+      background:#111827;
     }
 
-    /* FORM */
-    .form-control, .form-select{
-      border-radius: 14px;
-      border:1px solid var(--border);
-      background: rgba(2,6,23,.22);
-      color: var(--text-main);
-      padding: .72rem .85rem;
-    }
-    html[data-theme="light"] .form-control,
-    html[data-theme="light"] .form-select{
-      background:#ffffff;
-      color:#0b1220;
-    }
-    .form-control:focus, .form-select:focus{
-      outline:none;
-      box-shadow:none;
-      border-color: rgba(34,211,238,.85);
-    }
-    .help{
-      color: var(--text-muted);
-      font-size:.86rem;
-      margin-top:.25rem;
-    }
-    .calc-box{
-      border-radius: 16px;
-      border:1px solid var(--border);
-      background: rgba(2,6,23,.18);
-      padding: .85rem .9rem;
-    }
-    html[data-theme="light"] .calc-box{
-      background: rgba(255,255,255,.65);
-    }
-    .calc-row{
-      display:flex; justify-content:space-between; gap:1rem;
-      font-weight:800;
-      margin:.25rem 0;
-    }
-    .calc-row span:last-child{
-      font-family: Orbitron, system-ui;
+    /* Floating Cart & Toggle (sama posisi Multiverse) */
+    .float-cart{
+      position:fixed; right:16px; bottom:16px; z-index:90;
+      background:linear-gradient(135deg,var(--c2),var(--c1));
+      color:#06101a;
+      border:none;
+      border-radius:999px;
+      padding:12px 14px;
+      display:flex; align-items:center; gap:10px;
+      box-shadow:0 18px 45px rgba(0,0,0,.45);
+      cursor:pointer;
+      font-weight:900;
       letter-spacing:.08em;
     }
+    .float-cart .count{
+      background:#06101a;
+      color:#e5e7eb;
+      border-radius:999px;
+      min-width:28px;
+      height:22px;
+      display:inline-flex; align-items:center; justify-content:center;
+      font-size:12px;
+      padding:0 8px;
+    }
+    .float-toggle{
+      position:fixed; left:16px; bottom:16px; z-index:90;
+      width:52px; height:52px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(15,23,42,.32);
+      color:var(--text);
+      box-shadow:0 18px 45px rgba(0,0,0,.35);
+      cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+    }
+    html[data-theme="light"] .float-toggle{background:rgba(255,255,255,.76)}
 
-    /* PDF VIEWER */
-    .pdf-wrap{
-      border-radius: 16px;
-      border:1px solid var(--border);
-      background: rgba(2,6,23,.18);
-      overflow:hidden;
-      box-shadow: var(--shadow);
-      position:relative;
-      user-select:none;
+    /* CART DRAWER */
+    .cartDrawer{
+      position:fixed; inset:0; z-index:160;
+      display:none;
+      background:rgba(0,0,0,.55);
     }
-    html[data-theme="light"] .pdf-wrap{
-      background: rgba(255,255,255,.75);
+    .cartDrawer.open{display:block}
+    .cartPanel{
+      position:absolute; right:0; top:0; height:100%;
+      width:min(420px, 92vw);
+      background:var(--card2);
+      border-left:1px solid var(--line);
+      box-shadow:var(--shadow2);
+      display:flex; flex-direction:column;
     }
-    .pdf-toolbar{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:.6rem .75rem;
-      border-bottom:1px solid var(--border);
-      background: rgba(2,6,23,.25);
-      gap:.5rem;
+    .cartHead{
+      padding:14px 14px;
+      border-bottom:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      background:linear-gradient(135deg, rgba(34,211,238,.16), rgba(139,92,246,.16));
     }
-    html[data-theme="light"] .pdf-toolbar{ background: rgba(255,255,255,.7); }
-    .pdf-toolbar .mini{
-      color: var(--text-muted);
-      font-size:.85rem;
-      font-weight:700;
+    html[data-theme="light"] .cartHead{background:rgba(255,255,255,.80)}
+    .cartHead .ttl{font-weight:900; letter-spacing:.12em; text-transform:uppercase; font-size:12px}
+    .cartBody{padding:12px 14px; overflow:auto; flex:1}
+    .empty{
+      text-align:center; padding:26px 10px; color:var(--muted);
+      border:1px dashed var(--line2); border-radius:16px;
     }
-    .pdf-canvas-holder{
-      display:flex;
-      justify-content:center;
-      padding:.75rem;
-      background: rgba(0,0,0,.25);
+    .cartItem{
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:12px 12px;
+      margin-bottom:10px;
+      background:rgba(15,23,42,.14);
     }
-    html[data-theme="light"] .pdf-canvas-holder{ background: rgba(15,23,42,.05); }
-    canvas{ max-width:100%; height:auto; border-radius: 12px; }
+    html[data-theme="light"] .cartItem{background:rgba(255,255,255,.65)}
+    .cartItem .h{
+      display:flex; justify-content:space-between; align-items:flex-start; gap:10px;
+    }
+    .cartItem .nm{font-weight:900}
+    .cartItem .sub{font-size:12px; color:var(--muted); margin-top:4px; line-height:1.6}
+    .cartItem .rm{
+      border:1px solid rgba(239,68,68,.35);
+      background:transparent; color:var(--text);
+      border-radius:12px;
+      cursor:pointer;
+      padding:8px 10px;
+    }
+    .cartSum{
+      border-top:1px solid var(--line);
+      padding:12px 14px 14px;
+      background:rgba(0,0,0,.06);
+    }
+    html[data-theme="light"] .cartSum{background:rgba(255,255,255,.60)}
+    .sumRow{display:flex; justify-content:space-between; align-items:center; gap:10px; padding:6px 0}
+    .sumRow b{letter-spacing:.08em}
+    .cartBtns{display:grid; gap:10px; margin-top:10px}
+    .btn-danger{
+      border:1px solid rgba(239,68,68,.35);
+      background:transparent;
+      color:var(--text);
+      font-weight:800;
+    }
+    .btn-danger:hover{border-color:rgba(239,68,68,.65)}
+    .btn-wide{justify-content:center}
+    .tiny{font-size:11px; color:var(--muted); line-height:1.6; margin-top:8px}
 
-    /* Footer */
-    footer{
-      padding: 1.6rem 0 2.0rem;
-      text-align:center;
-      color: var(--text-muted);
-      font-size:.88rem;
-      position:relative;
-      z-index:1;
-    }
-    .footer-main{
-      font-weight:900;
-      letter-spacing:.04em;
-    }
-
-    /* Mobile */
-    @media (max-width: 576px){
-      .svc-desc{ min-height:auto; }
-    }
+    /* SVG icons */
+    .svg{width:20px;height:20px; display:block}
   </style>
 </head>
 
 <body>
   <div class="bg-grid"></div>
+  <div class="orb a"></div>
+  <div class="orb b"></div>
 
   <!-- NAV -->
-  <nav class="navbar navbar-expand-lg nav-glass" id="mainNavbar">
-    <div class="container py-2">
-      <a class="brand" href="#home" onclick="scrollToId('home')">
-        <div class="brand-badge">RC</div>
-        <div>
-          <p class="brand-title m-0">Retail-Cortex.io</p>
-          <p class="brand-sub m-0">Retail Services</p>
+  <header class="nav" id="top">
+    <div class="nav-inner" id="navBar">
+      <div class="brand">
+        <img src="retail-cortex-logo.png" alt="Retail-Cortex.io logo" onerror="this.style.display='none'">
+        <div style="min-width:0">
+          <div class="mono t1">Retail-Cortex.io</div>
+          <div class="t2">Retail Services</div>
         </div>
-      </a>
-
-      <div class="d-flex align-items-center gap-2 ms-auto">
-        <button class="nav-icon-btn" id="btnTheme" type="button" title="Toggle Dark/Light">
-          <i class="fa-solid fa-moon"></i>
-        </button>
-
-        <button class="navbar-toggler nav-icon-btn" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks" aria-label="Menu">
-          <i class="fa-solid fa-bars"></i>
-        </button>
       </div>
 
-      <div class="collapse navbar-collapse" id="navLinks">
-        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
-          <li class="nav-item"><a class="nav-link" href="#services" data-scroll>Services</a></li>
-          <li class="nav-item"><a class="nav-link" href="#workflow" data-scroll>Workflow</a></li>
-          <li class="nav-item"><a class="nav-link" href="#contact" data-scroll>Contact</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+      <nav class="nav-links" aria-label="Navigasi">
+        <a href="#home">Home</a>
+        <a href="#modules">Modules</a>
+        <a href="#reviews">Reviews</a>
+      </nav>
 
-  <!-- HERO -->
-  <header class="hero" id="home">
-    <div class="container">
-      <div class="hero-card">
-        <div class="row g-3 align-items-center">
-          <div class="col-lg-8">
-            <span class="hero-pill">
-              <i class="fa-solid fa-bolt"></i>
-              <span>Tools & coaching untuk target toko</span>
-            </span>
-
-            <h1 class="hero-title">
-              Sistem rapi buat ngejar <span class="grad">PPS</span>, <span class="grad">Suegeerr</span>, dan presentasi karier.
-            </h1>
-
-            <p class="hero-sub">
-              Pilih modul sesuai kebutuhan. Semua order langsung ke WhatsApp dengan format yang sudah rapih.
-              Tanpa ribet, tinggal isi field-nya.
-            </p>
-
-            <div class="hero-actions">
-              <button class="btn btn-grad" type="button" onclick="openWA('Halo, saya mau tanya dulu tentang layanan di Retail-Cortex.io. Bisa jelasin modul yang cocok buat toko saya?')">
-                <i class="fa-brands fa-whatsapp me-2"></i>Chat via WhatsApp
-              </button>
-              <button class="btn btn-ghost" type="button" onclick="scrollToId('services')">
-                <i class="fa-regular fa-eye me-2"></i>Lihat Modul
-              </button>
-            </div>
-          </div>
-
-          <div class="col-lg-4">
-            <div class="calc-box">
-              <div class="calc-row"><span>Mode</span><span id="modeLabel">DARK</span></div>
-              <div class="calc-row"><span>Status</span><span>READY</span></div>
-              <div class="calc-row"><span>Order</span><span>WA</span></div>
-              <div class="help mt-2">
-                Catatan: watermark bisa bikin “nggak nyaman” buat nyomot file, tapi <b>tidak bisa 100% mencegah screenshot</b>.
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="nav-actions">
+        <button class="icon-btn hamburger" id="btnMenu" aria-label="Menu">
+          <svg class="svg" viewBox="0 0 24 24" fill="none">
+            <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- SERVICES -->
-  <section id="services">
-    <div class="container">
-      <h2 class="section-title">Cortex Service Modules</h2>
-      <p class="section-sub">Klik detail, isi field, lalu kirim WhatsApp (format auto rapih).</p>
+  <!-- MOBILE MENU DRAWER -->
+  <div class="drawer" id="menuDrawer" aria-hidden="true">
+    <div class="drawer-panel" role="dialog" aria-label="Menu">
+      <a href="#home" data-drawer-link>Home</a>
+      <a href="#modules" data-drawer-link>Modules</a>
+      <a href="#reviews" data-drawer-link>Reviews</a>
+    </div>
+  </div>
 
-      <div class="row g-3 g-md-4">
-        <!-- NEW MEMBER -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="svc-top">
-              <div class="svc-icon"><i class="fa-solid fa-user-plus"></i></div>
+  <!-- HERO -->
+  <main id="home" class="hero">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-card">
+          <div class="chip">
+            <svg class="svg" viewBox="0 0 24 24" fill="none">
+              <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/>
+            </svg>
+            <span>Portal service buat target toko & presentasi karier</span>
+          </div>
+
+          <h1 class="hero-title mono">
+            Retail services yang <span class="hl">rapi</span>, jelas, dan gampang dipakai.
+          </h1>
+
+          <p class="hero-sub">
+            Retail-Cortex.io adalah portal layanan buat kebutuhan toko: tambah member baru, update area coverage, coaching target (PPS / SUEGEERR), dan pembuatan presentasi karier.
+            Alurnya simpel: pilih modul → masuk keranjang → checkout → format WhatsApp otomatis rapi.
+          </p>
+
+          <div class="hero-actions">
+            <button class="btn btn-primary" onclick="scrollToId('modules')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Lihat Modul</span>
+            </button>
+            <button class="btn btn-ghost" onclick="openCart()">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M6 7h15l-1.5 9h-12L6 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M6 7l-1-3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM17 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>Buka Keranjang</span>
+            </button>
+          </div>
+
+          <div class="hero-points">
+            <div class="point">
+              <div class="icon" aria-hidden="true">
+                <svg class="svg" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 6h16v12H4V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M8 10h8M8 14h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
               <div>
-                <div class="svc-tag">Membership</div>
-                <h3 class="svc-name">New Member Fresh</h3>
-                <p class="svc-desc">Input jumlah member, harga otomatis (di bawah 10 = 5k / member, 10+ = 4.5k / member). Format chat auto jadi.</p>
+                <b>Presentasi Karier</b>
+                <span>PPT rapi buat review naik jabatan (IP COS / DP COS / Crew), LPJ NSB, LPJ PPS, dll.</span>
               </div>
             </div>
-            <div class="svc-bottom">
-              <span class="chip">Auto Pricing</span>
-              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalMember">
-                <i class="fa-solid fa-circle-info"></i>Detail
-              </button>
+
+            <div class="point">
+              <div class="icon" aria-hidden="true">
+                <svg class="svg" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2l8 4v6c0 5-3.5 9-8 10-4.5-1-8-5-8-10V6l8-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M9 12l2 2 4-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div>
+                <b>Target Coaching</b>
+                <span>Coaching via GMeet buat PPS / SUEGEERR sampai targetnya “kepompa” dan stabil.</span>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="icon" aria-hidden="true">
+                <svg class="svg" viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21s8-4 8-10V5l-8-3-8 3v6c0 6 8 10 8 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M7 11h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <b>Area Coverage</b>
+                <span>Update mapping sesuai radius toko. Enak dipakai buat briefing & validasi lapangan.</span>
+              </div>
+            </div>
+
+            <div class="point">
+              <div class="icon" aria-hidden="true">
+                <svg class="svg" viewBox="0 0 24 24" fill="none">
+                  <path d="M4 7h16M4 12h10M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+              <div>
+                <b>Alur Checkout</b>
+                <span>Keranjang dulu, baru WA. Jadi gak acak-acakan dan gak bikin pusing.</span>
+              </div>
             </div>
           </div>
         </div>
+
+        <aside class="hero-visual" aria-hidden="true">
+          <div class="visual-core"></div>
+          <div class="visual-center">
+            <div class="badge-box">
+              <div class="k">Ringkas</div>
+              <div class="v mono">Pilih • Keranjang • Checkout</div>
+              <div class="mini-grid">
+                <div class="mini">
+                  <div class="a">Mode</div>
+                  <div class="b" id="miniMode">DARK</div>
+                </div>
+                <div class="mini">
+                  <div class="a">Status</div>
+                  <div class="b">READY</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+
+  <!-- MODULES -->
+  <section id="modules">
+    <div class="container">
+      <div class="sec-head">
+        <h2 class="mono">Cortex Service Modules</h2>
+        <p>Klik modul → isi seperlunya → masuk keranjang. Checkout nanti otomatis bikin format WhatsApp rapi.</p>
+      </div>
+
+      <div class="grid">
+        <!-- NEW MEMBER -->
+        <article class="card">
+          <div class="top">
+            <div>
+              <div class="tag">Membership</div>
+              <h3 class="name mono">New Member Fresh</h3>
+            </div>
+            <div class="icon" aria-hidden="true">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8.5 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/>
+                <path d="M23 21v-2a4 4 0 0 0-3-3.87" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <p class="desc">Tambah member baru, tanpa haruss pusing nyari member baruu.</p>
+          <div class="actions">
+            <button class="btn btn-primary btn-small" onclick="openMemberModal()">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Tambah ke Keranjang</span>
+            </button>
+            <button class="btn btn-outline btn-small" onclick="openInfo('member')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 10a2 2 0 1 1 4 0c0 2-2 2-2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>Detail</span>
+            </button>
+          </div>
+        </article>
 
         <!-- AREA COVERAGE -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="svc-top">
-              <div class="svc-icon"><i class="fa-solid fa-map-location-dot"></i></div>
-              <div>
-                <div class="svc-tag">Coverage</div>
-                <h3 class="svc-name">Design Area Coverage</h3>
-                <p class="svc-desc">Order mapping area. Ada tombol “lihat contoh” (PDF portrait/landscape) + watermark viewer.</p>
-              </div>
+        <article class="card">
+          <div class="top">
+            <div>
+              <div class="tag">Coverage</div>
+              <h3 class="name mono">Design Area Coverage</h3>
             </div>
-            <div class="svc-bottom">
-              <span class="chip">PDF Sample</span>
-              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalCoverage">
-                <i class="fa-solid fa-circle-info"></i>Detail
-              </button>
+            <div class="icon" aria-hidden="true">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 21s7-4 7-10a7 7 0 1 0-14 0c0 6 7 10 7 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
             </div>
           </div>
-        </div>
-
-        <!-- PPT -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="svc-top">
-              <div class="svc-icon"><i class="fa-solid fa-file-powerpoint"></i></div>
-              <div>
-                <div class="svc-tag">Deck</div>
-                <h3 class="svc-name">Tugas PPT</h3>
-                <p class="svc-desc">Buat review & presentasi karier: IP COS, DP COS, Crew. Termasuk LPJ NSB, LPJ PPS, dll (rapih, simple, detail).</p>
-              </div>
-            </div>
-            <div class="svc-bottom">
-              <span class="chip">Presentation</span>
-              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalPPT">
-                <i class="fa-solid fa-circle-info"></i>Detail
-              </button>
-            </div>
+          <p class="desc">Update Area Coberge terbaruu, Detail mapping sesuai Radius toko</p>
+          <div class="actions">
+            <button class="btn btn-primary btn-small" onclick="openAreaModal()">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Tambah ke Keranjang</span>
+            </button>
+            <button class="btn btn-outline btn-small" onclick="openPdfModal('landscape')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M6 2h9l5 5v15a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M14 2v6h6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
+              <span>Lihat Contoh</span>
+            </button>
           </div>
-        </div>
+        </article>
 
         <!-- PPS -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="svc-top">
-              <div class="svc-icon"><i class="fa-solid fa-chart-line"></i></div>
-              <div>
-                <div class="svc-tag">Coaching</div>
-                <h3 class="svc-name">PPS Coaching</h3>
-                <p class="svc-desc">Coaching via Google Meet. Fokus bantu toko sampai “pumping” PPS dan ngejar targetnya.</p>
-              </div>
+        <article class="card">
+          <div class="top">
+            <div>
+              <div class="tag">Coaching</div>
+              <h3 class="name mono">Panduan Rahasia Top 10 PPS</h3>
             </div>
-            <div class="svc-bottom">
-              <span class="chip">GMeet</span>
-              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalPPS">
-                <i class="fa-solid fa-circle-info"></i>Detail
-              </button>
+            <div class="icon" aria-hidden="true">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M22 10v6a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2v-6" stroke="currentColor" stroke-width="2"/>
+                <path d="M7 10l5-5 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
           </div>
-        </div>
+          <p class="desc">Coaching via GMeet + arahan eksekusi lapangan, bantu toko sampai “pumping” PPS dan ngejar target inti.</p>
+          <div class="actions">
+            <button class="btn btn-primary btn-small" onclick="addSimpleToCart('PANDUAN RAHASIA TOP 10 PPS')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M6 7h15l-1.5 9h-12L6 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M6 7l-1-3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Masuk Keranjang</span>
+            </button>
+            <button class="btn btn-outline btn-small" onclick="openInfo('pps')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 10a2 2 0 1 1 4 0c0 2-2 2-2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>Detail</span>
+            </button>
+          </div>
+        </article>
 
         <!-- SUEGEERR -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="svc-top">
-              <div class="svc-icon"><i class="fa-solid fa-trophy"></i></div>
-              <div>
-                <div class="svc-tag">Coaching</div>
-                <h3 class="svc-name">Suegeerr Coaching</h3>
-                <p class="svc-desc">Pendampingan eksekusi biar capai target Suegeerr. Intinya: gerak, rapih, konsisten, dan ketahuan progress-nya.</p>
-              </div>
+        <article class="card">
+          <div class="top">
+            <div>
+              <div class="tag">Coaching</div>
+              <h3 class="name mono">Panduan Rahasia Top 10 SUEGEERR</h3>
             </div>
-            <div class="svc-bottom">
-              <span class="chip">Target</span>
-              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalSuegeerr">
-                <i class="fa-solid fa-circle-info"></i>Detail
-              </button>
+            <div class="icon" aria-hidden="true">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2l3 7 7 3-7 3-3 7-3-7-7-3 7-3 3-7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              </svg>
             </div>
           </div>
-        </div>
+          <p class="desc">Coaching via GMeet + strategi eksekusi ritel, bantu toko sampai target SUEGEERR kejar & tembus.</p>
+          <div class="actions">
+            <button class="btn btn-primary btn-small" onclick="addSimpleToCart('PANDUAN RAHASIA TOP 10 SUEGEERR')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M6 7h15l-1.5 9h-12L6 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M6 7l-1-3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Masuk Keranjang</span>
+            </button>
+            <button class="btn btn-outline btn-small" onclick="openInfo('suegeerr')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 10a2 2 0 1 1 4 0c0 2-2 2-2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>Detail</span>
+            </button>
+          </div>
+        </article>
 
-        <!-- OPTIONAL EXTRA -->
-        <div class="col-md-6 col-lg-4">
-          <div class="service-card">
-            <div class="svc-top">
-              <div class="svc-icon"><i class="fa-solid fa-list-check"></i></div>
-              <div>
-                <div class="svc-tag">Playbook</div>
-                <h3 class="svc-name">Panduan Eksekusi</h3>
-                <p class="svc-desc">Template kerja & checklist lapangan (biar nggak muter di teori). Bisa disesuaikan kondisi toko.</p>
-              </div>
+        <!-- PPT -->
+        <article class="card">
+          <div class="top">
+            <div>
+              <div class="tag">Presentation</div>
+              <h3 class="name mono">Tugas PPT</h3>
             </div>
-            <div class="svc-bottom">
-              <span class="chip">Checklist</span>
-              <button class="btn-detail" type="button" onclick="openWA('Halo, saya mau tanya Panduan Eksekusi. Bisa jelasin paket yang tersedia?')">
-                <i class="fa-brands fa-whatsapp"></i>Order
-              </button>
+            <div class="icon" aria-hidden="true">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M4 4h16v12H4V4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M8 20h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 16v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
             </div>
           </div>
-        </div>
+          <p class="desc">
+            Buat review yang mau naik jabatan (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dll.
+            Bentuk presentasi: rapi, simple, detail.
+          </p>
+          <div class="actions">
+            <button class="btn btn-primary btn-small" onclick="addSimpleToCart('TUGAS PPT')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M6 7h15l-1.5 9h-12L6 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M6 7l-1-3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Masuk Keranjang</span>
+            </button>
+            <button class="btn btn-outline btn-small" onclick="openInfo('ppt')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 10a2 2 0 1 1 4 0c0 2-2 2-2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>Detail</span>
+            </button>
+          </div>
+        </article>
 
+        <!-- EXTRA: Strategy Review -->
+        <article class="card">
+          <div class="top">
+            <div>
+              <div class="tag">Review</div>
+              <h3 class="name mono">Review & Action Plan</h3>
+            </div>
+            <div class="icon" aria-hidden="true">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M9 11l3 3L22 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+          </div>
+          <p class="desc">Ringkas evaluasi kondisi toko + action plan eksekusi harian yang realistis dan gampang dipantau.</p>
+          <div class="actions">
+            <button class="btn btn-primary btn-small" onclick="addSimpleToCart('REVIEW & ACTION PLAN')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M6 7h15l-1.5 9h-12L6 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M6 7l-1-3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+              <span>Masuk Keranjang</span>
+            </button>
+            <button class="btn btn-outline btn-small" onclick="openInfo('plan')">
+              <svg class="svg" viewBox="0 0 24 24" fill="none">
+                <path d="M12 18h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M10 10a2 2 0 1 1 4 0c0 2-2 2-2 4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20Z" stroke="currentColor" stroke-width="2"/>
+              </svg>
+              <span>Detail</span>
+            </button>
+          </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <!-- WORKFLOW -->
-  <section id="workflow">
+  <!-- REVIEWS -->
+  <section id="reviews">
     <div class="container">
-      <h2 class="section-title">Workflow</h2>
-      <p class="section-sub">3 langkah — pilih modul, isi field, kirim WhatsApp.</p>
-
-      <div class="row g-3 g-md-4">
-        <div class="col-md-4">
-          <div class="calc-box h-100">
-            <div class="calc-row"><span>01</span><span>Pilih Modul</span></div>
-            <div class="help">Klik <b>Detail</b> untuk buka form sesuai layanan.</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="calc-box h-100">
-            <div class="calc-row"><span>02</span><span>Isi Field</span></div>
-            <div class="help">Kode toko, qty, link lokasi, format output auto rapih.</div>
-          </div>
-        </div>
-        <div class="col-md-4">
-          <div class="calc-box h-100">
-            <div class="calc-row"><span>03</span><span>Kirim WA</span></div>
-            <div class="help">Tombol WA langsung nyusun pesan sesuai template yang lu minta.</div>
-          </div>
-        </div>
+      <div class="sec-head">
+        <h2 class="mono">Reviews</h2>
+        <p>Ringkasan pengalaman pengguna. (Nama disamarkan.)</p>
       </div>
 
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="container">
-      <h2 class="section-title">Contact</h2>
-      <p class="section-sub">Langsung chat untuk konsultasi modul.</p>
-
-      <div class="row g-3">
-        <div class="col-lg-7">
-          <div class="calc-box">
-            <div class="calc-row"><span>WhatsApp</span><span id="waDisplay">087809236556</span></div>
-            <div class="calc-row"><span>Email</span><span>brandotan94@gmail.com</span></div>
-            <div class="help mt-2">
-              Klik tombol di bawah untuk chat.
+      <div class="testi">
+        <div class="tcard">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <div>
+              <div class="tname">R*** — Serang</div>
+              <div class="tmeta">Area Coverage Update</div>
             </div>
-            <div class="d-flex flex-wrap gap-2 mt-3">
-              <button class="btn btn-grad" type="button" onclick="openWA('Halo, saya mau tanya modul di Retail-Cortex.io. Ini kebutuhan toko saya: ...')">
-                <i class="fa-brands fa-whatsapp me-2"></i>Chat Sekarang
-              </button>
-              <a class="btn btn-ghost text-decoration-none" href="mailto:brandotan94@gmail.com">
-                <i class="fa-solid fa-envelope me-2"></i>Email
-              </a>
-            </div>
+            <div class="stars">★★★★★</div>
           </div>
+          <div class="ttext">“Mapping-nya jelas, radius kebaca, enak buat briefing tim. Gak ribet.”</div>
         </div>
 
-        <div class="col-lg-5">
-          <div class="calc-box">
-            <div class="calc-row"><span>Jam</span><span>08.00 – 23.00</span></div>
-            <div class="help mt-2">
-              Di luar jam itu, respon bisa agak lambat.
+        <div class="tcard">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <div>
+              <div class="tname">A*** — Tangerang</div>
+              <div class="tmeta">PPS Coaching</div>
             </div>
+            <div class="stars">★★★★☆</div>
           </div>
+          <div class="ttext">“Arahan step-by-step. Yang penting eksekusi harian jadi rapi dan kebaca.”</div>
+        </div>
+
+        <div class="tcard">
+          <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">
+            <div>
+              <div class="tname">D*** — Bekasi</div>
+              <div class="tmeta">Tugas PPT Karier</div>
+            </div>
+            <div class="stars">★★★★★</div>
+          </div>
+          <div class="ttext">“PPT nya clean, urut, detail. Cocok buat review & pembuktian kerja.”</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- FOOTER -->
   <footer>
-    <div class="footer-main">
-      © <span id="yearNow"></span> Retail-Cortex.io
-    </div>
-    <div>
-      Crafted by D&D A Digital Creative Studio ♥
-    </div>
+    <div class="f1 mono">Retail-Cortex.io</div>
+    <div class="f2">Crafted by D&amp;D — A Digital Creative Studio ❤️</div>
   </footer>
 
-  <!-- ===================== MODALS ===================== -->
-
-  <!-- NEW MEMBER MODAL -->
-  <div class="modal fade" id="modalMember" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title m-0"><i class="fa-solid fa-user-plus me-2"></i>New Member Fresh</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Jumlah member</label>
-              <input id="m_qty" type="number" min="1" class="form-control" placeholder="contoh: 12" />
-              <div class="help">Harga otomatis: <b>&lt; 10</b> = Rp5.000 / member, <b>≥ 10</b> = Rp4.500 / member.</div>
-
-              <div class="mt-3 calc-box">
-                <div class="calc-row"><span>Harga / member</span><span id="m_price">Rp0</span></div>
-                <div class="calc-row"><span>Total</span><span id="m_total">Rp0</span></div>
-              </div>
-
-              <div class="help mt-2">
-                Format WA akan otomatis jadi seperti template yang lu minta.
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Kode toko</label>
-              <input id="m_kodetoko" type="text" class="form-control" placeholder="contoh: A123" />
-
-              <label class="fw-bold mb-1 mt-3">PIN / tgl lahir</label>
-              <input id="m_pin" type="text" class="form-control" placeholder="contoh: 01092018 / 1234" />
-
-              <label class="fw-bold mb-1 mt-3">Jumlah qty member (opsional)</label>
-              <input id="m_qty2" type="number" min="1" class="form-control" placeholder="otomatis ngikut jumlah member, boleh lu isi ulang" />
-
-              <div class="mt-3">
-                <label class="fw-bold mb-1">Preview pesan</label>
-                <textarea id="m_preview" class="form-control" rows="9" readonly></textarea>
-                <div class="help">Lu bisa copy manual, tapi tombol WA udah otomatis.</div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer d-flex gap-2 flex-wrap">
-          <button class="btn btn-ghost" type="button" onclick="copyText('m_preview')">
-            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
-          </button>
-          <button class="btn btn-grad" type="button" id="btnMemberWA">
-            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- COVERAGE MODAL -->
-  <div class="modal fade" id="modalCoverage" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title m-0"><i class="fa-solid fa-map-location-dot me-2"></i>Design Area Coverage</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-        </div>
-        <div class="modal-body">
-          <div class="row g-3">
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Nama toko</label>
-              <input id="c_namatoko" type="text" class="form-control" placeholder="contoh: KP Garung Tambak" />
-
-              <label class="fw-bold mb-1 mt-3">Kode toko</label>
-              <input id="c_kodetoko" type="text" class="form-control" placeholder="contoh: A123" />
-
-              <label class="fw-bold mb-1 mt-3">Berapa sub</label>
-              <input id="c_sub" type="number" min="0" class="form-control" placeholder="contoh: 3" />
-
-              <label class="fw-bold mb-1 mt-3">Sharelok toko</label>
-              <input id="c_shareloc" type="text" class="form-control" placeholder="paste link maps: https://maps.app.goo.gl/..." />
-
-              <label class="fw-bold mb-1 mt-3">Format</label>
-              <select id="c_format" class="form-select">
-                <option value="Landscape">Landscape</option>
-                <option value="Portrait">Portrait</option>
-              </select>
-
-              <div class="mt-3">
-                <label class="fw-bold mb-1">Preview pesan</label>
-                <textarea id="c_preview" class="form-control" rows="8" readonly></textarea>
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <div class="calc-box">
-                <div class="d-flex align-items-start justify-content-between gap-2">
-                  <div>
-                    <div class="fw-bold">Lihat contoh (PDF)</div>
-                    <div class="help mt-1">
-                      Viewer pakai watermark overlay. Tapi harus jujur: <b>nggak ada cara web yang bisa 100% blok screenshot</b>.
-                    </div>
-                  </div>
-                  <div class="d-flex gap-2">
-                    <button class="btn btn-ghost" type="button" onclick="openPdfSample('landscape')">
-                      <i class="fa-regular fa-file-pdf me-2"></i>Landscape
-                    </button>
-                    <button class="btn btn-ghost" type="button" onclick="openPdfSample('portrait')">
-                      <i class="fa-regular fa-file-pdf me-2"></i>Portrait
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div class="mt-3 pdf-wrap" id="pdfWrap" style="display:none;">
-                <div class="pdf-toolbar">
-                  <div class="mini" id="pdfTitle">Sample PDF</div>
-                  <div class="d-flex gap-2">
-                    <button class="btn btn-sm btn-ghost" type="button" onclick="pdfZoom(-0.1)">
-                      <i class="fa-solid fa-magnifying-glass-minus"></i>
-                    </button>
-                    <button class="btn btn-sm btn-ghost" type="button" onclick="pdfZoom(0.1)">
-                      <i class="fa-solid fa-magnifying-glass-plus"></i>
-                    </button>
-                    <button class="btn btn-sm btn-ghost" type="button" onclick="closePdfSample()">
-                      <i class="fa-solid fa-xmark"></i>
-                    </button>
-                  </div>
-                </div>
-                <div class="pdf-canvas-holder" oncontextmenu="return false;">
-                  <canvas id="pdfCanvas"></canvas>
-                </div>
-              </div>
-
-              <div class="help mt-2">
-                Nama file PDF di repo (silakan samakan):
-                <ul class="mb-0 mt-1">
-                  <li><b>area-coverage-landscape.pdf</b></li>
-                  <li><b>area-coverage-portrait.pdf</b></li>
-                </ul>
-                Kalau nama file lu beda, tinggal ganti variabel di script.
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer d-flex gap-2 flex-wrap">
-          <button class="btn btn-ghost" type="button" onclick="copyText('c_preview')">
-            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
-          </button>
-          <button class="btn btn-grad" type="button" id="btnCoverageWA">
-            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PPT MODAL -->
-  <div class="modal fade" id="modalPPT" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title m-0"><i class="fa-solid fa-file-powerpoint me-2"></i>Tugas PPT</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-        </div>
-        <div class="modal-body">
-          <div class="calc-box mb-3">
-            <div class="fw-bold mb-1">Fungsi</div>
-            <div class="help m-0">
-              Buat bikin review yang mau naik jabatan (IP COS, DP COS, Crew). Format presentasi rapih, simple, tapi detail.
-              Bisa juga untuk LPJ NSB, LPJ PPS, bahan meeting, dan laporan progres.
-            </div>
-          </div>
-
-          <div class="row g-3">
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Jenis PPT</label>
-              <select id="p_type" class="form-select">
-                <option value="Review Karier (IP COS / DP COS / Crew)">Review Karier (IP COS / DP COS / Crew)</option>
-                <option value="LPJ PPS">LPJ PPS</option>
-                <option value="LPJ NSB">LPJ NSB</option>
-                <option value="Strategi / Meeting">Strategi / Meeting</option>
-                <option value="Laporan Toko">Laporan Toko</option>
-              </select>
-
-              <label class="fw-bold mb-1 mt-3">Nama toko</label>
-              <input id="p_toko" class="form-control" placeholder="contoh: KP Garung Tambak" />
-
-              <label class="fw-bold mb-1 mt-3">Kode toko</label>
-              <input id="p_kode" class="form-control" placeholder="contoh: A123" />
-            </div>
-
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Brief singkat (isi poin penting)</label>
-              <textarea id="p_brief" class="form-control" rows="7" placeholder="contoh: target, masalah utama, data yang mau dimasukin, periode, dll"></textarea>
-
-              <div class="mt-3">
-                <label class="fw-bold mb-1">Preview pesan</label>
-                <textarea id="p_preview" class="form-control" rows="7" readonly></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer d-flex gap-2 flex-wrap">
-          <button class="btn btn-ghost" type="button" onclick="copyText('p_preview')">
-            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
-          </button>
-          <button class="btn btn-grad" type="button" id="btnPPTWA">
-            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PPS MODAL -->
-  <div class="modal fade" id="modalPPS" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title m-0"><i class="fa-solid fa-chart-line me-2"></i>PPS Coaching</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-        </div>
-        <div class="modal-body">
-          <div class="calc-box mb-3">
-            <div class="fw-bold mb-1">Keterangan</div>
-            <div class="help m-0">
-              Coaching via Google Meet. Fokus bantu toko sampai pumping PPS dan ngejar target. Outputnya: arah eksekusi, prioritas, dan tracking.
-            </div>
-          </div>
-
-          <div class="row g-3">
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Nama toko</label>
-              <input id="pps_toko" class="form-control" placeholder="contoh: KP Garung Tambak" />
-
-              <label class="fw-bold mb-1 mt-3">Kode toko</label>
-              <input id="pps_kode" class="form-control" placeholder="contoh: A123" />
-
-              <label class="fw-bold mb-1 mt-3">Kondisi PPS saat ini (singkat)</label>
-              <textarea id="pps_kondisi" class="form-control" rows="5" placeholder="contoh: gap target, kendala, pola jam, dsb"></textarea>
-            </div>
-
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Preferensi jadwal GMeet</label>
-              <input id="pps_jadwal" class="form-control" placeholder="contoh: Senin 10.00 WIB / fleksibel" />
-
-              <div class="mt-3">
-                <label class="fw-bold mb-1">Preview pesan</label>
-                <textarea id="pps_preview" class="form-control" rows="9" readonly></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer d-flex gap-2 flex-wrap">
-          <button class="btn btn-ghost" type="button" onclick="copyText('pps_preview')">
-            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
-          </button>
-          <button class="btn btn-grad" type="button" id="btnPPSWA">
-            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- SUEGEERR MODAL -->
-  <div class="modal fade" id="modalSuegeerr" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title m-0"><i class="fa-solid fa-trophy me-2"></i>Suegeerr Coaching</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-        </div>
-        <div class="modal-body">
-          <div class="calc-box mb-3">
-            <div class="fw-bold mb-1">Keterangan</div>
-            <div class="help m-0">
-              Pendampingan eksekusi agar capai target Suegeerr. Intinya: target kebaca, plan jalan, progress ketahuan.
-            </div>
-          </div>
-
-          <div class="row g-3">
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Nama toko</label>
-              <input id="s_toko" class="form-control" placeholder="contoh: KP Garung Tambak" />
-
-              <label class="fw-bold mb-1 mt-3">Kode toko</label>
-              <input id="s_kode" class="form-control" placeholder="contoh: A123" />
-
-              <label class="fw-bold mb-1 mt-3">Target Suegeerr</label>
-              <input id="s_target" class="form-control" placeholder="contoh: tembus target bulan ini" />
-            </div>
-
-            <div class="col-lg-6">
-              <label class="fw-bold mb-1">Kondisi saat ini (singkat)</label>
-              <textarea id="s_kondisi" class="form-control" rows="6" placeholder="contoh: gap, kendala display, eksekusi, dsb"></textarea>
-
-              <div class="mt-3">
-                <label class="fw-bold mb-1">Preview pesan</label>
-                <textarea id="s_preview" class="form-control" rows="7" readonly></textarea>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="modal-footer d-flex gap-2 flex-wrap">
-          <button class="btn btn-ghost" type="button" onclick="copyText('s_preview')">
-            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
-          </button>
-          <button class="btn btn-grad" type="button" id="btnSuegeerrWA">
-            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Floating WA -->
-  <button class="position-fixed" style="
-      right:16px; bottom:16px; z-index:1200;
-      border:none; border-radius:999px;
-      padding:.9rem 1.05rem;
-      background: var(--grad);
-      color:#0b1220;
-      font-weight:900;
-      box-shadow: var(--shadow);
-    " onclick="openWA('Halo, saya mau tanya modul di Retail-Cortex.io. Bisa jelasin?')"
-    title="WhatsApp">
-    <i class="fa-brands fa-whatsapp me-2"></i>WA
+  <!-- FLOATING BUTTONS (Multiverse position) -->
+  <button class="float-toggle" id="btnTheme" title="Toggle Dark/Light" aria-label="Toggle Dark/Light">
+    <span id="themeIcon" style="font-size:18px">🌙</span>
   </button>
 
-  <!-- Bootstrap -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <button class="float-cart" id="btnCart" aria-label="Buka Keranjang">
+    <svg class="svg" viewBox="0 0 24 24" fill="none">
+      <path d="M6 7h15l-1.5 9h-12L6 7Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M6 7l-1-3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM17 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
+    </svg>
+    <span class="count" id="cartCount">0</span>
+  </button>
+
+  <!-- CART DRAWER -->
+  <div class="cartDrawer" id="cartDrawer" aria-hidden="true">
+    <div class="cartPanel" role="dialog" aria-label="Keranjang">
+      <div class="cartHead">
+        <div class="ttl mono">Keranjang</div>
+        <button class="modal-close" onclick="closeCart()" aria-label="Tutup">
+          ✕
+        </button>
+      </div>
+
+      <div class="cartBody" id="cartBody">
+        <!-- items -->
+      </div>
+
+      <div class="cartSum">
+        <div class="sumRow">
+          <span class="muted">Total</span>
+          <b id="cartTotal">Rp0</b>
+        </div>
+
+        <div class="cartBtns">
+          <button class="btn btn-primary btn-wide" onclick="checkoutWA()">
+            <svg class="svg" viewBox="0 0 24 24" fill="none">
+              <path d="M12 2a10 10 0 0 0-8.7 15l-1.3 5 5.2-1.3A10 10 0 1 0 12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M8 12c1.5 3 4 4.5 7 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>Checkout via WhatsApp</span>
+          </button>
+
+          <button class="btn btn-danger btn-wide" onclick="clearCart()">
+            <svg class="svg" viewBox="0 0 24 24" fill="none">
+              <path d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 6V4h8v2" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M19 6l-1 16H6L5 6" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+              <path d="M10 11v6M14 11v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <span>Hapus Keranjang</span>
+          </button>
+        </div>
+
+        <div class="tiny">
+          Catatan: semua order disusun otomatis ke WhatsApp saat checkout.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: MEMBER -->
+  <div class="modal" id="memberModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-label="New Member Fresh">
+      <div class="modal-head">
+        <div class="modal-title mono">New Member Fresh</div>
+        <button class="modal-close" onclick="closeModal('memberModal')" aria-label="Tutup">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="hint">
+          Harga otomatis:
+          <b>&lt; 10 member = Rp5.000 / member</b> •
+          <b>≥ 10 member = Rp4.500 / member</b>
+        </div>
+
+        <div class="form" style="margin-top:10px">
+          <div class="row2">
+            <div>
+              <label>Jumlah member</label>
+              <input class="input" type="number" min="1" step="1" id="m_qty" value="10" oninput="recalcMember()">
+            </div>
+            <div class="priceBox">
+              <div class="priceLine"><span>Harga / member</span><b id="m_priceEach">Rp4.500</b></div>
+              <div class="priceLine"><span>Total</span><b id="m_total">Rp45.000</b></div>
+            </div>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label>Kode toko</label>
+              <input class="input" id="m_kode" placeholder="contoh: 12345">
+            </div>
+            <div>
+              <label>Pin / tgl lahir</label>
+              <input class="input" id="m_pin" placeholder="contoh: 12031990">
+            </div>
+          </div>
+
+          <div>
+            <label>Jumlah qty member</label>
+            <input class="input" id="m_qtyMember" placeholder="contoh: 12">
+            <div class="hint" style="margin-top:6px">Ini field tambahan yang akan ikut kebawa di format WA.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeModal('memberModal')">Batal</button>
+        <button class="btn btn-primary" onclick="addMemberToCart()">Tambah ke Keranjang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: AREA -->
+  <div class="modal" id="areaModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-label="Design Area Coverage">
+      <div class="modal-head">
+        <div class="modal-title mono">Design Area Coverage</div>
+        <button class="modal-close" onclick="closeModal('areaModal')" aria-label="Tutup">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="form">
+          <div class="row2">
+            <div>
+              <label>Nama toko</label>
+              <input class="input" id="a_nama" placeholder="contoh: KP Garung Tambak">
+            </div>
+            <div>
+              <label>Kode toko</label>
+              <input class="input" id="a_kode" placeholder="contoh: 12345">
+            </div>
+          </div>
+
+          <div class="row2">
+            <div>
+              <label>Berapa sub</label>
+              <input class="input" id="a_sub" placeholder="contoh: 3">
+            </div>
+            <div>
+              <label>Sharelok toko</label>
+              <input class="input" id="a_share" placeholder="paste link sharelok/maps">
+            </div>
+          </div>
+
+          <div>
+            <label>Landscape / Portrait</label>
+            <select id="a_orient">
+              <option value="Landscape">Landscape</option>
+              <option value="Portrait">Portrait</option>
+            </select>
+            <div class="hint" style="margin-top:6px">
+              Lu bisa buka contoh PDF juga:
+              <button class="btn btn-outline btn-small" style="margin-left:6px" onclick="openPdfModal(document.getElementById('a_orient').value.toLowerCase())">Lihat Contoh</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeModal('areaModal')">Batal</button>
+        <button class="btn btn-primary" onclick="addAreaToCart()">Tambah ke Keranjang</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: PDF -->
+  <div class="modal" id="pdfModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-label="PDF Viewer">
+      <div class="modal-head">
+        <div class="modal-title mono" id="pdfTitle">Contoh PDF</div>
+        <button class="modal-close" onclick="closeModal('pdfModal')" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="pdfWrap">
+          <div class="pdfBar">
+            <div class="left">
+              <span class="chip" id="pdfChip">PDF</span>
+              <button class="btn btn-outline btn-small" onclick="openPdfNewTab()">Buka Tab Baru</button>
+            </div>
+            <div class="muted" style="font-size:12px">Kalau HP ngadat, buka tab baru.</div>
+          </div>
+          <iframe class="pdfFrame" id="pdfFrame" title="PDF"></iframe>
+        </div>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-primary" onclick="closeModal('pdfModal')">Tutup</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: INFO -->
+  <div class="modal" id="infoModal" aria-hidden="true">
+    <div class="modal-box" role="dialog" aria-label="Detail Modul">
+      <div class="modal-head">
+        <div class="modal-title mono" id="infoTitle">Detail</div>
+        <button class="modal-close" onclick="closeModal('infoModal')" aria-label="Tutup">✕</button>
+      </div>
+      <div class="modal-body" id="infoBody"></div>
+      <div class="modal-foot">
+        <button class="btn btn-primary" onclick="closeModal('infoModal')">Oke</button>
+      </div>
+    </div>
+  </div>
 
   <script>
-    /* ================== CONFIG ================== */
-    const WHATSAPP_NUMBER = "6287809236556";
+    // =========================
+    // CONFIG
+    // =========================
+    const WA_NUMBER = "6287809236556";
 
-    // PDF names in repo (samakan)
-    const PDF_LANDSCAPE = "area-coverage-landscape.pdf";
-    const PDF_PORTRAIT  = "area-coverage-portrait.pdf";
+    // PDF in repo (sesuai screenshot lu)
+    const PDF_LANDSCAPE = "samples/area-coverage-sample-landscape.pdf";
+    const PDF_PORTRAIT  = "samples/area-coverage-sample-portrait.pdf";
 
-    const money = n => `Rp${(Number(n)||0).toLocaleString('id-ID')}`;
+    const CART_KEY = "rc_cart_v1";
+    const THEME_KEY = "rc_theme_v1";
 
-    function openWA(text){
-      const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
-      window.open(url, "_blank");
-    }
+    // =========================
+    // UTIL
+    // =========================
+    const rupiah = (n)=> "Rp" + (Number(n||0)).toLocaleString("id-ID");
+    const qs = (id)=> document.getElementById(id);
 
     function scrollToId(id){
       const el = document.getElementById(id);
@@ -1098,345 +1287,429 @@
       el.scrollIntoView({behavior:"smooth", block:"start"});
     }
 
-    // smooth scroll for nav
-    document.addEventListener("click",(e)=>{
-      const a = e.target.closest('a[data-scroll][href^="#"]');
-      if(!a) return;
-      e.preventDefault();
-      const sel = a.getAttribute("href");
-      const el = document.querySelector(sel);
-      if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
-      const nav = document.getElementById("navLinks");
-      if(nav && nav.classList.contains("show")){
-        bootstrap.Collapse.getOrCreateInstance(nav).hide();
+    // =========================
+    // MOBILE MENU
+    // =========================
+    const menuDrawer = qs("menuDrawer");
+    qs("btnMenu").addEventListener("click", ()=>{
+      menuDrawer.classList.add("open");
+      menuDrawer.setAttribute("aria-hidden","false");
+    });
+    menuDrawer.addEventListener("click", (e)=>{
+      if(e.target === menuDrawer){
+        menuDrawer.classList.remove("open");
+        menuDrawer.setAttribute("aria-hidden","true");
       }
     });
-
-    // year
-    document.getElementById("yearNow").textContent = new Date().getFullYear();
-
-    /* ================== THEME ================== */
-    (function initTheme(){
-      const saved = localStorage.getItem("rc_theme") || "dark";
-      document.documentElement.setAttribute("data-theme", saved);
-      updateThemeIcon();
-
-      document.getElementById("btnTheme").addEventListener("click", ()=>{
-        const cur = document.documentElement.getAttribute("data-theme");
-        const next = (cur === "dark") ? "light" : "dark";
-        document.documentElement.setAttribute("data-theme", next);
-        localStorage.setItem("rc_theme", next);
-        updateThemeIcon();
-      });
-
-      function updateThemeIcon(){
-        const mode = document.documentElement.getAttribute("data-theme");
-        const btn = document.getElementById("btnTheme");
-        const label = document.getElementById("modeLabel");
-        if(btn){
-          btn.innerHTML = (mode === "dark")
-            ? '<i class="fa-solid fa-sun"></i>'
-            : '<i class="fa-solid fa-moon"></i>';
-        }
-        if(label) label.textContent = (mode || "").toUpperCase();
-      }
-    })();
-
-    /* ================== NEW MEMBER CALC + WA ================== */
-    const m_qty = document.getElementById("m_qty");
-    const m_qty2 = document.getElementById("m_qty2");
-    const m_kodetoko = document.getElementById("m_kodetoko");
-    const m_pin = document.getElementById("m_pin");
-    const m_priceEl = document.getElementById("m_price");
-    const m_totalEl = document.getElementById("m_total");
-    const m_preview = document.getElementById("m_preview");
-    const btnMemberWA = document.getElementById("btnMemberWA");
-
-    function memberUnitPrice(qty){
-      const q = Number(qty)||0;
-      if(q >= 10) return 4500;
-      if(q >= 1) return 5000;
-      return 0;
-    }
-
-    function buildMemberMessage(){
-      const qty = Math.max(0, Number(m_qty.value)||0);
-      const unit = memberUnitPrice(qty);
-      const total = qty * unit;
-
-      const kode = (m_kodetoko.value || "").trim();
-      const pin  = (m_pin.value || "").trim();
-
-      const qtyMember = (Number(m_qty2.value)||0) > 0 ? Number(m_qty2.value) : qty;
-
-      // template sesuai yang lu minta
-      const msg =
-`Halo,
-Saya ingin memesan layanan New Member Fresh.
-
-Jumlah member : ${qty || ""}
-Harga / member : ${unit ? money(unit) : ""}
-Total : ${total ? money(total) : ""}
-
-Kode toko : ${kode}
-Pin / tgl lahir : ${pin}
-Jumlah qty member : ${qtyMember || ""}`;
-
-      return { msg, qty, unit, total };
-    }
-
-    function refreshMemberUI(){
-      const { msg, qty, unit, total } = buildMemberMessage();
-      m_priceEl.textContent = unit ? money(unit) : "Rp0";
-      m_totalEl.textContent = total ? money(total) : "Rp0";
-      m_preview.value = msg;
-    }
-
-    [m_qty, m_kodetoko, m_pin, m_qty2].forEach(el=>{
-      el.addEventListener("input", ()=>{
-        // auto set qty2 kalau kosong
-        if(el === m_qty && (!m_qty2.value || Number(m_qty2.value) <= 0)){
-          m_qty2.value = m_qty.value;
-        }
-        refreshMemberUI();
+    document.querySelectorAll("[data-drawer-link]").forEach(a=>{
+      a.addEventListener("click", ()=>{
+        menuDrawer.classList.remove("open");
+        menuDrawer.setAttribute("aria-hidden","true");
       });
     });
 
-    btnMemberWA.addEventListener("click", ()=>{
-      const { msg } = buildMemberMessage();
-      openWA(msg);
+    // =========================
+    // THEME (toggle kiri bawah)
+    // =========================
+    function applyTheme(theme){
+      document.documentElement.setAttribute("data-theme", theme);
+      localStorage.setItem(THEME_KEY, theme);
+      qs("themeIcon").textContent = (theme === "dark") ? "🌙" : "☀️";
+      qs("miniMode").textContent = (theme === "dark") ? "DARK" : "LIGHT";
+    }
+
+    function initTheme(){
+      const saved = localStorage.getItem(THEME_KEY) || "dark";
+      applyTheme(saved);
+      qs("btnTheme").addEventListener("click", ()=>{
+        const cur = document.documentElement.getAttribute("data-theme") || "dark";
+        applyTheme(cur === "dark" ? "light" : "dark");
+      });
+    }
+
+    // =========================
+    // MODALS
+    // =========================
+    function openModal(id){
+      const m = qs(id);
+      if(!m) return;
+      m.classList.add("open");
+      m.setAttribute("aria-hidden","false");
+    }
+    function closeModal(id){
+      const m = qs(id);
+      if(!m) return;
+      m.classList.remove("open");
+      m.setAttribute("aria-hidden","true");
+    }
+    ["memberModal","areaModal","pdfModal","infoModal"].forEach(mid=>{
+      const m = qs(mid);
+      m.addEventListener("click",(e)=>{
+        if(e.target === m) closeModal(mid);
+      });
     });
 
-    // init
-    refreshMemberUI();
-
-    /* ================== COVERAGE WA + PDF SAMPLE ================== */
-    const c_namatoko = document.getElementById("c_namatoko");
-    const c_kodetoko = document.getElementById("c_kodetoko");
-    const c_sub = document.getElementById("c_sub");
-    const c_shareloc = document.getElementById("c_shareloc");
-    const c_format = document.getElementById("c_format");
-    const c_preview = document.getElementById("c_preview");
-    const btnCoverageWA = document.getElementById("btnCoverageWA");
-
-    function buildCoverageMessage(){
-      const nama = (c_namatoko.value||"").trim();
-      const kode = (c_kodetoko.value||"").trim();
-      const sub  = (c_sub.value||"").toString().trim();
-      const loc  = (c_shareloc.value||"").trim();
-      const fmt  = (c_format.value||"").trim();
-
-      return `Halo,
-Saya ingin memesan layanan Design Area Coverage.
-
-Nama toko : ${nama}
-Kode toko : ${kode}
-Berapa sub : ${sub}
-Sharelok toko : ${loc}
-Format : ${fmt}`;
+    // =========================
+    // CART
+    // =========================
+    function getCart(){
+      try{ return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+      catch{ return []; }
+    }
+    function setCart(items){
+      localStorage.setItem(CART_KEY, JSON.stringify(items));
+      renderCart();
+      refreshCartCount();
+    }
+    function clearCart(){
+      setCart([]);
+    }
+    function removeItem(idx){
+      const cart = getCart();
+      cart.splice(idx,1);
+      setCart(cart);
     }
 
-    function refreshCoverageUI(){
-      c_preview.value = buildCoverageMessage();
+    function refreshCartCount(){
+      const cart = getCart();
+      const count = cart.reduce((a,b)=> a + (b.qty || 1), 0);
+      qs("cartCount").textContent = count;
     }
-    [c_namatoko, c_kodetoko, c_sub, c_shareloc, c_format].forEach(el=>{
-      el.addEventListener("input", refreshCoverageUI);
-      el.addEventListener("change", refreshCoverageUI);
+
+    function cartTotal(){
+      const cart = getCart();
+      return cart.reduce((sum,it)=> sum + (Number(it.total||0)), 0);
+    }
+
+    function openCart(){
+      qs("cartDrawer").classList.add("open");
+      qs("cartDrawer").setAttribute("aria-hidden","false");
+      renderCart();
+    }
+    function closeCart(){
+      qs("cartDrawer").classList.remove("open");
+      qs("cartDrawer").setAttribute("aria-hidden","true");
+    }
+    qs("btnCart").addEventListener("click", openCart);
+    qs("cartDrawer").addEventListener("click",(e)=>{
+      if(e.target === qs("cartDrawer")) closeCart();
     });
-    btnCoverageWA.addEventListener("click", ()=> openWA(buildCoverageMessage()));
-    refreshCoverageUI();
 
-    /* ================== PPT WA ================== */
-    const p_type = document.getElementById("p_type");
-    const p_toko = document.getElementById("p_toko");
-    const p_kode = document.getElementById("p_kode");
-    const p_brief = document.getElementById("p_brief");
-    const p_preview = document.getElementById("p_preview");
-    const btnPPTWA = document.getElementById("btnPPTWA");
+    function renderCart(){
+      const cart = getCart();
+      const body = qs("cartBody");
 
-    function buildPPTMessage(){
-      return `Halo,
-Saya ingin memesan layanan Tugas PPT.
+      if(cart.length === 0){
+        body.innerHTML = `<div class="empty">Keranjang masih kosong.</div>`;
+        qs("cartTotal").textContent = rupiah(0);
+        return;
+      }
 
-Jenis PPT : ${(p_type.value||"").trim()}
-Nama toko : ${(p_toko.value||"").trim()}
-Kode toko : ${(p_kode.value||"").trim()}
+      body.innerHTML = cart.map((it,idx)=>{
+        const lines = (it.previewLines || []).map(s=>`<div>• ${escapeHTML(s)}</div>`).join("");
+        return `
+          <div class="cartItem">
+            <div class="h">
+              <div>
+                <div class="nm">${escapeHTML(it.name)}</div>
+                <div class="sub">${lines || ""}</div>
+              </div>
+              <button class="rm" onclick="removeItem(${idx})" aria-label="Hapus">Hapus</button>
+            </div>
+            <div class="sub" style="margin-top:8px; display:flex; justify-content:space-between; gap:10px">
+              <span class="muted">Subtotal</span>
+              <b>${rupiah(it.total||0)}</b>
+            </div>
+          </div>
+        `;
+      }).join("");
 
-Brief :
-${(p_brief.value||"").trim()}`;
-    }
-    function refreshPPTUI(){ p_preview.value = buildPPTMessage(); }
-    [p_type,p_toko,p_kode,p_brief].forEach(el=>{
-      el.addEventListener("input", refreshPPTUI);
-      el.addEventListener("change", refreshPPTUI);
-    });
-    btnPPTWA.addEventListener("click", ()=> openWA(buildPPTMessage()));
-    refreshPPTUI();
-
-    /* ================== PPS WA ================== */
-    const pps_toko = document.getElementById("pps_toko");
-    const pps_kode = document.getElementById("pps_kode");
-    const pps_kondisi = document.getElementById("pps_kondisi");
-    const pps_jadwal = document.getElementById("pps_jadwal");
-    const pps_preview = document.getElementById("pps_preview");
-    const btnPPSWA = document.getElementById("btnPPSWA");
-
-    function buildPPSMessage(){
-      return `Halo,
-Saya ingin memesan layanan PPS Coaching (Google Meet).
-
-Nama toko : ${(pps_toko.value||"").trim()}
-Kode toko : ${(pps_kode.value||"").trim()}
-
-Kondisi PPS saat ini :
-${(pps_kondisi.value||"").trim()}
-
-Preferensi jadwal GMeet :
-${(pps_jadwal.value||"").trim()}`;
-    }
-    function refreshPPSUI(){ pps_preview.value = buildPPSMessage(); }
-    [pps_toko,pps_kode,pps_kondisi,pps_jadwal].forEach(el=>{
-      el.addEventListener("input", refreshPPSUI);
-      el.addEventListener("change", refreshPPSUI);
-    });
-    btnPPSWA.addEventListener("click", ()=> openWA(buildPPSMessage()));
-    refreshPPSUI();
-
-    /* ================== SUEGEERR WA ================== */
-    const s_toko = document.getElementById("s_toko");
-    const s_kode = document.getElementById("s_kode");
-    const s_target = document.getElementById("s_target");
-    const s_kondisi = document.getElementById("s_kondisi");
-    const s_preview = document.getElementById("s_preview");
-    const btnSuegeerrWA = document.getElementById("btnSuegeerrWA");
-
-    function buildSuegeerrMessage(){
-      return `Halo,
-Saya ingin memesan layanan Suegeerr Coaching.
-
-Nama toko : ${(s_toko.value||"").trim()}
-Kode toko : ${(s_kode.value||"").trim()}
-Target Suegeerr : ${(s_target.value||"").trim()}
-
-Kondisi saat ini :
-${(s_kondisi.value||"").trim()}`;
-    }
-    function refreshSuegeerrUI(){ s_preview.value = buildSuegeerrMessage(); }
-    [s_toko,s_kode,s_target,s_kondisi].forEach(el=>{
-      el.addEventListener("input", refreshSuegeerrUI);
-      el.addEventListener("change", refreshSuegeerrUI);
-    });
-    btnSuegeerrWA.addEventListener("click", ()=> openWA(buildSuegeerrMessage()));
-    refreshSuegeerrUI();
-
-    /* ================== COPY ================== */
-    function copyText(id){
-      const el = document.getElementById(id);
-      if(!el) return;
-      el.select();
-      el.setSelectionRange(0, 999999);
-      document.execCommand("copy");
+      qs("cartTotal").textContent = rupiah(cartTotal());
     }
 
-    /* ================== PDF VIEWER + WATERMARK ==================
-      Catatan jujur:
-      - Watermark overlay + disable right-click bisa mengurangi orang “nyomot”
-      - Tapi tidak ada cara web yang bisa 100% blok screenshot
-    ============================================================= */
-    pdfjsLib.GlobalWorkerOptions.workerSrc =
-      "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.js";
+    function escapeHTML(str){
+      return (str ?? "").toString()
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
 
-    const pdfWrap = document.getElementById("pdfWrap");
-    const pdfTitle = document.getElementById("pdfTitle");
-    const pdfCanvas = document.getElementById("pdfCanvas");
-    const pdfCtx = pdfCanvas.getContext("2d");
+    // =========================
+    // MEMBER (pricing rule)
+    // =========================
+    function memberPriceEach(qty){
+      qty = Number(qty||0);
+      if(qty >= 10) return 4500;
+      return 5000;
+    }
+    function recalcMember(){
+      const qty = Number(qs("m_qty").value || 0);
+      const priceEach = memberPriceEach(qty);
+      const total = qty * priceEach;
 
-    let pdfDoc = null;
-    let pdfScale = 1.2;
+      qs("m_priceEach").textContent = rupiah(priceEach);
+      qs("m_total").textContent = rupiah(total);
+    }
+    function openMemberModal(){
+      qs("m_qty").value = 10;
+      qs("m_kode").value = "";
+      qs("m_pin").value = "";
+      qs("m_qtyMember").value = "";
+      recalcMember();
+      openModal("memberModal");
+    }
+
+    function addMemberToCart(){
+      const qty = Math.max(1, Number(qs("m_qty").value || 1));
+      const priceEach = memberPriceEach(qty);
+      const total = qty * priceEach;
+
+      const kode = (qs("m_kode").value || "").trim();
+      const pin  = (qs("m_pin").value || "").trim();
+      const qtyMember = (qs("m_qtyMember").value || "").trim();
+
+      const cart = getCart();
+      cart.push({
+        type: "member",
+        name: "New Member Fresh",
+        qty,
+        priceEach,
+        total,
+        fields: { kode, pin, qtyMember },
+        previewLines: [
+          `Jumlah member: ${qty}`,
+          `Harga/member: ${rupiah(priceEach)}`,
+          `Total: ${rupiah(total)}`
+        ]
+      });
+      setCart(cart);
+      closeModal("memberModal");
+      openCart();
+    }
+
+    // =========================
+    // AREA
+    // =========================
+    function openAreaModal(){
+      qs("a_nama").value = "";
+      qs("a_kode").value = "";
+      qs("a_sub").value = "";
+      qs("a_share").value = "";
+      qs("a_orient").value = "Landscape";
+      openModal("areaModal");
+    }
+
+    function addAreaToCart(){
+      const nama = (qs("a_nama").value || "").trim();
+      const kode = (qs("a_kode").value || "").trim();
+      const sub  = (qs("a_sub").value || "").trim();
+      const share= (qs("a_share").value || "").trim();
+      const orient = (qs("a_orient").value || "Landscape").trim();
+
+      const cart = getCart();
+      cart.push({
+        type:"area",
+        name:"Design Area Coverage",
+        qty:1,
+        total:0,
+        fields:{ nama, kode, sub, share, orient },
+        previewLines:[
+          `Nama toko: ${nama || "-"}`,
+          `Kode toko: ${kode || "-"}`,
+          `Orient: ${orient}`
+        ]
+      });
+
+      setCart(cart);
+      closeModal("areaModal");
+      openCart();
+    }
+
+    // =========================
+    // SIMPLE MODULES
+    // =========================
+    function addSimpleToCart(name){
+      const cart = getCart();
+      cart.push({
+        type:"simple",
+        name,
+        qty:1,
+        total:0,
+        fields:{},
+        previewLines:[`Checkout akan minta brief via chat`]
+      });
+      setCart(cart);
+      openCart();
+    }
+
+    // =========================
+    // INFO MODAL
+    // =========================
+    function openInfo(key){
+      const map = {
+        member: {
+          title: "New Member Fresh",
+          body: `
+            <div class="hint">
+              Fokus: tambah member baru tanpa bikin lu pusing.
+              <br><br>
+              Cara kerja: lu isi jumlah member, sistem hitung otomatis harga/member & total, masuk keranjang, lalu checkout.
+            </div>`
+        },
+        pps: {
+          title: "Panduan Rahasia Top 10 PPS",
+          body: `
+            <div class="hint">
+              Coaching via GMeet + arahan eksekusi lapangan.
+              Targetnya: PPS “kepompa” dan stabil.
+              <br><br>
+              Flow: masuk keranjang → checkout → lu kirim brief (kondisi toko, target, kendala) → jadwal coaching.
+            </div>`
+        },
+        suegeerr: {
+          title: "Panduan Rahasia Top 10 SUEGEERR",
+          body: `
+            <div class="hint">
+              Coaching via GMeet + strategi eksekusi ritel.
+              Targetnya: SUEGEERR kejar & tembus (inti: capai target).
+              <br><br>
+              Flow: masuk keranjang → checkout → brief → coaching & monitoring.
+            </div>`
+        },
+        ppt: {
+          title: "Tugas PPT",
+          body: `
+            <div class="hint">
+              Buat presentasi rapi, simple, detail buat:
+              <br>• Review naik jabatan (IP COS / DP COS / Crew)
+              <br>• LPJ NSB
+              <br>• LPJ PPS
+              <br>• Laporan strategi / evaluasi
+              <br><br>
+              Output: deck siap dipresentasikan, urut, enak dibaca atasan.
+            </div>`
+        },
+        plan: {
+          title: "Review & Action Plan",
+          body: `
+            <div class="hint">
+              Ringkas evaluasi kondisi toko + action plan eksekusi harian.
+              Fokus: yang realistis dijalanin dan gampang dipantau.
+            </div>`
+        }
+      };
+
+      const it = map[key];
+      qs("infoTitle").textContent = it?.title || "Detail";
+      qs("infoBody").innerHTML = it?.body || `<div class="hint">Tidak ada detail.</div>`;
+      openModal("infoModal");
+    }
+
+    // =========================
+    // PDF VIEWER
+    // =========================
     let currentPdfUrl = "";
-
-    function openPdfSample(type){
-      const url = (type === "portrait") ? PDF_PORTRAIT : PDF_LANDSCAPE;
+    function openPdfModal(which){
+      const w = (which || "").toLowerCase();
+      const url = (w.includes("portrait")) ? PDF_PORTRAIT : PDF_LANDSCAPE;
       currentPdfUrl = url;
-      pdfTitle.textContent = `Sample PDF — ${type.toUpperCase()}`;
-      pdfWrap.style.display = "block";
-      renderPdfFirstPage(url);
+
+      qs("pdfTitle").textContent = "Contoh Area Coverage — " + (w.includes("portrait") ? "Portrait" : "Landscape");
+      qs("pdfChip").textContent  = (w.includes("portrait") ? "PORTRAIT PDF" : "LANDSCAPE PDF");
+
+      // cache bust biar gak “ke-load versi lama”
+      qs("pdfFrame").src = url + "?v=" + Date.now();
+
+      openModal("pdfModal");
     }
-
-    function closePdfSample(){
-      pdfWrap.style.display = "none";
-      pdfDoc = null;
-      currentPdfUrl = "";
-      pdfCtx.clearRect(0,0,pdfCanvas.width,pdfCanvas.height);
-    }
-
-    async function renderPdfFirstPage(url){
-      try{
-        const loadingTask = pdfjsLib.getDocument(url);
-        pdfDoc = await loadingTask.promise;
-        const page = await pdfDoc.getPage(1);
-
-        const viewport = page.getViewport({ scale: pdfScale });
-        pdfCanvas.width = Math.floor(viewport.width);
-        pdfCanvas.height = Math.floor(viewport.height);
-
-        await page.render({ canvasContext: pdfCtx, viewport }).promise;
-
-        drawWatermark();
-      }catch(err){
-        console.error(err);
-        pdfCtx.clearRect(0,0,pdfCanvas.width,pdfCanvas.height);
-        pdfCanvas.width = 900;
-        pdfCanvas.height = 250;
-        pdfCtx.fillStyle = "rgba(0,0,0,0.0)";
-        pdfCtx.fillRect(0,0,pdfCanvas.width,pdfCanvas.height);
-        pdfCtx.font = "bold 18px Inter, Arial";
-        pdfCtx.fillStyle = "rgba(239,68,68,0.95)";
-        pdfCtx.fillText("Gagal load PDF. Pastikan file ada di repo & nama sama.", 20, 60);
-        pdfCtx.font = "14px Inter, Arial";
-        pdfCtx.fillStyle = "rgba(156,163,175,0.95)";
-        pdfCtx.fillText("Expected: " + PDF_LANDSCAPE + " dan " + PDF_PORTRAIT, 20, 92);
-      }
-    }
-
-    function drawWatermark(){
-      // watermark diagonal repeated
-      const text = "Retail-Cortex.io • SAMPLE";
-      const time = new Date().toLocaleString("id-ID");
-      const wm = `${text} • ${time}`;
-
-      const w = pdfCanvas.width;
-      const h = pdfCanvas.height;
-
-      pdfCtx.save();
-      pdfCtx.globalAlpha = 0.12;
-      pdfCtx.fillStyle = "#ffffff";
-      pdfCtx.font = "700 18px Orbitron, Inter, Arial";
-      pdfCtx.translate(w/2, h/2);
-      pdfCtx.rotate(-Math.PI / 4);
-
-      const stepX = 380;
-      const stepY = 180;
-
-      for(let y = -h; y < h; y += stepY){
-        for(let x = -w; x < w; x += stepX){
-          pdfCtx.fillText(wm, x, y);
-        }
-      }
-
-      // stronger corner mark
-      pdfCtx.globalAlpha = 0.22;
-      pdfCtx.font = "900 22px Orbitron, Inter, Arial";
-      pdfCtx.fillText("Retail-Cortex.io", -w/2 + 24, -h/2 + 36);
-
-      pdfCtx.restore();
-    }
-
-    async function pdfZoom(delta){
+    function openPdfNewTab(){
       if(!currentPdfUrl) return;
-      pdfScale = Math.max(0.8, Math.min(2.2, pdfScale + delta));
-      await renderPdfFirstPage(currentPdfUrl);
+      window.open(currentPdfUrl, "_blank");
     }
+
+    // =========================
+    // CHECKOUT WA (format rapi)
+    // =========================
+    function checkoutWA(){
+      const cart = getCart();
+      if(cart.length === 0){
+        openCart();
+        return;
+      }
+
+      const lines = [];
+      let grand = 0;
+
+      cart.forEach((it)=>{
+        if(it.type === "member"){
+          const qty = it.qty;
+          const priceEach = it.priceEach;
+          const total = it.total;
+
+          grand += total;
+
+          lines.push(`Halo,`);
+          lines.push(`Saya ingin memesan layanan New Member Fresh.`);
+          lines.push(``);
+          lines.push(`Jumlah member : ${qty}`);
+          lines.push(`Harga / member : ${rupiah(priceEach)}`);
+          lines.push(`Total : ${rupiah(total)}`);
+          lines.push(``);
+          lines.push(`Kode toko : ${it.fields?.kode || ""}`);
+          lines.push(`Pin / tgl lahir : ${it.fields?.pin || ""}`);
+          lines.push(`Jumlah qty member : ${it.fields?.qtyMember || ""}`);
+          lines.push(``);
+          lines.push(`---`);
+          lines.push(``);
+        }
+
+        else if(it.type === "area"){
+          lines.push(`Halo,`);
+          lines.push(`Saya ingin memesan layanan Design Area Coverage.`);
+          lines.push(``);
+          lines.push(`Nama toko : ${it.fields?.nama || ""}`);
+          lines.push(`Kode toko : ${it.fields?.kode || ""}`);
+          lines.push(`Berapa sub : ${it.fields?.sub || ""}`);
+          lines.push(`Sharelok toko : ${it.fields?.share || ""}`);
+          lines.push(`Landscape / portrait : ${it.fields?.orient || ""}`);
+          lines.push(``);
+          lines.push(`---`);
+          lines.push(``);
+        }
+
+        else{
+          lines.push(`Halo,`);
+          lines.push(`Saya ingin memesan layanan ${it.name}.`);
+          lines.push(``);
+          lines.push(`---`);
+          lines.push(``);
+        }
+      });
+
+      // Total only for member (yang ada harga)
+      if(grand > 0){
+        lines.push(`Total keseluruhan (yang bertarif): ${rupiah(grand)}`);
+      }
+
+      const text = lines.join("\n").trim();
+      const url = "https://wa.me/" + WA_NUMBER + "?text=" + encodeURIComponent(text);
+      window.open(url, "_blank");
+    }
+
+    // =========================
+    // INIT
+    // =========================
+    function openWhatsAppGeneral(){ /* sengaja kosong - WA cuma checkout */ }
+
+    function init(){
+      initTheme();
+      refreshCartCount();
+      renderCart();
+      recalcMember();
+    }
+    document.addEventListener("DOMContentLoaded", init);
   </script>
 </body>
 </html>
