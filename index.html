@@ -1,1916 +1,1656 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Retail-Cortex.io — Service Modules</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Orbitron:wght@600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
-      --bg: #070a18;
-      --bg2:#060816;
-      --card: rgba(15, 22, 44, .62);
-      --card2: rgba(12, 16, 36, .72);
-      --glass: rgba(255,255,255,.06);
-      --stroke: rgba(255,255,255,.12);
-      --stroke2: rgba(129, 200, 255, .22);
-      --text: #eaf1ff;
-      --muted: rgba(234,241,255,.66);
-      --muted2: rgba(234,241,255,.48);
+      --bg:#070A16;
+      --bg2:#0B1026;
+      --card:rgba(10,14,32,.76);
+      --card2:rgba(12,18,42,.82);
+      --stroke:rgba(148,163,184,.22);
+      --stroke2:rgba(148,163,184,.34);
+      --text:#E8EEFF;
+      --muted:rgba(232,238,255,.70);
+      --muted2:rgba(232,238,255,.55);
+      --brandA:#22d3ee;
+      --brandB:#7c3aed;
+      --brandC:#4c1d95;
+      --good:#22c55e;
+      --warn:#f59e0b;
 
-      --c1:#7a3cff;     /* purple */
-      --c2:#25d6ff;     /* cyan */
-      --c3:#38ffb3;     /* mint */
-      --warn:#ffb020;
-      --ok:#38ffb3;
-      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --r16:16px;
+      --r18:18px;
+      --r20:20px;
+      --shadow:0 18px 55px rgba(0,0,0,.55);
+      --shadow2:0 26px 75px rgba(0,0,0,.70);
 
-      --radius: 22px;
-      --radius2: 16px;
-      --maxw: 1120px;
+      --gutter:16px;
+      --max:1100px;
 
-      --pad: 18px;
-      --pad2: 14px;
-      --h1: clamp(30px, 5.2vw, 52px);
-      --h2: clamp(18px, 2.2vw, 22px);
+      --floatingSize:54px;
     }
 
-    /* Light mode */
-    [data-theme="light"]{
-      --bg: #f3f7ff;
-      --bg2:#eef3ff;
-      --card: rgba(255,255,255,.72);
-      --card2: rgba(255,255,255,.86);
-      --glass: rgba(20, 35, 75, .06);
-      --stroke: rgba(20, 35, 75, .10);
-      --stroke2: rgba(50, 130, 255, .22);
-      --text: #0a1533;
-      --muted: rgba(10,21,51,.62);
-      --muted2: rgba(10,21,51,.48);
-      --shadow: 0 18px 60px rgba(10, 21, 51, .12);
+    html[data-theme="light"]{
+      --bg:#EEF2FF;
+      --bg2:#F8FAFF;
+      --card:rgba(255,255,255,.86);
+      --card2:rgba(255,255,255,.96);
+      --stroke:rgba(2,6,23,.10);
+      --stroke2:rgba(2,6,23,.16);
+      --text:#0B1026;
+      --muted:rgba(11,16,38,.72);
+      --muted2:rgba(11,16,38,.58);
+      --shadow:0 14px 38px rgba(2,6,23,.12);
+      --shadow2:0 18px 46px rgba(2,6,23,.16);
     }
 
     *{box-sizing:border-box}
-    html{scroll-behavior:smooth}
+    html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans", sans-serif;
-      background: radial-gradient(1100px 600px at 15% 10%, rgba(122,60,255,.35), transparent 60%),
-                  radial-gradient(900px 520px at 80% 15%, rgba(37,214,255,.22), transparent 60%),
-                  radial-gradient(900px 520px at 70% 85%, rgba(56,255,179,.14), transparent 60%),
-                  linear-gradient(180deg, var(--bg), var(--bg2));
-      color: var(--text);
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1100px 650px at 20% 0%, rgba(124,58,237,.35), transparent 55%),
+        radial-gradient(900px 520px at 85% 15%, rgba(34,211,238,.26), transparent 58%),
+        radial-gradient(900px 620px at 55% 110%, rgba(76,29,149,.32), transparent 60%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
       overflow-x:hidden;
+      padding-bottom: 120px; /* ruang aman floating */
     }
 
-    /* grid overlay */
+    /* background grid */
     .bg-grid{
-      position:fixed; inset:0; pointer-events:none;
-      background-image:
-        linear-gradient(to right, rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(255,255,255,.06) 1px, transparent 1px);
-      background-size: 56px 56px;
+      position:fixed; inset:0;
+      pointer-events:none;
       opacity:.16;
-      mix-blend-mode: overlay;
-    }
-    [data-theme="light"] .bg-grid{ opacity:.10; mix-blend-mode: normal; }
-
-    .orb{
-      position:fixed; inset:auto; pointer-events:none; filter: blur(10px);
-      opacity:.42;
-      border-radius:999px;
-      mix-blend-mode: screen;
-    }
-    .orb.a{ width:360px; height:360px; left:-110px; top:-120px;
-      background: radial-gradient(circle at 30% 30%, rgba(122,60,255,.85), transparent 60%);
-      animation: floatA 18s ease-in-out infinite;
-    }
-    .orb.b{ width:420px; height:420px; right:-140px; top:120px;
-      background: radial-gradient(circle at 40% 30%, rgba(37,214,255,.75), transparent 60%);
-      animation: floatB 22s ease-in-out infinite;
-    }
-    .orb.c{ width:520px; height:520px; right:-170px; bottom:-190px;
-      background: radial-gradient(circle at 40% 40%, rgba(56,255,179,.45), transparent 62%);
-      animation: floatC 26s ease-in-out infinite;
-    }
-    @keyframes floatA{ 0%,100%{transform:translate(0,0)} 50%{transform:translate(24px, 22px)}}
-    @keyframes floatB{ 0%,100%{transform:translate(0,0)} 50%{transform:translate(-22px, 26px)}}
-    @keyframes floatC{ 0%,100%{transform:translate(0,0)} 50%{transform:translate(-16px, -18px)}}
-
-    a{color:inherit; text-decoration:none}
-
-    .wrap{
-      width: min(var(--maxw), calc(100% - 28px));
-      margin: 0 auto;
-      position:relative;
-      padding-bottom: 120px;
+      background-image:
+        linear-gradient(to right, rgba(129,140,248,.22) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(129,140,248,.22) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: radial-gradient(circle at 50% 10%, rgba(0,0,0,1), rgba(0,0,0,.2) 55%, rgba(0,0,0,0) 85%);
+      z-index:0;
     }
 
-    /* Header */
-    header{
-      position:sticky; top:0; z-index: 20;
-      backdrop-filter: blur(14px);
-      background: linear-gradient(180deg, rgba(0,0,0,.42), rgba(0,0,0,.06));
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    [data-theme="light"] header{
-      background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.22));
-      border-bottom: 1px solid rgba(10,21,51,.08);
-    }
-
-    .topbar{
-      width:min(var(--maxw), calc(100% - 28px));
+    .container{
+      width:100%;
+      max-width:var(--max);
       margin:0 auto;
+      padding-left:var(--gutter);
+      padding-right:var(--gutter);
+      position:relative;
+      z-index:1;
+    }
+
+    /* ===== Header (simple, simetris) ===== */
+    header{
+      position:sticky; top:0;
+      z-index:30;
+      background:rgba(7,10,22,.55);
+      backdrop-filter: blur(14px) saturate(1.2);
+      border-bottom:1px solid var(--stroke);
+    }
+    html[data-theme="light"] header{
+      background:rgba(248,250,255,.72);
+    }
+
+    .nav{
       display:flex;
       align-items:center;
+      justify-content:space-between;
       gap:12px;
-      padding: 14px 0;
+      padding:12px 0;
     }
 
     .brand{
-      display:flex; align-items:center; gap:12px;
-      min-width: 0;
-    }
-    .logo{
-      width:44px; height:44px; border-radius: 14px;
-      background: linear-gradient(135deg, rgba(122,60,255,.85), rgba(37,214,255,.75));
-      border: 1px solid rgba(255,255,255,.18);
-      box-shadow: 0 12px 30px rgba(0,0,0,.32);
-      display:grid; place-items:center;
-      overflow:hidden;
-      flex:0 0 auto;
-    }
-    .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
-    .logo .fallback{
-      font-weight:800;
-      letter-spacing:.08em;
-      font-size: 14px;
-      opacity:.92;
-    }
-
-    .brandText{
-      display:flex; flex-direction:column; gap:3px;
+      display:flex;
+      align-items:center;
+      gap:10px;
       min-width:0;
     }
-    .brandText .t1{
-      font-weight: 900;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-      font-size: 18px;
-      line-height:1.05;
+    .brand img{
+      width:42px;height:42px;
+      border-radius:14px;
+      object-fit:cover;
+      flex:0 0 auto;
+      box-shadow: 0 10px 28px rgba(0,0,0,.25);
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.08);
+    }
+    .brand-text{min-width:0; line-height:1.05}
+    .brand-title{
+      font-family:Orbitron,Inter,sans-serif;
+      font-weight:800;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:1rem;
       white-space:nowrap;
       overflow:hidden;
-      text-overflow: ellipsis;
-      background: linear-gradient(90deg, rgba(122,60,255,.95), rgba(37,214,255,.92));
-      -webkit-background-clip: text;
+      text-overflow:ellipsis;
+      background: linear-gradient(90deg, var(--brandB), var(--brandA));
+      -webkit-background-clip:text;
       background-clip:text;
-      color: transparent;
+      color:transparent;
     }
-    .brandText .t2{
-      font-size: 12px;
-      letter-spacing:.18em;
-      text-transform: uppercase;
-      color: var(--muted);
+    .brand-sub{
+      margin-top:4px;
+      font-size:.72rem;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      color:var(--muted2);
       white-space:nowrap;
       overflow:hidden;
-      text-overflow: ellipsis;
+      text-overflow:ellipsis;
     }
 
-    .spacer{ flex:1 }
+    .menuBtn{
+      width:46px;height:46px;
+      border-radius:16px;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      display:flex;align-items:center;justify-content:center;
+      box-shadow: var(--shadow);
+      cursor:pointer;
+    }
+    html[data-theme="light"] .menuBtn{background:rgba(2,6,23,.04)}
+    .menuBtn:active{transform:translateY(1px)}
 
-    /* Hero */
+    /* ===== Hero ===== */
     .hero{
-      padding: 24px 0 10px;
+      padding:22px 0 12px;
     }
-
     .pill{
-      display:inline-flex; align-items:center; gap:10px;
-      padding: 10px 14px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-      box-shadow: 0 14px 40px rgba(0,0,0,.22);
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.06);
+      color:var(--muted);
+      font-weight:600;
+      font-size:.88rem;
     }
-    [data-theme="light"] .pill{
-      background: linear-gradient(180deg, rgba(255,255,255,.72), rgba(255,255,255,.52));
-      box-shadow: 0 14px 40px rgba(10,21,51,.10);
-    }
-    .pill .star{
-      width:22px; height:22px;
-      display:grid; place-items:center;
-      border-radius: 8px;
-      background: rgba(122,60,255,.18);
-      border: 1px solid rgba(122,60,255,.22);
-    }
-    .pill span{
-      font-weight:700; color: var(--muted);
-      font-size: 13px;
-      letter-spacing:.02em;
+    .pill .dot{
+      width:10px;height:10px;border-radius:999px;
+      background:linear-gradient(135deg,var(--brandB),var(--brandA));
+      box-shadow: 0 0 0 6px rgba(34,211,238,.12);
     }
 
     .heroGrid{
       display:grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      margin-top: 18px;
+      grid-template-columns: 1.15fr .85fr;
+      gap:18px;
       align-items:start;
+      margin-top:14px;
+    }
+    @media (max-width:900px){
+      .heroGrid{grid-template-columns:1fr; gap:14px;}
     }
 
-    h1{
-      margin: 10px 0 10px;
-      font-size: var(--h1);
-      line-height: 1.05;
-      letter-spacing: .02em;
-      text-transform: uppercase;
+    .heroTitle{
+      margin:10px 0 10px;
+      font-family:Orbitron,Inter,sans-serif;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      line-height:1.06;
+      font-size:2.35rem;
+      text-wrap: balance;
+      overflow-wrap:anywhere;
     }
-    h1 .grad{
-      background: linear-gradient(90deg, rgba(122,60,255,.98), rgba(37,214,255,.94));
+    @media (max-width:480px){
+      .heroTitle{font-size:2.05rem; letter-spacing:.05em;}
+    }
+
+    .heroTitle .accent{
+      background:linear-gradient(90deg,var(--brandB),var(--brandA));
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
-      white-space: nowrap;
-    }
-    .lead{
-      margin: 0;
-      max-width: 64ch;
-      color: var(--muted);
-      line-height: 1.7;
-      font-size: 15px;
     }
 
-    .infoCards{
-      margin-top: 18px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
+    .heroDesc{
+      margin:0;
+      color:var(--muted);
+      font-size:1rem;
+      line-height:1.7;
+      max-width: 56ch;
     }
-    @media (min-width: 820px){
-      .heroGrid{
-        grid-template-columns: 1.1fr .9fr;
-        gap: 18px;
-      }
-      .infoCards{ grid-template-columns: 1fr; }
+
+    .heroCards{
+      display:grid;
+      gap:10px;
+      position:relative;
+    }
+
+    /* ===== HERO LOGO (PROFESSIONAL) ===== */
+    .heroBrand{
+      border:1px solid var(--stroke);
+      background: var(--card);
+      border-radius:var(--r20);
+      box-shadow: var(--shadow);
+      padding:16px;
+      overflow:hidden;
+      position:relative;
+      min-height: 188px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .heroBrand:before{
+      content:"";
+      position:absolute; inset:-1px;
+      background:
+        radial-gradient(420px 220px at 30% 20%, rgba(124,58,237,.30), transparent 60%),
+        radial-gradient(420px 220px at 70% 80%, rgba(34,211,238,.22), transparent 60%);
+      opacity:.95;
+      pointer-events:none;
+    }
+    .heroBrand:after{
+      content:"";
+      position:absolute; inset:0;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 55%);
+      opacity:.55;
+      pointer-events:none;
+    }
+    .heroBrandInner{
+      position:relative;
+      display:grid;
+      gap:10px;
+      justify-items:center;
+      text-align:center;
+    }
+    .heroBrand img{
+      width:116px;height:116px;
+      border-radius:28px;
+      object-fit:cover;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.08);
+      box-shadow: 0 18px 58px rgba(0,0,0,.55);
+      filter: drop-shadow(0 0 18px rgba(34,211,238,.18));
+    }
+    .heroBrand .t1{
+      font-family:Orbitron,Inter,sans-serif;
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:.95rem;
+      background: linear-gradient(90deg, var(--brandB), var(--brandA));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .heroBrand .t2{
+      color:var(--muted);
+      font-weight:800;
+      font-size:.90rem;
+      line-height:1.55;
     }
 
     .miniCard{
-      border-radius: var(--radius);
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.04));
+      border:1px solid var(--stroke);
+      background:var(--card);
+      border-radius:var(--r20);
       box-shadow: var(--shadow);
-      padding: 14px 14px;
+      padding:14px;
     }
-    .miniCard .k{
-      font-weight: 800;
+    .miniCard h4{
+      margin:0 0 6px;
+      font-size:.98rem;
+      font-weight:800;
       letter-spacing:.02em;
-      margin-bottom: 6px;
     }
-    .miniCard .v{
-      color: var(--muted);
-      line-height: 1.6;
-      font-size: 14px;
-    }
-
-    /* Section title */
-    .sectionTitle{
-      margin: 30px 0 8px;
-      font-size: 34px;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      opacity:.94;
-    }
-    .sectionSub{
-      margin: 0 0 16px;
-      color: var(--muted);
-      line-height: 1.6;
-      max-width: 74ch;
+    .miniCard p{
+      margin:0;
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.6;
     }
 
-    /* Modules grid */
+    /* ===== Section Title ===== */
+    .section{
+      padding:18px 0 10px;
+      position:relative;
+    }
+    .section h2{
+      margin:0 0 6px;
+      font-size:1.35rem;
+      font-weight:900;
+      letter-spacing:.02em;
+    }
+    .section .sub{
+      margin:0 0 14px;
+      color:var(--muted);
+      line-height:1.65;
+    }
+
+    /* subtle watermark (optional tasteful) */
+    .watermark{
+      position:absolute;
+      right:-26px;
+      bottom:-20px;
+      width:170px;
+      height:170px;
+      opacity:.055;
+      filter: blur(.0px);
+      pointer-events:none;
+      transform: rotate(-10deg);
+      display:none;
+    }
+    @media (min-width:980px){
+      .watermark{display:block;}
+    }
+
+    /* ===== Modules Grid ===== */
     .grid{
       display:grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
     }
-    @media (min-width: 820px){
-      .grid{ grid-template-columns: 1fr 1fr; }
-    }
+    @media (max-width:980px){ .grid{grid-template-columns:repeat(2,1fr);} }
+    @media (max-width:560px){ .grid{grid-template-columns:1fr;} }
 
     .card{
-      position:relative;
-      border-radius: var(--radius);
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, var(--card), rgba(255,255,255,.04));
+      border:1px solid var(--stroke);
+      border-radius:var(--r20);
+      background: radial-gradient(900px 220px at 10% 0%, rgba(34,211,238,.14), transparent 55%), var(--card);
       box-shadow: var(--shadow);
       overflow:hidden;
-      padding: 16px;
-      min-height: 168px;
+      position:relative;
     }
-    .card::before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(320px 160px at 20% 10%, rgba(122,60,255,.20), transparent 60%),
-                  radial-gradient(320px 160px at 80% 30%, rgba(37,214,255,.14), transparent 60%),
-                  radial-gradient(320px 160px at 70% 90%, rgba(56,255,179,.10), transparent 60%);
-      pointer-events:none;
-      opacity:.9;
+    html[data-theme="light"] .card{
+      background: radial-gradient(900px 220px at 10% 0%, rgba(124,58,237,.10), transparent 55%), var(--card);
     }
-    .card > *{ position:relative; z-index:1; }
 
-    .tagRow{
-      display:flex; align-items:center; gap:10px;
-      margin-bottom: 10px;
+    .cardTop{
+      padding:14px 14px 10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
     }
-    .tag{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      padding: 8px 12px;
-      border-radius: 999px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.05);
-      color: var(--muted);
-      font-weight: 800;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      font-size: 12px;
+    .badge{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.06);
+      color:var(--muted);
+      font-weight:800;
+      font-size:.78rem;
+      letter-spacing:.10em;
+      text-transform:uppercase;
     }
     .iconBox{
-      margin-left:auto;
-      width:44px; height:44px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: linear-gradient(135deg, rgba(122,60,255,.18), rgba(37,214,255,.12));
-      display:grid; place-items:center;
-      box-shadow: 0 14px 30px rgba(0,0,0,.22);
+      width:44px;height:44px;border-radius:16px;
+      display:flex;align-items:center;justify-content:center;
+      border:1px solid var(--stroke2);
+      background:linear-gradient(135deg, rgba(124,58,237,.20), rgba(34,211,238,.12));
+      box-shadow: 0 14px 36px rgba(0,0,0,.25);
+      flex:0 0 auto;
     }
-    [data-theme="light"] .iconBox{
-      border: 1px solid rgba(10,21,51,.10);
-      box-shadow: 0 14px 30px rgba(10,21,51,.10);
+    .iconBox svg{width:22px;height:22px;opacity:.92}
+
+    .cardBody{
+      padding:0 14px 14px;
     }
     .cardTitle{
-      font-size: var(--h2);
-      font-weight: 900;
-      margin: 0 0 6px;
+      margin:2px 0 6px;
+      font-size:1.08rem;
+      font-weight:900;
       letter-spacing:.01em;
     }
     .cardDesc{
-      margin:0;
-      color: var(--muted);
-      line-height: 1.7;
-      max-width: 64ch;
+      margin:0 0 12px;
+      color:var(--muted);
+      line-height:1.65;
+      font-size:.94rem;
     }
 
-    .btnRow{
-      margin-top: 14px;
+    .cardActions{
       display:flex;
-      gap: 10px;
+      gap:10px;
       align-items:center;
-      flex-wrap:wrap;
     }
     .btn{
+      appearance:none;
+      border:none;
+      cursor:pointer;
+      border-radius:16px;
+      padding:12px 14px;
+      font-weight:900;
+      font-size:.95rem;
+      letter-spacing:.01em;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap: 10px;
-      padding: 12px 14px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: linear-gradient(90deg, rgba(122,60,255,.85), rgba(37,214,255,.70));
-      color: #031022;
-      font-weight: 900;
-      letter-spacing:.02em;
-      cursor:pointer;
+      gap:10px;
+      transition: transform .12s ease, opacity .12s ease;
       user-select:none;
-      box-shadow: 0 16px 36px rgba(0,0,0,.30);
     }
-    .btn.secondary{
-      background: rgba(255,255,255,.06);
-      color: var(--text);
-      border: 1px solid var(--stroke);
-      box-shadow: none;
+    .btn:active{transform:translateY(1px)}
+    .btnPrimary{
+      color:#061026;
+      background:linear-gradient(90deg,var(--brandB),var(--brandA));
+      box-shadow: var(--shadow);
     }
-    .btn:active{ transform: translateY(1px); }
+    .btnGhost{
+      color:var(--text);
+      background:rgba(255,255,255,.06);
+      border:1px solid var(--stroke2);
+    }
+    html[data-theme="light"] .btnGhost{background:rgba(2,6,23,.04)}
+    .btnFull{width:100%}
 
-    /* Reviews */
-    .reviews{
-      margin-top: 18px;
+    /* NOTE: priceLine on OUTSIDE cards is removed per request */
+
+    /* ===== Testimonials ===== */
+    .testiWrap{
       display:grid;
-      grid-template-columns: 1fr;
-      gap: 12px;
+      grid-template-columns: repeat(3, 1fr);
+      gap:12px;
     }
-    @media (min-width: 820px){
-      .reviews{ grid-template-columns: 1fr 1fr 1fr; }
+    @media (max-width:900px){.testiWrap{grid-template-columns:1fr;}}
+    .testi{
+      border:1px solid var(--stroke);
+      background:var(--card);
+      border-radius:var(--r20);
+      padding:14px;
+      box-shadow: var(--shadow);
     }
-    .review{
-      border-radius: var(--radius);
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, var(--card2), rgba(255,255,255,.04));
-      padding: 14px;
-    }
-    .review .who{
-      display:flex; align-items:center; gap:10px;
-      margin-bottom: 8px;
-    }
-    .avatar{
-      width:38px; height:38px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(122,60,255,.35), rgba(37,214,255,.18));
-      border: 1px solid rgba(255,255,255,.14);
-      display:grid; place-items:center;
-      font-weight: 900;
-      color: var(--text);
-    }
-    .who .nm{
-      font-weight: 900;
-      letter-spacing:.02em;
-      line-height:1.1;
-    }
-    .who .role{
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 2px;
-    }
-    .review p{
-      margin:0;
-      color: var(--muted);
-      line-height:1.7;
-    }
+    .stars{letter-spacing:2px; color:#fbbf24; font-size:.95rem}
+    .testi p{margin:8px 0 0; color:var(--muted); line-height:1.65}
+    .testi .name{margin-top:10px; font-weight:900}
+    .testi .meta{color:var(--muted2); font-size:.9rem}
 
-    /* Modal */
+    /* ===== Modal ===== */
     .overlay{
       position:fixed; inset:0;
-      background: rgba(0,0,0,.55);
+      background:rgba(0,0,0,.55);
       backdrop-filter: blur(10px);
       display:none;
-      align-items:center;
-      justify-content:center;
-      padding: 18px;
-      z-index: 50;
+      z-index:50;
+      padding: 12px;
     }
-    [data-theme="light"] .overlay{ background: rgba(10,21,51,.28); }
-
+    .overlay.open{display:flex; align-items:center; justify-content:center;}
     .modal{
-      width: min(760px, 100%);
-      border-radius: 24px;
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(10,14,28,.92), rgba(9, 12, 24, .92));
-      box-shadow: 0 28px 90px rgba(0,0,0,.55);
+      width:100%;
+      max-width: 720px;
+      border-radius: 22px;
+      border:1px solid var(--stroke2);
+      background: var(--card2);
+      box-shadow: var(--shadow2);
       overflow:hidden;
-      position:relative;
     }
-    [data-theme="light"] .modal{
-      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.88));
-      box-shadow: 0 28px 90px rgba(10,21,51,.16);
+    .modalHeader{
+      padding:14px 14px;
+      background: linear-gradient(90deg, rgba(124,58,237,.35), rgba(34,211,238,.22));
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-
-    .modalHead{
-      padding: 14px 16px;
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(90deg, rgba(122,60,255,.30), rgba(37,214,255,.18));
-      position:relative;
-    }
-    [data-theme="light"] .modalHead{ border-bottom: 1px solid rgba(10,21,51,.10); }
-
-    .modalHead .mhIcon{
-      width:34px; height:34px; border-radius: 14px;
-      background: rgba(255,255,255,.10);
-      border: 1px solid rgba(255,255,255,.14);
-      display:grid; place-items:center;
-      flex:0 0 auto;
-    }
-    .modalHead .mhTitle{
-      font-weight: 950;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      font-size: 16px;
+    .modalHeader h3{
       margin:0;
-      line-height: 1.1;
+      font-family:Orbitron,Inter,sans-serif;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size:1.05rem;
     }
-    .closeX{
-      margin-left:auto;
-      width:38px; height:38px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.08);
+    .closeBtn{
+      width:42px;height:42px;border-radius:16px;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.08);
+      color:var(--text);
       cursor:pointer;
-      display:grid; place-items:center;
-      z-index: 3;
-      flex:0 0 auto;
+      display:flex; align-items:center; justify-content:center;
     }
-    [data-theme="light"] .closeX{
-      border: 1px solid rgba(10,21,51,.10);
-      background: rgba(10,21,51,.06);
-    }
-    .modalBody{
-      padding: 16px;
-      display:grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-    @media (min-width: 720px){
-      .modalBody{ grid-template-columns: 1.05fr .95fr; }
-    }
-
-    .panel{
-      border-radius: 20px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      padding: 14px;
-    }
-    [data-theme="light"] .panel{ background: rgba(10,21,51,.04); }
-
-    .panel h3{
-      margin:0 0 10px;
-      font-size: 14px;
-      letter-spacing:.12em;
-      text-transform: uppercase;
-      color: var(--muted);
+    html[data-theme="light"] .closeBtn{background:rgba(2,6,23,.04)}
+    .modalBody{padding:14px}
+    .modalFooter{
+      padding:14px;
+      border-top:1px solid var(--stroke);
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
     }
 
     .field{
-      display:flex;
-      flex-direction:column;
-      gap: 8px;
-      margin-bottom: 12px;
+      display:grid;
+      gap:8px;
+      margin-bottom:12px;
     }
-    .field label{
-      font-weight: 800;
-      color: var(--muted);
-      font-size: 13px;
-      letter-spacing:.02em;
+    .label{
+      font-weight:800;
+      color:var(--muted);
+      font-size:.9rem;
     }
-    .input, select{
+    input, select, textarea{
       width:100%;
-      padding: 12px 12px;
+      padding:12px 12px;
       border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(0,0,0,.18);
-      color: var(--text);
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
       outline:none;
+      font-weight:700;
+      font-size:.98rem;
     }
-    [data-theme="light"] .input, [data-theme="light"] select{
-      background: rgba(255,255,255,.84);
-      color: var(--text);
-      border: 1px solid rgba(10,21,51,.10);
+    html[data-theme="light"] input, html[data-theme="light"] select, html[data-theme="light"] textarea{
+      background:rgba(2,6,23,.04);
     }
-    select{ appearance:none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
-      background-position: calc(100% - 18px) calc(50% - 3px), calc(100% - 13px) calc(50% - 3px);
-      background-size: 6px 6px, 6px 6px;
-      background-repeat: no-repeat;
-      padding-right: 38px;
-    }
-
-    .hint{
-      color: var(--muted2);
-      line-height: 1.6;
-      margin: 0;
-      font-size: 13px;
+    textarea{min-height:86px; resize:vertical; font-weight:600}
+    .help{
+      margin:6px 0 0;
+      color:var(--muted2);
+      font-size:.9rem;
+      line-height:1.55;
     }
 
-    .summaryLine{
-      display:flex; align-items:center; justify-content:space-between;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      margin-bottom: 10px;
-      font-weight: 900;
+    .inline2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
     }
-    [data-theme="light"] .summaryLine{
-      border: 1px solid rgba(10,21,51,.10);
-      background: rgba(10,21,51,.04);
-    }
-    .summaryLine .l{ color: var(--muted); font-weight: 900; }
-    .summaryLine .r{ color: var(--text); }
+    @media (max-width:560px){.inline2{grid-template-columns:1fr;}}
 
-    .modalActions{
-      padding: 0 16px 16px;
-      display:flex;
-      gap: 10px;
-      justify-content:flex-end;
-      flex-wrap: wrap;
+    /* PDF buttons */
+    .pdfRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    @media (max-width:560px){.pdfRow{grid-template-columns:1fr;}}
+
+    /* ===== Floating Buttons (bawah saja) ===== */
+    .floating{
+      position:fixed;
+      bottom:16px;
+      z-index:40;
+      width:var(--floatingSize);
+      height:var(--floatingSize);
+      border-radius: 999px;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.08);
+      box-shadow: var(--shadow2);
+      color:var(--text);
+      display:flex; align-items:center; justify-content:center;
+      cursor:pointer;
+      user-select:none;
+    }
+    html[data-theme="light"] .floating{background:rgba(2,6,23,.04)}
+    .floating:active{transform:translateY(1px)}
+    .floatingLeft{left:16px}
+    .floatingRight{right:16px}
+
+    .count{
+      position:absolute;
+      top:-6px; right:-6px;
+      min-width:22px;height:22px;
+      border-radius:999px;
+      background: var(--good);
+      color:#06200f;
+      font-weight:1000;
+      font-size:.78rem;
+      display:flex;align-items:center;justify-content:center;
+      border:2px solid rgba(0,0,0,.20);
     }
 
-    /* Cart Drawer */
-    .cartOverlay{
+    /* ===== Cart Drawer ===== */
+    .drawerOverlay{
       position:fixed; inset:0;
-      background: rgba(0,0,0,.55);
+      background:rgba(0,0,0,.55);
       backdrop-filter: blur(10px);
       display:none;
-      z-index: 60;
-      padding: 18px;
-      align-items:center;
-      justify-content:center;
+      z-index:60;
+      padding: 12px;
     }
-    [data-theme="light"] .cartOverlay{ background: rgba(10,21,51,.28); }
-
-    .cart{
-      width: min(860px, 100%);
-      border-radius: 24px;
-      border: 1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(10,14,28,.92), rgba(9, 12, 24, .92));
-      box-shadow: 0 28px 90px rgba(0,0,0,.55);
+    .drawerOverlay.open{display:block;}
+    .drawer{
+      position:absolute;
+      right:12px; bottom:12px;
+      width:min(520px, calc(100% - 24px));
+      border-radius:22px;
+      border:1px solid var(--stroke2);
+      background: var(--card2);
+      box-shadow: var(--shadow2);
       overflow:hidden;
-      position:relative;
     }
-    [data-theme="light"] .cart{
-      background: linear-gradient(180deg, rgba(255,255,255,.92), rgba(255,255,255,.88));
-      box-shadow: 0 28px 90px rgba(10,21,51,.16);
+    .drawerHeader{
+      padding:14px;
+      background: linear-gradient(90deg, rgba(124,58,237,.35), rgba(34,211,238,.22));
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-
-    .cartHead{
-      padding: 14px 16px;
-      display:flex;
-      align-items:center;
-      gap: 12px;
-      border-bottom: 1px solid rgba(255,255,255,.10);
-      background: linear-gradient(90deg, rgba(122,60,255,.26), rgba(37,214,255,.16));
-    }
-    [data-theme="light"] .cartHead{ border-bottom: 1px solid rgba(10,21,51,.10); }
-
-    .cartHead h2{
+    .drawerHeader h3{
       margin:0;
-      font-weight: 950;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      font-size: 16px;
+      font-family:Orbitron,Inter,sans-serif;
+      font-weight:800;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      font-size:1.02rem;
     }
-    .cartBody{
-      padding: 16px;
+    .drawerBody{padding:14px; max-height: 56vh; overflow:auto;}
+    .drawerFooter{
+      padding:14px;
+      border-top:1px solid var(--stroke);
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
-      gap: 14px;
+      gap:10px;
     }
-    @media (max-width: 820px){
-      .cartBody{ grid-template-columns: 1fr; }
+    .item{
+      border:1px solid var(--stroke);
+      background:rgba(255,255,255,.05);
+      border-radius:18px;
+      padding:12px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:flex-start;
+      margin-bottom:10px;
     }
-
-    .cartList{
-      border-radius: 20px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      padding: 12px;
-      min-height: 140px;
+    html[data-theme="light"] .item{background:rgba(2,6,23,.03)}
+    .item .t{font-weight:900}
+    .item .m{color:var(--muted); font-size:.9rem; margin-top:4px; line-height:1.55}
+    .item .right{display:flex; flex-direction:column; gap:8px; align-items:flex-end}
+    .qty{
+      display:flex; align-items:center; gap:8px;
+      border:1px solid var(--stroke2);
+      border-radius:999px;
+      padding:6px 8px;
+      background:rgba(255,255,255,.06);
     }
-    [data-theme="light"] .cartList{ background: rgba(10,21,51,.04); }
-
-    .cartItem{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 18px;
-      padding: 12px;
-      margin-bottom: 10px;
-    }
-    [data-theme="light"] .cartItem{
-      border: 1px solid rgba(10,21,51,.10);
-      background: rgba(10,21,51,.03);
-    }
-    .cartItem:last-child{ margin-bottom:0; }
-
-    .ciTop{
-      display:flex; align-items:flex-start; justify-content:space-between; gap: 10px;
-    }
-    .ciName{
-      font-weight: 950;
-      letter-spacing:.01em;
-      margin:0;
-    }
-    .ciMeta{
-      margin: 6px 0 0;
-      color: var(--muted);
-      line-height:1.6;
-      font-size: 13px;
-      white-space: pre-wrap;
-    }
-    .ciPrice{
-      font-weight: 950;
-      white-space:nowrap;
-      color: var(--ok);
-    }
-    [data-theme="light"] .ciPrice{ color: #0b7c57; }
-
-    .ciActions{
-      margin-top: 10px;
-      display:flex; justify-content:flex-end;
-    }
-    .removeBtn{
-      display:inline-flex; align-items:center; gap:8px;
-      padding: 10px 12px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.06);
-      color: var(--text);
+    .qbtn{
+      width:30px;height:30px;border-radius:999px;
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.08);
+      color:var(--text);
       cursor:pointer;
-      font-weight: 900;
+      font-weight:900;
     }
-    [data-theme="light"] .removeBtn{
-      border: 1px solid rgba(10,21,51,.10);
-      background: rgba(10,21,51,.06);
+    .qbtn:active{transform:translateY(1px)}
+    .qty span{min-width:18px; text-align:center; font-weight:900}
+    .rm{
+      border:none;
+      background:transparent;
+      color:rgba(248,113,113,.92);
+      font-weight:900;
+      cursor:pointer;
     }
 
-    .checkout{
-      border-radius: 20px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.06);
-      padding: 12px;
-      display:flex; flex-direction:column; gap: 10px;
-    }
-    [data-theme="light"] .checkout{ background: rgba(10,21,51,.04); }
-
-    .totalBox{
+    .totals{
       display:flex; justify-content:space-between; align-items:center;
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      border-radius: 18px;
-      padding: 12px;
-      font-weight: 950;
+      font-weight:900;
+      padding:12px;
+      border:1px solid var(--stroke);
+      border-radius:18px;
+      background:rgba(255,255,255,.05);
     }
-    [data-theme="light"] .totalBox{
-      border: 1px solid rgba(10,21,51,.10);
-      background: rgba(10,21,51,.03);
-    }
+    html[data-theme="light"] .totals{background:rgba(2,6,23,.03)}
+    .totals .value{color:var(--good)}
+    .noteSmall{color:var(--muted2); font-size:.88rem; line-height:1.55; margin:0}
 
-    .ctaWA{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      gap: 10px;
-      padding: 13px 14px;
-      border-radius: 18px;
-      border: 1px solid rgba(56,255,179,.28);
-      background: linear-gradient(90deg, rgba(56,255,179,.72), rgba(37,214,255,.36));
-      color:#021017;
-      font-weight: 950;
-      letter-spacing:.02em;
-      cursor:pointer;
+    /* ===== Footer ===== */
+    footer{
+      margin-top: 22px;
+      padding: 18px 0 6px;
+      color:var(--muted2);
+      border-top:1px solid var(--stroke);
     }
-
-    .mutedNote{
-      color: var(--muted2);
-      line-height:1.6;
-      margin:0;
-      font-size: 13px;
-    }
-
-    /* Bottom Dock */
-    .dock{
-      position:fixed;
-      left: 16px;
-      right: 16px;
-      bottom: 14px;
-      z-index: 40;
+    .foot{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      gap: 12px;
-      pointer-events:none;
+      gap:10px;
+      flex-wrap:wrap;
+      font-size:.88rem;
     }
-    .dock .bubble{
-      pointer-events:auto;
-      width:58px; height:58px;
-      border-radius: 22px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: linear-gradient(135deg, rgba(122,60,255,.25), rgba(37,214,255,.18));
-      box-shadow: 0 18px 45px rgba(0,0,0,.40);
-      display:grid; place-items:center;
-      cursor:pointer;
-      position:relative;
-      user-select:none;
-    }
-    [data-theme="light"] .dock .bubble{
-      border: 1px solid rgba(10,21,51,.10);
-      box-shadow: 0 18px 45px rgba(10,21,51,.16);
-      background: linear-gradient(135deg, rgba(122,60,255,.14), rgba(37,214,255,.10));
-    }
-    .badge{
-      position:absolute;
-      top:-6px; right:-6px;
-      width:22px; height:22px;
-      border-radius:999px;
-      background: rgba(56,255,179,.90);
-      color:#041219;
-      display:grid; place-items:center;
-      font-weight: 950;
-      border: 1px solid rgba(0,0,0,.22);
-      font-size: 12px;
-    }
-
-    /* Footer */
-    footer{
-      margin-top: 26px;
-      padding: 18px 0 26px;
-      border-top: 1px solid rgba(255,255,255,.08);
-      color: var(--muted);
-    }
-    [data-theme="light"] footer{ border-top: 1px solid rgba(10,21,51,.08); }
-    .footRow{
-      display:flex;
-      flex-direction:column;
-      gap: 6px;
-      align-items:center;
-      text-align:center;
-    }
-    .footRow .f1{
-      font-weight: 950;
-      letter-spacing:.14em;
-      text-transform: uppercase;
-    }
-    .footRow .f2{
-      font-weight: 800;
-      letter-spacing:.02em;
-      color: var(--muted);
-      display:flex; align-items:center; gap:8px;
-    }
-    .heart{
-      width:16px; height:16px;
-      display:inline-block;
-      filter: drop-shadow(0 8px 18px rgba(122,60,255,.25));
-    }
-
-    /* Utility */
-    .hide{ display:none !important; }
-    .small{ font-size: 12px; color: var(--muted2); line-height:1.6; }
-
-    /* SVG */
-    svg{ display:block }
+    .heart{color:#fb7185}
   </style>
 </head>
 
-<body data-theme="dark">
+<body>
   <div class="bg-grid"></div>
-  <div class="orb a"></div>
-  <div class="orb b"></div>
-  <div class="orb c"></div>
 
+  <!-- Header -->
   <header>
-    <div class="topbar">
-      <div class="brand">
-        <div class="logo" title="Retail-Cortex.io">
-          <!-- Jika file logo tidak muncul, fallback RC akan tampil -->
-          <img id="brandLogo" src="retail-cortex-logo.png" alt="Retail-Cortex.io" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='grid';" />
-          <div id="logoFallback" class="fallback" style="display:none; width:100%; height:100%; place-items:center;">RC</div>
+    <div class="container">
+      <div class="nav">
+        <div class="brand">
+          <img src="retail-cortex-logo.png" alt="Retail-Cortex.io" onerror="this.style.display='none'">
+          <div class="brand-text">
+            <div class="brand-title">RETAIL-CORTEX.IO</div>
+            <div class="brand-sub">SERVICE MODULES</div>
+          </div>
         </div>
-        <div class="brandText">
-          <div class="t1">RETAIL-CORTEX.IO</div>
-          <div class="t2">SERVICE MODULES</div>
-        </div>
+        <button class="menuBtn" id="menuBtn" aria-label="Menu">
+          <!-- hamburger -->
+          <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+            <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
       </div>
-      <div class="spacer"></div>
-      <!-- Atas kosong (sesuai permintaan: tidak ada toggle/cart di atas) -->
     </div>
   </header>
 
-  <main class="wrap">
-    <section class="hero" id="top">
-      <div class="pill">
-        <div class="star" aria-hidden="true">
-          <!-- star -->
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
-            <path d="M12 2.8l2.6 6.1 6.6.6-5 4.3 1.5 6.4L12 17.4 6.3 20.2 7.8 13.8 2.8 9.5l6.6-.6L12 2.8z" fill="rgba(234,241,255,.92)"/>
-          </svg>
+  <!-- Main -->
+  <main>
+    <!-- Hero -->
+    <section class="hero">
+      <div class="container">
+        <div class="pill">
+          <span class="dot"></span>
+          <span>Portal layanan operasional toko — cepat, rapi, dan terukur.</span>
         </div>
-        <span>Portal layanan operasional toko — cepat, rapi, dan terukur.</span>
+
+        <div class="heroGrid">
+          <div>
+            <h1 class="heroTitle">
+              <span class="accent">Retail-Cortex.io</span><br>
+              Layanan untuk Eksekusi Toko.
+            </h1>
+            <p class="heroDesc">
+              Retail-Cortex.io membantu tim toko menyelesaikan kebutuhan operasional seperti penambahan member,
+              pembaruan area coverage, coaching PPS/Suegeerr, hingga penyusunan presentasi kerja yang rapi untuk
+              evaluasi maupun pengajuan jabatan.
+            </p>
+          </div>
+
+          <div class="heroCards">
+            <!-- PRO logo placement -->
+            <div class="heroBrand">
+              <div class="heroBrandInner">
+                <img src="retail-cortex-logo.png" alt="Retail-Cortex Logo" onerror="this.style.display='none'">
+                <div class="t1">Retail-Cortex.io</div>
+                <div class="t2">Service Modules • Checkout via WhatsApp</div>
+              </div>
+            </div>
+
+            <div class="miniCard">
+              <h4>Alur Order</h4>
+              <p>Pilih modul → isi seperlunya → masuk keranjang → checkout via WhatsApp (format otomatis).</p>
+            </div>
+            <div class="miniCard">
+              <h4>Status</h4>
+              <p>Mode: <b id="modeLabel">DARK</b> • Sistem: <b>READY</b> • Checkout: <b>WA</b></p>
+            </div>
+          </div>
+        </div>
       </div>
+    </section>
 
-      <div class="heroGrid">
-        <div>
-          <h1>
-            <span class="grad">RETAIL-CORTEX.IO</span><br/>
-            LAYANAN UNTUK<br/>
-            EKSEKUSI TOKO.
-          </h1>
-          <p class="lead">
-            Retail-Cortex.io membantu tim toko menyelesaikan kebutuhan operasional seperti penambahan member,
-            pembaruan area coverage, coaching PPS/Suegeerr, hingga penyusunan presentasi kerja yang rapi dan siap digunakan
-            untuk evaluasi maupun pengajuan jabatan.
-          </p>
+    <!-- Modules -->
+    <section class="section" id="modules">
+      <div class="container">
+        <h2>Cortex Service Modules</h2>
+        <p class="sub">Klik modul, isi seperlunya, lalu checkout. Semua pesan akan tersusun rapi otomatis.</p>
+
+        <!-- subtle watermark -->
+        <img class="watermark" src="retail-cortex-logo.png" alt="" aria-hidden="true">
+
+        <div class="grid" id="moduleGrid">
+          <!-- MEMBERSHIP -->
+          <article class="card">
+            <div class="cardTop">
+              <div class="badge">MEMBERSHIP</div>
+              <div class="iconBox" aria-hidden="true">
+                <!-- user-plus -->
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M19 8v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M22 11h-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="cardTitle">New Member Fresh</div>
+              <p class="cardDesc">Tambah member baru, tanpa harus pusing mencari member baru.</p>
+
+              <button class="btn btnPrimary btnFull" data-open="member">
+                <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                  <path d="M7 7h10M7 12h10M7 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+                <span>Detail &amp; Input</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- AREA COVERAGE -->
+          <article class="card">
+            <div class="cardTop">
+              <div class="badge">DESIGN</div>
+              <div class="iconBox" aria-hidden="true">
+                <!-- map-pin / route style -->
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 21s6-5 6-10a6 6 0 1 0-12 0c0 5 6 10 6 10Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M4 20c2-1.2 3.2-2 5-2s3 1.6 5 1.6S17 18 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+                </svg>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="cardTitle">Design Area Coverage</div>
+              <p class="cardDesc">Update Area Coverage terbaru, detail mapping sesuai radius toko.</p>
+
+              <div class="cardActions">
+                <button class="btn btnPrimary btnFull" data-open="area">
+                  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                    <path d="M12 21s6-5 6-10a6 6 0 1 0-12 0c0 5 6 10 6 10Z" stroke="currentColor" stroke-width="2"/>
+                    <path d="M12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2"/>
+                  </svg>
+                  <span>Detail &amp; Input</span>
+                </button>
+              </div>
+            </div>
+          </article>
+
+          <!-- PPS COACHING -->
+          <article class="card">
+            <div class="cardTop">
+              <div class="badge">COACHING</div>
+              <div class="iconBox" aria-hidden="true">
+                <!-- meet / video -->
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M14 10.5v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M6 8h8a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M16 12l4-2v4l-4-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="cardTitle">PPS Coaching (GMeet)</div>
+              <p class="cardDesc">Coaching melalui Google Meet untuk bantu toko paham strategi eksekusi dan alur penawaran.</p>
+
+              <button class="btn btnGhost btnFull" data-add-simple="PPS Coaching (GMeet)">
+                <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                  <path d="M6 6h15l-1.5 9h-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span>Tambah ke Keranjang</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- SUEGEERR -->
+          <article class="card">
+            <div class="cardTop">
+              <div class="badge">COACHING</div>
+              <div class="iconBox" aria-hidden="true">
+                <!-- target / growth -->
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M12 2a10 10 0 1 0 10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 6a6 6 0 1 0 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+                  <path d="M12 10a2 2 0 1 0 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".9"/>
+                  <path d="M14.5 9.5 22 2l-3 9-4.5-1.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="cardTitle">Suegeerr Support</div>
+              <p class="cardDesc">Pendampingan eksekusi agar target tercapai, termasuk monitoring dan arahan tindak lanjut.</p>
+
+              <button class="btn btnGhost btnFull" data-add-simple="Suegeerr Support">
+                <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                  <path d="M6 6h15l-1.5 9h-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span>Tambah ke Keranjang</span>
+              </button>
+            </div>
+          </article>
+
+          <!-- PRESENTASI KARIER -->
+          <article class="card">
+            <div class="cardTop">
+              <div class="badge">PRESENTASI</div>
+              <div class="iconBox" aria-hidden="true">
+                <!-- presentation -->
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M4 4h16v12H4z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M8 20h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 16v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M7 8h10M7 11h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                </svg>
+              </div>
+            </div>
+            <div class="cardBody">
+              <div class="cardTitle">Presentasi Karier (PPT)</div>
+              <p class="cardDesc">Presentasi rapi untuk evaluasi/kenaikan jabatan (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dan lainnya.</p>
+
+              <button class="btn btnGhost btnFull" data-add-simple="Presentasi Karier (PPT)">
+                <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                  <path d="M6 6h15l-1.5 9h-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span>Tambah ke Keranjang</span>
+              </button>
+            </div>
+          </article>
         </div>
+      </div>
+    </section>
 
-        <div class="infoCards">
-          <div class="miniCard">
-            <div class="k">Order via WhatsApp</div>
-            <div class="v">Pilih modul → isi seperlunya → masuk keranjang → checkout otomatis membentuk format WhatsApp rapi.</div>
+    <!-- Testimonials -->
+    <section class="section">
+      <div class="container">
+        <h2>Ulasan Singkat</h2>
+        <p class="sub">Ringkasan pengalaman beberapa pengguna. Nama disamarkan.</p>
+
+        <div class="testiWrap">
+          <div class="testi">
+            <div class="stars">★★★★★</div>
+            <p>“Mantap gausah cari member lg tinggal order, murahh josss”</p>
+            <div class="name">R***</div>
+            <div class="meta">Operational Support</div>
           </div>
-          <div class="miniCard">
-            <div class="k">Keranjang & Mode</div>
-            <div class="v">Tombol keranjang dan toggle mode tersedia di bagian kanan & kiri bawah.</div>
+          <div class="testi">
+            <div class="stars">★★★★★</div>
+            <p>“Design Area coverage nya keren mantull cocok”</p>
+            <div class="name">A***</div>
+            <div class="meta">Store Team</div>
           </div>
-          <div class="miniCard">
-            <div class="k">Catatan</div>
-            <div class="v">Harga tidak ditampilkan di kartu modul. Harga akan tampil saat item masuk keranjang/checkout.</div>
+          <div class="testi">
+            <div class="stars">★★★★☆</div>
+            <p>“PPT untuk evaluasi karier lebih rapi dan mudah dipresentasikan.”</p>
+            <div class="name">N***</div>
+            <div class="meta">Supervisor</div>
           </div>
         </div>
       </div>
     </section>
 
-    <section id="modules">
-      <div class="sectionTitle">Cortex Service Modules</div>
-      <p class="sectionSub">
-        Klik <b>Detail & Input</b>, isi seperlunya, lalu tambahkan ke keranjang. Checkout akan mengirimkan format WhatsApp otomatis.
-      </p>
-
-      <div class="grid">
-        <!-- MODULE 1: MEMBER -->
-        <article class="card">
-          <div class="tagRow">
-            <div class="tag">MEMBERSHIP</div>
-            <div class="iconBox" title="New Member Fresh">
-              <!-- user-plus -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M15 8.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-                <path d="M4.5 20c1.2-4 13.8-4 15 0" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round"/>
-                <path d="M19 8v6" stroke="rgba(56,255,179,.9)" stroke-width="1.8" stroke-linecap="round"/>
-                <path d="M16 11h6" stroke="rgba(56,255,179,.9)" stroke-width="1.8" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-          <h3 class="cardTitle">New Member Fresh</h3>
-          <p class="cardDesc">Tambah member baru, tanpa harus pusing mencari member baru.</p>
-          <div class="btnRow">
-            <button class="btn secondary" data-open="member">
-              <!-- list icon -->
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 7h14M5 12h14M5 17h14" stroke="rgba(234,241,255,.92)" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Detail & Input
-            </button>
-          </div>
-        </article>
-
-        <!-- MODULE 2: AREA -->
-        <article class="card">
-          <div class="tagRow">
-            <div class="tag">DESIGN</div>
-            <div class="iconBox" title="Design Area Coverage">
-              <!-- map-pin -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-                <path d="M12 11.2a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6Z" fill="rgba(37,214,255,.85)"/>
-              </svg>
-            </div>
-          </div>
-          <h3 class="cardTitle">Design Area Coverage</h3>
-          <p class="cardDesc">Update Area Coverage terbaru, detail mapping sesuai radius toko.</p>
-          <div class="btnRow">
-            <button class="btn secondary" data-open="area">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 7h14M5 12h14M5 17h14" stroke="rgba(234,241,255,.92)" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Detail & Input
-            </button>
-          </div>
-        </article>
-
-        <!-- MODULE 3: PPS -->
-        <article class="card">
-          <div class="tagRow">
-            <div class="tag">COACHING</div>
-            <div class="iconBox" title="PPS Coaching (GMeet)">
-              <!-- calendar/meet -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M7 3v3M17 3v3" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round"/>
-                <path d="M4.5 8.5h15" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round"/>
-                <path d="M6.2 5.5h11.6c1 0 1.7.7 1.7 1.7v11.2c0 1-.7 1.7-1.7 1.7H6.2c-1 0-1.7-.7-1.7-1.7V7.2c0-1 .7-1.7 1.7-1.7Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-                <path d="M10 12h4l-1.2 1.2c-1.2 1.2-2.8 2-4.5 2" stroke="rgba(56,255,179,.9)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-          </div>
-          <h3 class="cardTitle">PPS Coaching (GMeet)</h3>
-          <p class="cardDesc">Coaching via Google Meet untuk membantu toko mencapai target dan memahami alur eksekusi.</p>
-          <div class="btnRow">
-            <button class="btn secondary" data-open="pps">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 7h14M5 12h14M5 17h14" stroke="rgba(234,241,255,.92)" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Detail & Input
-            </button>
-          </div>
-        </article>
-
-        <!-- MODULE 4: SUEGEERR -->
-        <article class="card">
-          <div class="tagRow">
-            <div class="tag">COACHING</div>
-            <div class="iconBox" title="Suegeerr Support">
-              <!-- target -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-                <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="rgba(37,214,255,.85)" stroke-width="1.6"/>
-                <path d="M12 13.2a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4Z" fill="rgba(56,255,179,.9)"/>
-                <path d="M21 3l-6.2 6.2" stroke="rgba(56,255,179,.9)" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-          <h3 class="cardTitle">Suegeerr Support</h3>
-          <p class="cardDesc">Pendampingan untuk memastikan target Suegeerr tercapai dengan eksekusi yang rapi dan terarah.</p>
-          <div class="btnRow">
-            <button class="btn secondary" data-open="suegerr">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 7h14M5 12h14M5 17h14" stroke="rgba(234,241,255,.92)" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Detail & Input
-            </button>
-          </div>
-        </article>
-
-        <!-- MODULE 5: PPT -->
-        <article class="card">
-          <div class="tagRow">
-            <div class="tag">PRESENTATION</div>
-            <div class="iconBox" title="Presentasi Karier (PPT)">
-              <!-- presentation -->
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M4 4h16v10H4V4Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6" />
-                <path d="M8 20l4-6 4 6" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9 8h6M9 11h4" stroke="rgba(37,214,255,.85)" stroke-width="1.6" stroke-linecap="round"/>
-              </svg>
-            </div>
-          </div>
-          <h3 class="cardTitle">Presentasi Karier (PPT)</h3>
-          <p class="cardDesc">Template presentasi rapi untuk review kenaikan jabatan (IP COS, DP COS, Crew, LPJ NSB, LPJ PPS, dll).</p>
-          <div class="btnRow">
-            <button class="btn secondary" data-open="ppt">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M5 7h14M5 12h14M5 17h14" stroke="rgba(234,241,255,.92)" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              Detail & Input
-            </button>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="reviews">
-      <div class="sectionTitle" style="margin-top:34px;">Ulasan</div>
-      <p class="sectionSub">Ringkas, jelas, dan siap dipakai tim toko.</p>
-
-      <div class="reviews">
-        <div class="review">
-          <div class="who">
-            <div class="avatar">R</div>
-            <div>
-              <div class="nm">Rizky</div>
-              <div class="role">Store Team</div>
-            </div>
-          </div>
-          <p>Mantap, gausah cari member lagi. Tinggal order, murah, josss.</p>
-        </div>
-
-        <div class="review">
-          <div class="who">
-            <div class="avatar">A</div>
-            <div>
-              <div class="nm">Andre</div>
-              <div class="role">Operational</div>
-            </div>
-          </div>
-          <p>Design Area Coverage-nya keren, mantull, cocok.</p>
-        </div>
-
-        <div class="review">
-          <div class="who">
-            <div class="avatar">D</div>
-            <div>
-              <div class="nm">Dimas</div>
-              <div class="role">Supervisor</div>
-            </div>
-          </div>
-          <p>Format WhatsApp otomatisnya rapi. Tinggal isi field, kirim, beres.</p>
-        </div>
-      </div>
-    </section>
-
+    <!-- Footer (single) -->
     <footer>
-      <div class="footRow">
-        <div class="f1">RETAIL-CORTEX.IO</div>
-        <div class="f2">
-          Crafted with
-          <svg class="heart" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 21s-7-4.6-9.2-8.7C.9 9 2.6 6 6 6c1.8 0 3.1 1 4 2.2C10.9 7 12.2 6 14 6c3.4 0 5.1 3 3.2 6.3C19 16.4 12 21 12 21z" fill="rgba(255,85,125,.95)"/>
-          </svg>
-          by <b>D&amp;D A Digital Creative Studio</b>
+      <div class="container">
+        <div class="foot">
+          <div>© <span id="y"></span> Retail-Cortex.io</div>
+          <div>Crafted with <span class="heart">❤</span> • D&amp;D A Digital Creative Studio</div>
         </div>
       </div>
     </footer>
   </main>
 
-  <!-- Bottom Dock (toggle left, cart right) -->
-  <div class="dock" aria-label="Quick actions">
-    <div class="bubble" id="themeToggle" title="Toggle Dark/Light">
-      <!-- moon/sun -->
-      <svg id="themeIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M21 13.5A7.5 7.5 0 0 1 10.5 3a6.8 6.8 0 0 0 10.5 10.5Z" fill="rgba(234,241,255,.92)"/>
-      </svg>
-    </div>
+  <!-- Floating: Theme (bawah kiri) -->
+  <button class="floating floatingLeft" id="themeBtn" aria-label="Toggle Theme" title="Toggle Theme">
+    <svg id="themeIcon" viewBox="0 0 24 24" fill="none" width="22" height="22">
+      <path d="M21 13a8 8 0 1 1-10-10 6.5 6.5 0 0 0 10 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+    </svg>
+  </button>
 
-    <div class="bubble" id="openCartBtn" title="Keranjang">
-      <!-- cart icon -->
-      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M6 7h15l-1.5 8.5H7.2L6 7Z" stroke="rgba(234,241,255,.92)" stroke-width="1.8" stroke-linejoin="round"/>
-        <path d="M6 7 5.3 4.5H3" stroke="rgba(234,241,255,.92)" stroke-width="1.8" stroke-linecap="round"/>
-        <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" fill="rgba(56,255,179,.92)"/>
-      </svg>
-      <div class="badge" id="cartBadge">0</div>
-    </div>
-  </div>
+  <!-- Floating: Cart (bawah kanan) -->
+  <button class="floating floatingRight" id="cartBtn" aria-label="Keranjang" title="Keranjang">
+    <span class="count" id="cartCount">0</span>
+    <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
+      <path d="M6 6h15l-1.5 9h-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+      <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
+    </svg>
+  </button>
 
-  <!-- MODALS -->
-  <div class="overlay" id="modalOverlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" id="modal">
-      <div class="modalHead">
-        <div class="mhIcon" id="mhIcon"></div>
-        <h2 class="mhTitle" id="mhTitle">Detail</h2>
-        <div class="closeX" id="closeModal" aria-label="Tutup">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 6l12 12M18 6 6 18" stroke="rgba(234,241,255,.92)" stroke-width="2.2" stroke-linecap="round"/>
+  <!-- ===== Member Modal ===== -->
+  <div class="overlay" id="memberOverlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHeader">
+        <h3>New Member Fresh</h3>
+        <button class="closeBtn" data-close="member" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
-        </div>
+        </button>
       </div>
 
       <div class="modalBody">
-        <div class="panel" id="leftPanel"></div>
-        <div class="panel" id="rightPanel"></div>
+        <p class="help" style="margin-top:0">
+          Isi jumlah member, sistem menghitung harga/member dan total otomatis. Setelah itu tambahkan ke keranjang.
+        </p>
+
+        <div class="field">
+          <div class="label">Jumlah member</div>
+          <input type="number" id="m_qty" min="1" step="1" placeholder="Contoh: 12">
+        </div>
+
+        <div class="inline2">
+          <div class="field">
+            <div class="label">Kode toko</div>
+            <input type="text" id="m_kodetoko" placeholder="Contoh: 1234">
+          </div>
+          <div class="field">
+            <div class="label">PIN / Tanggal lahir</div>
+            <input type="text" id="m_pin" placeholder="Contoh: 01011999">
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">Ringkasan</div>
+          <textarea id="m_preview" readonly></textarea>
+          <p class="help">Catatan: harga Rp5.000/member (di bawah 10). Jika 10 atau lebih: Rp4.500/member.</p>
+        </div>
       </div>
 
-      <div class="modalActions" id="modalActions"></div>
+      <div class="modalFooter">
+        <button class="btn btnGhost" data-close="member">Tutup</button>
+        <button class="btn btnPrimary" id="m_addCart">Tambah ke Keranjang</button>
+      </div>
     </div>
   </div>
 
-  <!-- CART -->
-  <div class="cartOverlay" id="cartOverlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="cart">
-      <div class="cartHead">
-        <div class="mhIcon" style="width:34px;height:34px;border-radius:14px;">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 7h15l-1.5 8.5H7.2L6 7Z" stroke="rgba(234,241,255,.92)" stroke-width="1.8" stroke-linejoin="round"/>
-            <path d="M6 7 5.3 4.5H3" stroke="rgba(234,241,255,.92)" stroke-width="1.8" stroke-linecap="round"/>
+  <!-- ===== Area Modal ===== -->
+  <div class="overlay" id="areaOverlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHeader">
+        <h3>Design Area Coverage</h3>
+
+        <!-- FIX: Add X close button (per request) -->
+        <button class="closeBtn" data-close="area" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
+        </button>
+      </div>
+
+      <div class="modalBody">
+        <p class="help" style="margin-top:0">
+          Isi data singkat untuk brief. Contoh PDF tersedia pada tombol di bawah.
+        </p>
+
+        <div class="miniCard" style="margin:10px 0 12px;">
+          <h4 style="margin:0 0 6px;">Info Layanan</h4>
+          <p style="margin:0;color:var(--muted);line-height:1.65;font-size:.92rem">
+            Harga: <b style="color:var(--good)">Rp45.000</b> • Revisi gratis <b>1×24 jam</b>
+          </p>
         </div>
-        <h2>Keranjang</h2>
-        <div class="spacer"></div>
-        <div class="closeX" id="closeCart" aria-label="Tutup">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M6 6l12 12M18 6 6 18" stroke="rgba(234,241,255,.92)" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
+
+        <div class="inline2">
+          <div class="field">
+            <div class="label">Nama toko</div>
+            <input type="text" id="a_namatoko" placeholder="Contoh: Alfamart KP Garung Tambak">
+          </div>
+          <div class="field">
+            <div class="label">Kode toko</div>
+            <input type="text" id="a_kodetoko" placeholder="Contoh: 1234">
+          </div>
+        </div>
+
+        <div class="inline2">
+          <div class="field">
+            <div class="label">Berapa sub</div>
+            <input type="text" id="a_sub" placeholder="Contoh: 5 sub">
+          </div>
+          <div class="field">
+            <div class="label">Format</div>
+            <select id="a_format">
+              <option value="">Pilih format</option>
+              <option value="Landscape">Landscape</option>
+              <option value="Portrait">Portrait</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="label">Sharelok toko</div>
+          <input type="text" id="a_sharelok" placeholder="Tempel link share location Google Maps">
+        </div>
+
+        <div class="miniCard" style="margin-top:10px;">
+          <h4 style="margin:0 0 8px;">Lihat Contoh PDF</h4>
+          <div class="pdfRow">
+            <button class="btn btnGhost" id="btnPdfLandscape" type="button">Contoh Landscape</button>
+            <button class="btn btnGhost" id="btnPdfPortrait" type="button">Contoh Portrait</button>
+          </div>
         </div>
       </div>
 
-      <div class="cartBody">
-        <div class="cartList" id="cartList"></div>
+      <div class="modalFooter">
+        <button class="btn btnGhost" data-close="area">Tutup</button>
+        <button class="btn btnPrimary" id="a_addCart">Tambah ke Keranjang</button>
+      </div>
+    </div>
+  </div>
 
-        <div class="checkout">
-          <div class="totalBox">
-            <div>Total</div>
-            <div id="cartTotal">Rp0</div>
-          </div>
+  <!-- ===== Cart Drawer ===== -->
+  <div class="drawerOverlay" id="drawerOverlay" aria-hidden="true">
+    <div class="drawer" role="dialog" aria-modal="true">
+      <div class="drawerHeader">
+        <h3>Keranjang</h3>
+        <button class="closeBtn" id="closeCart" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
 
-          <button class="ctaWA" id="checkoutWA">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-              <path d="M12 21s-7-4.6-9.2-8.7C.9 9 2.6 6 6 6c1.8 0 3.1 1 4 2.2C10.9 7 12.2 6 14 6c3.4 0 5.1 3 3.2 6.3C19 16.4 12 21 12 21z" fill="rgba(0,0,0,.55)"/>
-            </svg>
-            Checkout via WhatsApp
-          </button>
+      <div class="drawerBody" id="cartItems">
+        <!-- items -->
+      </div>
 
-          <p class="mutedNote">
-            Checkout akan membuka WhatsApp dengan format pesan otomatis. Harga modul tampil di keranjang/checkout (bukan di kartu modul).
-          </p>
-
-          <button class="btn secondary" id="clearCartBtn" style="justify-content:center;">
-            Kosongkan Keranjang
-          </button>
+      <div class="drawerFooter">
+        <div class="totals">
+          <span>Total</span>
+          <span class="value" id="cartTotal">Rp0</span>
         </div>
+        <p class="noteSmall" id="cartNote" style="display:none;"></p>
+
+        <button class="btn btnGhost" id="clearCart">Hapus Keranjang</button>
+        <button class="btn btnPrimary" id="checkoutWA">Checkout via WhatsApp</button>
       </div>
     </div>
   </div>
 
   <script>
-    /* =========================
-      CONFIG
-    ========================= */
-    const WHATSAPP_NUMBER = "6287809236556"; // 0878... -> 62 + nomor tanpa 0 depan
+    // ====== CONFIG ======
+    // PDF di ROOT repo
+    const PDF_LANDSCAPE = "area-coverage-landscape.pdf";
+    const PDF_PORTRAIT  = "area-coverage-portrait.pdf";
 
-    // PDF file (pastikan file ada di repo GitHub Pages, folder /samples/)
-    // Ganti nama file di sini kalau Boss Brandon upload PDF baru.
-    const PDF_AREA_LANDSCAPE = "samples/area-coverage-landscape.pdf";
-    const PDF_AREA_PORTRAIT  = "samples/area-coverage-portrait.pdf";
+    // Nomor WA tujuan (tetap tidak ditampilkan di UI)
+    const WA_NUMBER = "6287809236556";
 
-    /* =========================
-      HELPERS
-    ========================= */
-    const rupiah = (n) => {
-      if (typeof n !== "number") return n;
-      return "Rp" + n.toLocaleString("id-ID");
+    // ====== FIX PRICING (per request) ======
+    const PRICE_AREA = 45000;
+    const PRICE_COACHING = 100000; // PPS & Suegeerr
+    const AREA_NOTE = "Revisi gratis 1×24 jam";
+    const COACHING_NOTE = "Sampai paham alur penawaran";
+
+    // ====== HELPERS ======
+    const money = (n) => "Rp" + (Number(n || 0)).toLocaleString("id-ID");
+    const clampInt = (v, min=1) => {
+      const x = parseInt(v, 10);
+      if (Number.isNaN(x)) return min;
+      return Math.max(min, x);
     };
-    const esc = (s) => String(s ?? "").replace(/[&<>"']/g, (m) => ({
-      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
-    }[m]));
 
-    const absUrl = (rel) => new URL(rel, window.location.href).href;
+    function siteUrl(path){
+      const base = window.location.origin.replace(/\/$/, "");
+      return base + "/" + String(path || "").replace(/^\//, "");
+    }
 
-    /* =========================
-      THEME
-    ========================= */
-    const themeToggle = document.getElementById("themeToggle");
-    const themeIcon = document.getElementById("themeIcon");
+    // ====== THEME ======
+    const themeBtn = document.getElementById("themeBtn");
+    const modeLabel = document.getElementById("modeLabel");
 
-    function setTheme(t){
-      document.body.setAttribute("data-theme", t);
-      localStorage.setItem("rc_theme", t);
+    function setMode(mode){
+      document.documentElement.setAttribute("data-theme", mode);
+      localStorage.setItem("rc_theme", mode);
+      modeLabel.textContent = (mode === "light" ? "LIGHT" : "DARK");
+    }
 
-      // icon swap
-      if(t === "light"){
-        themeIcon.innerHTML = `
-          <path d="M12 18.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Z" fill="rgba(10,21,51,.92)"/>
-          <path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.1 4.1l1.6 1.6M18.3 18.3l1.6 1.6M19.9 4.1l-1.6 1.6M5.7 18.3l-1.6 1.6"
-                stroke="rgba(10,21,51,.72)" stroke-width="1.8" stroke-linecap="round"/>`;
-      }else{
-        themeIcon.innerHTML = `<path d="M21 13.5A7.5 7.5 0 0 1 10.5 3a6.8 6.8 0 0 0 10.5 10.5Z" fill="rgba(234,241,255,.92)"/>`;
+    (function initTheme(){
+      const saved = localStorage.getItem("rc_theme") || "dark";
+      setMode(saved);
+      themeBtn.addEventListener("click", () => {
+        const cur = document.documentElement.getAttribute("data-theme");
+        setMode(cur === "dark" ? "light" : "dark");
+      });
+    })();
+
+    // ====== FOOTER YEAR ======
+    document.getElementById("y").textContent = new Date().getFullYear();
+
+    // ====== MODALS ======
+    const memberOverlay = document.getElementById("memberOverlay");
+    const areaOverlay   = document.getElementById("areaOverlay");
+
+    function openOverlay(which){
+      if(which === "member") memberOverlay.classList.add("open");
+      if(which === "area")   areaOverlay.classList.add("open");
+    }
+    function closeOverlay(which){
+      if(which === "member") memberOverlay.classList.remove("open");
+      if(which === "area")   areaOverlay.classList.remove("open");
+    }
+
+    document.addEventListener("click", (e) => {
+      const open = e.target.closest("[data-open]");
+      if(open){
+        const id = open.getAttribute("data-open");
+        openOverlay(id);
       }
-    }
-
-    const savedTheme = localStorage.getItem("rc_theme") || "dark";
-    setTheme(savedTheme);
-
-    themeToggle.addEventListener("click", () => {
-      const cur = document.body.getAttribute("data-theme");
-      setTheme(cur === "dark" ? "light" : "dark");
+      const close = e.target.closest("[data-close]");
+      if(close){
+        const id = close.getAttribute("data-close");
+        closeOverlay(id);
+      }
     });
 
-    /* =========================
-      MODAL SYSTEM
-    ========================= */
-    const modalOverlay = document.getElementById("modalOverlay");
-    const mhTitle = document.getElementById("mhTitle");
-    const mhIcon = document.getElementById("mhIcon");
-    const leftPanel = document.getElementById("leftPanel");
-    const rightPanel = document.getElementById("rightPanel");
-    const modalActions = document.getElementById("modalActions");
-    const closeModal = document.getElementById("closeModal");
-
-    let activeModal = null;
-
-    function openModal(key){
-      activeModal = key;
-      buildModal(key);
-      modalOverlay.style.display = "flex";
-      modalOverlay.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    }
-
-    function hideModal(){
-      modalOverlay.style.display = "none";
-      modalOverlay.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-      activeModal = null;
-    }
-
-    closeModal.addEventListener("click", hideModal);
-    modalOverlay.addEventListener("click", (e) => {
-      if(e.target === modalOverlay) hideModal();
+    // close when click outside modal
+    [memberOverlay, areaOverlay].forEach(ov => {
+      ov.addEventListener("click", (e) => {
+        if(e.target === ov) ov.classList.remove("open");
+      });
     });
 
-    document.querySelectorAll("[data-open]").forEach(btn => {
-      btn.addEventListener("click", () => openModal(btn.getAttribute("data-open")));
+    // ====== PDF BUTTONS ======
+    document.getElementById("btnPdfLandscape").addEventListener("click", () => {
+      window.open(siteUrl(PDF_LANDSCAPE), "_blank");
+    });
+    document.getElementById("btnPdfPortrait").addEventListener("click", () => {
+      window.open(siteUrl(PDF_PORTRAIT), "_blank");
     });
 
-    /* =========================
-      CART
-    ========================= */
-    const cartBadge = document.getElementById("cartBadge");
-    const openCartBtn = document.getElementById("openCartBtn");
-    const cartOverlay = document.getElementById("cartOverlay");
+    // ====== CART ======
+    const CART_KEY = "rc_cart_v1";
+    const cartBtn = document.getElementById("cartBtn");
+    const drawerOverlay = document.getElementById("drawerOverlay");
     const closeCart = document.getElementById("closeCart");
-    const cartList = document.getElementById("cartList");
-    const cartTotal = document.getElementById("cartTotal");
+    const clearCart = document.getElementById("clearCart");
     const checkoutWA = document.getElementById("checkoutWA");
-    const clearCartBtn = document.getElementById("clearCartBtn");
+    const cartItems = document.getElementById("cartItems");
+    const cartTotal = document.getElementById("cartTotal");
+    const cartCount = document.getElementById("cartCount");
+    const cartNote = document.getElementById("cartNote");
 
-    let CART = JSON.parse(localStorage.getItem("rc_cart") || "[]");
-
-    function saveCart(){
-      localStorage.setItem("rc_cart", JSON.stringify(CART));
-      renderCartBadge();
+    function getCart(){
+      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+      catch { return []; }
+    }
+    function setCart(items){
+      localStorage.setItem(CART_KEY, JSON.stringify(items));
       renderCart();
     }
 
-    function renderCartBadge(){
-      cartBadge.textContent = String(CART.length);
+    function cartQtySum(items){
+      return items.reduce((a,b)=>a+(Number(b.qty)||1),0);
     }
 
-    function openCart(){
-      renderCart();
-      cartOverlay.style.display = "flex";
-      cartOverlay.setAttribute("aria-hidden", "false");
-      document.body.style.overflow = "hidden";
-    }
-    function hideCart(){
-      cartOverlay.style.display = "none";
-      cartOverlay.setAttribute("aria-hidden", "true");
-      document.body.style.overflow = "";
-    }
-
-    openCartBtn.addEventListener("click", openCart);
-    closeCart.addEventListener("click", hideCart);
-    cartOverlay.addEventListener("click", (e) => {
-      if(e.target === cartOverlay) hideCart();
-    });
-
-    clearCartBtn.addEventListener("click", () => {
-      CART = [];
-      saveCart();
-    });
-
-    function addToCart(item){
-      CART.push(item);
-      saveCart();
-      hideModal();
+    function addItem(item){
+      const cart = getCart();
+      const sig = item.sig || item.title;
+      const found = cart.find(x => x.sig === sig);
+      if(found){
+        found.qty = (Number(found.qty)||1) + (Number(item.qty)||1);
+      }else{
+        cart.push(item);
+      }
+      setCart(cart);
       openCart();
     }
 
-    function removeFromCart(idx){
-      CART.splice(idx, 1);
-      saveCart();
+    function removeItem(sig){
+      setCart(getCart().filter(x => x.sig !== sig));
     }
 
-    function calcTotal(){
-      // PPT konsultasi tidak ada harga -> total hanya hitung item berharga
-      return CART.reduce((sum, it) => sum + (Number(it.price) || 0), 0);
+    function changeQty(sig, delta){
+      const cart = getCart();
+      const it = cart.find(x => x.sig === sig);
+      if(!it) return;
+      it.qty = Math.max(1, (Number(it.qty)||1) + delta);
+      setCart(cart);
     }
+
+    function openCart(){
+      drawerOverlay.classList.add("open");
+      drawerOverlay.setAttribute("aria-hidden","false");
+    }
+    function closeCartFn(){
+      drawerOverlay.classList.remove("open");
+      drawerOverlay.setAttribute("aria-hidden","true");
+    }
+
+    cartBtn.addEventListener("click", openCart);
+    closeCart.addEventListener("click", closeCartFn);
+    drawerOverlay.addEventListener("click", (e) => {
+      if(e.target === drawerOverlay) closeCartFn();
+    });
+
+    clearCart.addEventListener("click", () => setCart([]));
 
     function renderCart(){
-      if(CART.length === 0){
-        cartList.innerHTML = `<div class="small">Keranjang kosong. Silakan pilih modul dan tambahkan ke keranjang.</div>`;
-        cartTotal.textContent = rupiah(0);
+      const cart = getCart();
+      cartCount.textContent = cartQtySum(cart);
+
+      if(cart.length === 0){
+        cartItems.innerHTML = `<p class="help" style="margin:0">Keranjang masih kosong.</p>`;
+        cartTotal.textContent = money(0);
+        cartNote.style.display = "none";
         return;
       }
 
-      cartList.innerHTML = CART.map((it, idx) => {
-        const priceTxt = (Number(it.price) || 0) > 0 ? rupiah(it.price) : "Konsultasi";
+      let total = 0;
+      let hasUnknown = false;
+
+      cartItems.innerHTML = cart.map(it => {
+        const price = Number(it.price);
+        const known = Number.isFinite(price) && price > 0;
+
+        // PPT: konsultasi (no price)
+        const isConsult = it.type === "ppt";
+
+        if(known){
+          total += price * (Number(it.qty)||1);
+        }else{
+          if(!isConsult) hasUnknown = true;
+        }
+
+        const priceLabel = isConsult
+          ? "Konsultasi harga"
+          : (known ? money(price) : "Harga dikonfirmasi admin");
+
+        const priceColor = isConsult
+          ? "var(--warn)"
+          : (known ? "var(--good)" : "var(--warn)");
+
         return `
-          <div class="cartItem">
-            <div class="ciTop">
-              <div>
-                <p class="ciName">${esc(it.name)}</p>
-                <div class="ciMeta">${esc(it.meta || "")}</div>
+          <div class="item">
+            <div>
+              <div class="t">${it.title}</div>
+              <div class="m">
+                ${it.meta ? it.meta : ""}
+                <div style="margin-top:6px;font-weight:900;color:${priceColor}">
+                  ${priceLabel}
+                </div>
               </div>
-              <div class="ciPrice">${esc(priceTxt)}</div>
             </div>
-            <div class="ciActions">
-              <button class="removeBtn" onclick="window.__rcRemove(${idx})">
-                Hapus
-              </button>
+            <div class="right">
+              <div class="qty">
+                <button class="qbtn" data-q="-1" data-sig="${encodeURIComponent(it.sig)}">-</button>
+                <span>${it.qty}</span>
+                <button class="qbtn" data-q="1" data-sig="${encodeURIComponent(it.sig)}">+</button>
+              </div>
+              <button class="rm" data-rm="${encodeURIComponent(it.sig)}">Hapus</button>
             </div>
           </div>
         `;
       }).join("");
 
-      cartTotal.textContent = rupiah(calcTotal());
+      cartTotal.textContent = money(total);
+
+      if(hasUnknown){
+        cartNote.style.display = "block";
+        cartNote.textContent = "Catatan: sebagian item memiliki harga yang akan dikonfirmasi admin.";
+      }else{
+        cartNote.style.display = "none";
+      }
     }
 
-    window.__rcRemove = removeFromCart;
-
-    checkoutWA.addEventListener("click", () => {
-      if(CART.length === 0) return;
-
-      const lines = [];
-      lines.push("Halo Admin,");
-      lines.push("Saya ingin melakukan pemesanan layanan Retail-Cortex.io.");
-      lines.push("");
-
-      // group items
-      CART.forEach((it, i) => {
-        lines.push(`*${i+1}. ${it.name}*`);
-        if(it.meta) lines.push(it.meta.trim());
-        if((Number(it.price) || 0) > 0){
-          lines.push(`Harga: ${rupiah(it.price)}`);
-        }else{
-          lines.push(`Harga: Konsultasi (menyesuaikan kebutuhan)`);
-        }
-        lines.push("");
-      });
-
-      const total = calcTotal();
-      lines.push(`Total (item berharga): ${rupiah(total)}`);
-      lines.push("");
-      lines.push("Terima kasih.");
-
-      const msg = encodeURIComponent(lines.join("\n"));
-      const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${msg}`;
-      window.open(url, "_blank", "noopener");
+    cartItems.addEventListener("click", (e) => {
+      const qbtn = e.target.closest("[data-q]");
+      if(qbtn){
+        const sig = decodeURIComponent(qbtn.getAttribute("data-sig"));
+        const d = Number(qbtn.getAttribute("data-q"));
+        changeQty(sig, d);
+        return;
+      }
+      const rm = e.target.closest("[data-rm]");
+      if(rm){
+        const sig = decodeURIComponent(rm.getAttribute("data-rm"));
+        removeItem(sig);
+      }
     });
 
-    renderCartBadge();
+    // ====== SIMPLE ADD (non-form modules) ======
+    document.addEventListener("click", (e) => {
+      const b = e.target.closest("[data-add-simple]");
+      if(!b) return;
+      const title = b.getAttribute("data-add-simple");
 
-    /* =========================
-      MODAL BUILDERS
-    ========================= */
-    function iconSVG(key){
-      const common = (inner) => `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">${inner}</svg>`;
-      if(key==="member"){
-        return common(`
-          <path d="M15 8.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-          <path d="M4.5 20c1.2-4 13.8-4 15 0" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M19 8v6" stroke="rgba(56,255,179,.9)" stroke-width="1.8" stroke-linecap="round"/>
-          <path d="M16 11h6" stroke="rgba(56,255,179,.9)" stroke-width="1.8" stroke-linecap="round"/>
-        `);
+      // fixed pricing rules
+      if(title === "PPS Coaching (GMeet)"){
+        addItem({
+          type: "pps",
+          title,
+          qty: 1,
+          price: PRICE_COACHING,
+          meta: `Catatan: ${COACHING_NOTE}.`,
+          sig: "pps::fixed"
+        });
+        return;
       }
-      if(key==="area"){
-        return common(`
-          <path d="M12 21s6-5.3 6-11a6 6 0 1 0-12 0c0 5.7 6 11 6 11Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-          <path d="M12 11.2a1.8 1.8 0 1 0 0-3.6 1.8 1.8 0 0 0 0 3.6Z" fill="rgba(37,214,255,.85)"/>
-        `);
+      if(title === "Suegeerr Support"){
+        addItem({
+          type: "suegeerr",
+          title,
+          qty: 1,
+          price: PRICE_COACHING,
+          meta: `Catatan: ${COACHING_NOTE}.`,
+          sig: "suegeerr::fixed"
+        });
+        return;
       }
-      if(key==="pps"){
-        return common(`
-          <path d="M7 3v3M17 3v3" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M4.5 8.5h15" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round"/>
-          <path d="M6.2 5.5h11.6c1 0 1.7.7 1.7 1.7v11.2c0 1-.7 1.7-1.7 1.7H6.2c-1 0-1.7-.7-1.7-1.7V7.2c0-1 .7-1.7 1.7-1.7Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-          <path d="M10 12h4l-1.2 1.2c-1.2 1.2-2.8 2-4.5 2" stroke="rgba(56,255,179,.9)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-        `);
+      if(title === "Presentasi Karier (PPT)"){
+        addItem({
+          type: "ppt",
+          title,
+          qty: 1,
+          price: 0, // konsultasi
+          meta: "Catatan: Mohon konsultasi kebutuhan (harga menyesuaikan).",
+          sig: "ppt::consult"
+        });
+        return;
       }
-      if(key==="suegerr"){
-        return common(`
-          <path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6"/>
-          <path d="M12 17a5 5 0 1 0 0-10 5 5 0 0 0 0 10Z" stroke="rgba(37,214,255,.85)" stroke-width="1.6"/>
-          <path d="M12 13.2a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4Z" fill="rgba(56,255,179,.9)"/>
-          <path d="M21 3l-6.2 6.2" stroke="rgba(56,255,179,.9)" stroke-width="1.6" stroke-linecap="round"/>
-        `);
-      }
-      if(key==="ppt"){
-        return common(`
-          <path d="M4 4h16v10H4V4Z" stroke="rgba(234,241,255,.9)" stroke-width="1.6" />
-          <path d="M8 20l4-6 4 6" stroke="rgba(234,241,255,.9)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M9 8h6M9 11h4" stroke="rgba(37,214,255,.85)" stroke-width="1.6" stroke-linecap="round"/>
-        `);
-      }
-      return "";
+
+      // fallback (shouldn't be used now)
+      addItem({
+        type: "simple",
+        title,
+        qty: 1,
+        price: 0,
+        meta: "Detail akan diinformasikan melalui WhatsApp.",
+        sig: "simple::" + title
+      });
+    });
+
+    // ====== MEMBER LOGC (auto price) ======
+    const m_qty = document.getElementById("m_qty");
+    const m_kodetoko = document.getElementById("m_kodetoko");
+    const m_pin = document.getElementById("m_pin");
+    const m_preview = document.getElementById("m_preview");
+    const m_addCart = document.getElementById("m_addCart");
+
+    function memberPricePer(qty){
+      return (qty >= 10) ? 4500 : 5000;
     }
 
-    function buildModal(key){
-      // header
-      mhIcon.innerHTML = iconSVG(key);
-      if(key==="member") mhTitle.textContent = "New Member Fresh";
-      if(key==="area") mhTitle.textContent = "Design Area Coverage";
-      if(key==="pps") mhTitle.textContent = "PPS Coaching (GMeet)";
-      if(key==="suegerr") mhTitle.textContent = "Suegeerr Support";
-      if(key==="ppt") mhTitle.textContent = "Presentasi Karier (PPT)";
+    function renderMemberPreview(){
+      const qty = clampInt(m_qty.value || 0, 1);
+      const per = memberPricePer(qty);
+      const total = per * qty;
 
-      // base panels
-      leftPanel.innerHTML = "";
-      rightPanel.innerHTML = "";
-      modalActions.innerHTML = "";
+      const kode = (m_kodetoko.value || "").trim();
+      const pin  = (m_pin.value || "").trim();
 
-      if(key==="member"){
-        leftPanel.innerHTML = `
-          <h3>Detail</h3>
-          <p class="hint">
-            Isi jumlah member, sistem menghitung harga/member dan total otomatis. Harga tidak tampil di kartu modul—akan tampil saat masuk keranjang/checkout.
-          </p>
+      m_preview.value =
+`Halo,
+Saya ingin memesan layanan New Member Fresh.
 
-          <div style="height:10px"></div>
-
-          <div class="field">
-            <label>Jumlah member</label>
-            <input class="input" id="m_qty" type="number" min="1" placeholder="Contoh: 12" />
-          </div>
-
-          <div class="field">
-            <label>Kode toko</label>
-            <input class="input" id="m_kode" type="text" placeholder="Contoh: 1234" />
-          </div>
-
-          <div class="field">
-            <label>PIN / Tgl Lahir</label>
-            <input class="input" id="m_pin" type="text" placeholder="Contoh: 01011998" />
-          </div>
-
-          <div class="field" style="margin-bottom:0;">
-            <label>Jumlah qty member</label>
-            <input class="input" id="m_qty_member" type="text" placeholder="Contoh: 12" />
-          </div>
-        `;
-
-        rightPanel.innerHTML = `
-          <h3>Ringkasan</h3>
-          <div class="summaryLine">
-            <div class="l">Harga / member</div>
-            <div class="r" id="m_price_each">-</div>
-          </div>
-          <div class="summaryLine">
-            <div class="l">Total</div>
-            <div class="r" id="m_total">-</div>
-          </div>
-          <p class="hint">
-            Aturan harga:<br/>
-            • Di bawah 10: Rp5.000 / member<br/>
-            • 10 atau lebih: Rp4.500 / member
-          </p>
-        `;
-
-        const addBtn = document.createElement("button");
-        addBtn.className = "btn";
-        addBtn.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" stroke="rgba(0,0,0,.68)" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          Tambah ke Keranjang
-        `;
-        addBtn.onclick = () => {
-          const qty = Number(document.getElementById("m_qty").value || 0);
-          if(!qty || qty < 1){ alert("Isi jumlah member minimal 1."); return; }
-
-          const kode = document.getElementById("m_kode").value.trim();
-          const pin = document.getElementById("m_pin").value.trim();
-          const qtyMember = document.getElementById("m_qty_member").value.trim();
-
-          const priceEach = qty >= 10 ? 4500 : 5000;
-          const total = qty * priceEach;
-
-          const meta =
-`Jumlah member : ${qty}
-Harga / member : ${rupiah(priceEach)}
-Total : ${rupiah(total)}
+Jumlah member : ${qty}
+Harga / member : ${money(per)}
+Total : ${money(total)}
 
 Kode toko : ${kode || "-"}
 Pin / tgl lahir : ${pin || "-"}
-Jumlah qty member : ${qtyMember || "-"}`;
-
-          addToCart({
-            key: "member",
-            name: "New Member Fresh",
-            price: total,
-            meta
-          });
-        };
-        modalActions.appendChild(addBtn);
-
-        // update live
-        const updateMemberSummary = () => {
-          const qty = Number(document.getElementById("m_qty").value || 0);
-          if(!qty || qty < 1){
-            document.getElementById("m_price_each").textContent = "-";
-            document.getElementById("m_total").textContent = "-";
-            return;
-          }
-          const priceEach = qty >= 10 ? 4500 : 5000;
-          const total = qty * priceEach;
-          document.getElementById("m_price_each").textContent = rupiah(priceEach);
-          document.getElementById("m_total").textContent = rupiah(total);
-          // auto mirror qty member
-          const qm = document.getElementById("m_qty_member");
-          if(qm && !qm.value) qm.value = String(qty);
-        };
-
-        setTimeout(() => {
-          ["m_qty"].forEach(id => {
-            const el = document.getElementById(id);
-            if(el) el.addEventListener("input", updateMemberSummary);
-          });
-        }, 0);
-
-        return;
-      }
-
-      if(key==="area"){
-        leftPanel.innerHTML = `
-          <h3>Detail & Input</h3>
-          <p class="hint">
-            Isi data singkat untuk brief. Contoh PDF tersedia pada tombol di bawah.
-          </p>
-
-          <div style="height:10px"></div>
-
-          <div class="field">
-            <label>Nama toko</label>
-            <input class="input" id="a_nama" type="text" placeholder="Contoh: Alfamart KP Garung Tambak" />
-          </div>
-
-          <div class="field">
-            <label>Kode toko</label>
-            <input class="input" id="a_kode" type="text" placeholder="Contoh: 1234" />
-          </div>
-
-          <div class="field">
-            <label>Berapa sub</label>
-            <input class="input" id="a_sub" type="text" placeholder="Contoh: 5 sub" />
-          </div>
-
-          <div class="field">
-            <label>Format</label>
-            <select id="a_format">
-              <option value="Landscape">Landscape</option>
-              <option value="Portrait">Portrait</option>
-            </select>
-          </div>
-
-          <div class="field" style="margin-bottom:0;">
-            <label>Sharelok toko</label>
-            <input class="input" id="a_sharelok" type="text" placeholder="Tempel link share location Google Maps" />
-          </div>
-        `;
-
-        rightPanel.innerHTML = `
-          <h3>Contoh PDF</h3>
-          <div class="btnRow" style="margin-top:6px;">
-            <a class="btn secondary" href="${absUrl(PDF_AREA_LANDSCAPE)}" target="_blank" rel="noopener">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" stroke="rgba(234,241,255,.92)" stroke-width="1.6"/>
-                <path d="M14 3v5h5" stroke="rgba(234,241,255,.92)" stroke-width="1.6"/>
-              </svg>
-              Contoh Landscape
-            </a>
-
-            <a class="btn secondary" href="${absUrl(PDF_AREA_PORTRAIT)}" target="_blank" rel="noopener">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-                <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8l-5-5Z" stroke="rgba(234,241,255,.92)" stroke-width="1.6"/>
-                <path d="M14 3v5h5" stroke="rgba(234,241,255,.92)" stroke-width="1.6"/>
-              </svg>
-              Contoh Portrait
-            </a>
-          </div>
-
-          <div style="height:10px"></div>
-
-          <div class="summaryLine">
-            <div class="l">Harga</div>
-            <div class="r">${rupiah(45000)}</div>
-          </div>
-          <p class="hint">Benefit: <b>1×24 jam</b> untuk revisi gratis.</p>
-        `;
-
-        const addBtn = document.createElement("button");
-        addBtn.className = "btn";
-        addBtn.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" stroke="rgba(0,0,0,.68)" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          Tambah ke Keranjang
-        `;
-        addBtn.onclick = () => {
-          const nama = document.getElementById("a_nama").value.trim();
-          const kode = document.getElementById("a_kode").value.trim();
-          const sub  = document.getElementById("a_sub").value.trim();
-          const fmt  = document.getElementById("a_format").value;
-          const sharelok = document.getElementById("a_sharelok").value.trim();
-
-          if(!nama){ alert("Isi nama toko."); return; }
-          if(!kode){ alert("Isi kode toko."); return; }
-          if(!sharelok){ alert("Isi sharelok toko."); return; }
-
-          const meta =
-`Nama toko : ${nama}
-Kode toko : ${kode}
-Berapa sub : ${sub || "-"}
-Format : ${fmt}
-Sharelok toko : ${sharelok}
-
-Catatan : 1×24 jam untuk revisi gratis.`;
-
-          addToCart({
-            key: "area",
-            name: "Design Area Coverage",
-            price: 45000,
-            meta
-          });
-        };
-        modalActions.appendChild(addBtn);
-
-        return;
-      }
-
-      if(key==="pps"){
-        leftPanel.innerHTML = `
-          <h3>Detail</h3>
-          <p class="hint">
-            Coaching melalui Google Meet untuk membantu toko mencapai target dan memahami alur penawaran/eksekusi sampai benar-benar paham.
-          </p>
-
-          <div style="height:10px"></div>
-
-          <div class="field">
-            <label>Nama toko</label>
-            <input class="input" id="p_toko" type="text" placeholder="Contoh: Alfamart KP Garung Tambak" />
-          </div>
-
-          <div class="field">
-            <label>Kode toko</label>
-            <input class="input" id="p_kode" type="text" placeholder="Contoh: 1234" />
-          </div>
-
-          <div class="field" style="margin-bottom:0;">
-            <label>Catatan singkat (opsional)</label>
-            <input class="input" id="p_note" type="text" placeholder="Contoh: fokus pumping PPS, strategi eksekusi, review progress" />
-          </div>
-        `;
-
-        rightPanel.innerHTML = `
-          <h3>Ringkasan</h3>
-          <div class="summaryLine">
-            <div class="l">Harga</div>
-            <div class="r">${rupiah(100000)}</div>
-          </div>
-          <p class="hint">
-            Alur layanan:<br/>
-            1) Brief kebutuhan<br/>
-            2) Jadwal GMeet<br/>
-            3) Coaching sampai paham alur penawaran & eksekusi<br/>
-            4) Tindak lanjut (jika diperlukan)
-          </p>
-        `;
-
-        const addBtn = document.createElement("button");
-        addBtn.className = "btn";
-        addBtn.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" stroke="rgba(0,0,0,.68)" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          Tambah ke Keranjang
-        `;
-        addBtn.onclick = () => {
-          const toko = document.getElementById("p_toko").value.trim();
-          const kode = document.getElementById("p_kode").value.trim();
-          const note = document.getElementById("p_note").value.trim();
-
-          if(!toko){ alert("Isi nama toko."); return; }
-          if(!kode){ alert("Isi kode toko."); return; }
-
-          const meta =
-`Nama toko : ${toko}
-Kode toko : ${kode}
-Catatan : ${note || "-"}
-
-Tujuan : Coaching sampai paham alur penawaran & eksekusi.`;
-
-          addToCart({
-            key: "pps",
-            name: "PPS Coaching (GMeet)",
-            price: 100000,
-            meta
-          });
-        };
-        modalActions.appendChild(addBtn);
-
-        return;
-      }
-
-      if(key==="suegerr"){
-        leftPanel.innerHTML = `
-          <h3>Detail</h3>
-          <p class="hint">
-            Pendampingan Suegeerr untuk memastikan target tercapai dengan eksekusi yang jelas dan terukur.
-          </p>
-
-          <div style="height:10px"></div>
-
-          <div class="field">
-            <label>Nama toko</label>
-            <input class="input" id="s_toko" type="text" placeholder="Contoh: Alfamart KP Garung Tambak" />
-          </div>
-
-          <div class="field">
-            <label>Kode toko</label>
-            <input class="input" id="s_kode" type="text" placeholder="Contoh: 1234" />
-          </div>
-
-          <div class="field" style="margin-bottom:0;">
-            <label>Target/isu (opsional)</label>
-            <input class="input" id="s_note" type="text" placeholder="Contoh: gap target, hambatan eksekusi, plan harian" />
-          </div>
-        `;
-
-        rightPanel.innerHTML = `
-          <h3>Ringkasan</h3>
-          <div class="summaryLine">
-            <div class="l">Harga</div>
-            <div class="r">${rupiah(100000)}</div>
-          </div>
-          <p class="hint">
-            Alur layanan:<br/>
-            1) Brief kondisi toko<br/>
-            2) Rencana eksekusi<br/>
-            3) Pendampingan sampai paham alur penawaran & target
-          </p>
-        `;
-
-        const addBtn = document.createElement("button");
-        addBtn.className = "btn";
-        addBtn.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" stroke="rgba(0,0,0,.68)" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          Tambah ke Keranjang
-        `;
-        addBtn.onclick = () => {
-          const toko = document.getElementById("s_toko").value.trim();
-          const kode = document.getElementById("s_kode").value.trim();
-          const note = document.getElementById("s_note").value.trim();
-
-          if(!toko){ alert("Isi nama toko."); return; }
-          if(!kode){ alert("Isi kode toko."); return; }
-
-          const meta =
-`Nama toko : ${toko}
-Kode toko : ${kode}
-Catatan : ${note || "-"}
-
-Tujuan : Pendampingan sampai paham alur penawaran & target Suegeerr.`;
-
-          addToCart({
-            key: "suegerr",
-            name: "Suegeerr Support",
-            price: 100000,
-            meta
-          });
-        };
-        modalActions.appendChild(addBtn);
-
-        return;
-      }
-
-      if(key==="ppt"){
-        leftPanel.innerHTML = `
-          <h3>Detail</h3>
-          <p class="hint">
-            Presentasi berbentuk slide untuk review kenaikan jabatan (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dan kebutuhan evaluasi lainnya.
-          </p>
-
-          <div style="height:10px"></div>
-
-          <div class="field">
-            <label>Jenis presentasi</label>
-            <select id="t_jenis">
-              <option value="IP COS">IP COS</option>
-              <option value="DP COS">DP COS</option>
-              <option value="CREW">CREW</option>
-              <option value="LPJ NSB">LPJ NSB</option>
-              <option value="LPJ PPS">LPJ PPS</option>
-              <option value="Lainnya">Lainnya</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label>Nama toko (opsional)</label>
-            <input class="input" id="t_toko" type="text" placeholder="Contoh: Alfamart KP Garung Tambak" />
-          </div>
-
-          <div class="field" style="margin-bottom:0;">
-            <label>Kebutuhan singkat (opsional)</label>
-            <input class="input" id="t_note" type="text" placeholder="Contoh: isi materi, periode, target, highlight pencapaian" />
-          </div>
-        `;
-
-        rightPanel.innerHTML = `
-          <h3>Catatan</h3>
-          <div class="summaryLine">
-            <div class="l">Harga</div>
-            <div class="r">Konsultasi</div>
-          </div>
-          <p class="hint">
-            Harga menyesuaikan kebutuhan dan jumlah slide. Setelah checkout, admin akan menghubungi untuk konsultasi.
-          </p>
-        `;
-
-        const addBtn = document.createElement("button");
-        addBtn.className = "btn";
-        addBtn.innerHTML = `
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-            <path d="M12 5v14M5 12h14" stroke="rgba(0,0,0,.68)" stroke-width="2.2" stroke-linecap="round"/>
-          </svg>
-          Tambah ke Keranjang
-        `;
-        addBtn.onclick = () => {
-          const jenis = document.getElementById("t_jenis").value;
-          const toko  = document.getElementById("t_toko").value.trim();
-          const note  = document.getElementById("t_note").value.trim();
-
-          const meta =
-`Jenis : ${jenis}
-Nama toko : ${toko || "-"}
-Kebutuhan : ${note || "-"}
-
-Catatan : Harga konsultasi (menyesuaikan kebutuhan).`;
-
-          addToCart({
-            key: "ppt",
-            name: "Presentasi Karier (PPT)",
-            price: 0,
-            meta
-          });
-        };
-        modalActions.appendChild(addBtn);
-
-        return;
-      }
+Jumlah qty member : ${qty}`;
     }
 
-    /* =========================
-      INIT
-    ========================= */
-    saveCart(); // render & persist
+    [m_qty, m_kodetoko, m_pin].forEach(el => el.addEventListener("input", renderMemberPreview));
+    renderMemberPreview();
+
+    m_addCart.addEventListener("click", () => {
+      const qty = clampInt(m_qty.value || 0, 1);
+      const per = memberPricePer(qty);
+      const total = per * qty;
+
+      const kode = (m_kodetoko.value || "").trim();
+      const pin  = (m_pin.value || "").trim();
+
+      const meta =
+`Jumlah member: ${qty}
+Harga/member: ${money(per)}
+Kode toko: ${kode || "-"}
+PIN/Tgl lahir: ${pin || "-"}`;
+
+      addItem({
+        type:"member",
+        title:"New Member Fresh",
+        qty: 1,
+        price: total,
+        meta: meta.replace(/\n/g,"<br>"),
+        sig: "member::" + qty + "::" + (kode||"-") + "::" + (pin||"-"),
+        payload: {
+          qtyMember: qty,
+          pricePer: per,
+          total,
+          kodeToko: kode || "",
+          pin: pin || ""
+        }
+      });
+
+      closeOverlay("member");
+    });
+
+    // ====== AREA (form) ======
+    const a_namatoko = document.getElementById("a_namatoko");
+    const a_kodetoko = document.getElementById("a_kodetoko");
+    const a_sub = document.getElementById("a_sub");
+    const a_sharelok = document.getElementById("a_sharelok");
+    const a_format = document.getElementById("a_format");
+    const a_addCart = document.getElementById("a_addCart");
+
+    a_addCart.addEventListener("click", () => {
+      const nama = (a_namatoko.value || "").trim();
+      const kode = (a_kodetoko.value || "").trim();
+      const sub  = (a_sub.value || "").trim();
+      const link = (a_sharelok.value || "").trim();
+      const fmt  = (a_format.value || "").trim();
+
+      if(!fmt){
+        alert("Silakan pilih format (Landscape/Portrait).");
+        return;
+      }
+
+      const meta =
+`Nama toko: ${nama || "-"}
+Kode toko: ${kode || "-"}
+Berapa sub: ${sub || "-"}
+Sharelok toko: ${link || "-"}
+Format: ${fmt}
+Info: ${AREA_NOTE}`;
+
+      addItem({
+        type:"area",
+        title:"Design Area Coverage",
+        qty: 1,
+        price: PRICE_AREA, // FIX: 45k
+        meta: meta.replace(/\n/g,"<br>"),
+        sig: "area::" + (kode||"-") + "::" + (fmt||"-") + "::" + (nama||"-"),
+        payload: {
+          namaToko: nama || "",
+          kodeToko: kode || "",
+          sub: sub || "",
+          sharelok: link || "",
+          format: fmt || ""
+        }
+      });
+
+      closeOverlay("area");
+    });
+
+    // ====== CHECKOUT WA (auto format) ======
+    checkoutWA.addEventListener("click", () => {
+      const cart = getCart();
+      if(cart.length === 0){
+        alert("Keranjang masih kosong.");
+        return;
+      }
+
+      let lines = [];
+      lines.push("Halo,");
+      lines.push("Saya ingin melakukan checkout modul berikut:");
+
+      cart.forEach((it, idx) => {
+        const n = idx + 1;
+
+        if(it.type === "member" && it.payload){
+          const p = it.payload;
+          lines.push("");
+          lines.push(`${n}) ${it.title}`);
+          lines.push(`Jumlah member : ${p.qtyMember}`);
+          lines.push(`Harga / member : ${money(p.pricePer)}`);
+          lines.push(`Total : ${money(p.total)}`);
+          lines.push(`Kode toko : ${p.kodeToko || "-"}`);
+          lines.push(`Pin / tgl lahir : ${p.pin || "-"}`);
+          lines.push(`Jumlah qty member : ${p.qtyMember}`);
+          return;
+        }
+
+        if(it.type === "area" && it.payload){
+          const p = it.payload;
+          lines.push("");
+          lines.push(`${n}) ${it.title}`);
+          lines.push(`Nama toko : ${p.namaToko || "-"}`);
+          lines.push(`Kode toko : ${p.kodeToko || "-"}`);
+          lines.push(`Berapa sub : ${p.sub || "-"}`);
+          lines.push(`Sharelok toko : ${p.sharelok || "-"}`);
+          lines.push(`Landscape / Portrait : ${p.format || "-"}`);
+          lines.push(`Harga : ${money(PRICE_AREA)}`);
+          lines.push(`Info : ${AREA_NOTE}`);
+          return;
+        }
+
+        if(it.type === "pps"){
+          lines.push("");
+          lines.push(`${n}) ${it.title}`);
+          lines.push(`Harga : ${money(PRICE_COACHING)}`);
+          lines.push(`Info : ${COACHING_NOTE}`);
+          return;
+        }
+
+        if(it.type === "suegeerr"){
+          lines.push("");
+          lines.push(`${n}) ${it.title}`);
+          lines.push(`Harga : ${money(PRICE_COACHING)}`);
+          lines.push(`Info : ${COACHING_NOTE}`);
+          return;
+        }
+
+        if(it.type === "ppt"){
+          lines.push("");
+          lines.push(`${n}) ${it.title}`);
+          lines.push("Info : Mohon konsultasi kebutuhan (harga menyesuaikan).");
+          return;
+        }
+
+        // fallback
+        lines.push("");
+        lines.push(`${n}) ${it.title}`);
+        lines.push("Catatan : Mohon informasi detail dan harga.");
+      });
+
+      // total known items only
+      const knownTotal = cart.reduce((sum, it) => {
+        const price = Number(it.price);
+        const known = Number.isFinite(price) && price > 0;
+        if(!known) return sum;
+        return sum + (price * (Number(it.qty)||1));
+      }, 0);
+
+      lines.push("");
+      lines.push(`Total (item dengan harga pasti) : ${money(knownTotal)}`);
+      lines.push("");
+      lines.push("Terima kasih.");
+
+      const text = lines.join("\n");
+      const url = `https://wa.me/${encodeURIComponent(WA_NUMBER)}?text=${encodeURIComponent(text)}`;
+      window.open(url, "_blank");
+    });
+
+    // init cart render
+    renderCart();
+
+    // menu button -> open cart
+    document.getElementById("menuBtn").addEventListener("click", () => {
+      openCart();
+    });
   </script>
 </body>
 </html>
