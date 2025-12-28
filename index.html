@@ -26,6 +26,7 @@
       --brandC:#4c1d95;
       --good:#22c55e;
       --warn:#f59e0b;
+      --bad:#fb7185;
 
       --r16:16px;
       --r18:18px;
@@ -65,10 +66,9 @@
         radial-gradient(900px 620px at 55% 110%, rgba(76,29,149,.32), transparent 60%),
         linear-gradient(180deg, var(--bg), var(--bg2));
       overflow-x:hidden;
-      padding-bottom: 120px; /* ruang aman floating */
+      padding-bottom: 120px;
     }
 
-    /* background grid */
     .bg-grid{
       position:fixed; inset:0;
       pointer-events:none;
@@ -91,7 +91,6 @@
       z-index:1;
     }
 
-    /* ===== Header (simple, simetris) ===== */
     header{
       position:sticky; top:0;
       z-index:30;
@@ -99,9 +98,7 @@
       backdrop-filter: blur(14px) saturate(1.2);
       border-bottom:1px solid var(--stroke);
     }
-    html[data-theme="light"] header{
-      background:rgba(248,250,255,.72);
-    }
+    html[data-theme="light"] header{ background:rgba(248,250,255,.72); }
 
     .nav{
       display:flex;
@@ -120,11 +117,12 @@
     .brand img{
       width:42px;height:42px;
       border-radius:14px;
-      object-fit:cover;
+      object-fit:contain; /* FIX: logo full */
       flex:0 0 auto;
       box-shadow: 0 10px 28px rgba(0,0,0,.25);
       border:1px solid var(--stroke);
-      background:rgba(255,255,255,.08);
+      background:rgba(255,255,255,.06);
+      padding:6px; /* ruang biar ga mepet */
     }
     .brand-text{min-width:0; line-height:1.05}
     .brand-title{
@@ -165,10 +163,7 @@
     html[data-theme="light"] .menuBtn{background:rgba(2,6,23,.04)}
     .menuBtn:active{transform:translateY(1px)}
 
-    /* ===== Hero ===== */
-    .hero{
-      padding:22px 0 12px;
-    }
+    .hero{ padding:22px 0 12px; }
     .pill{
       display:inline-flex;
       align-items:center;
@@ -189,7 +184,7 @@
 
     .heroGrid{
       display:grid;
-      grid-template-columns: 1.15fr .85fr;
+      grid-template-columns: 1.25fr .75fr;
       gap:18px;
       align-items:start;
       margin-top:14px;
@@ -212,14 +207,12 @@
     @media (max-width:480px){
       .heroTitle{font-size:2.05rem; letter-spacing:.05em;}
     }
-
     .heroTitle .accent{
       background:linear-gradient(90deg,var(--brandB),var(--brandA));
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
     }
-
     .heroDesc{
       margin:0;
       color:var(--muted);
@@ -228,77 +221,7 @@
       max-width: 56ch;
     }
 
-    .heroCards{
-      display:grid;
-      gap:10px;
-      position:relative;
-    }
-
-    /* ===== HERO LOGO (PROFESSIONAL) ===== */
-    .heroBrand{
-      border:1px solid var(--stroke);
-      background: var(--card);
-      border-radius:var(--r20);
-      box-shadow: var(--shadow);
-      padding:16px;
-      overflow:hidden;
-      position:relative;
-      min-height: 188px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .heroBrand:before{
-      content:"";
-      position:absolute; inset:-1px;
-      background:
-        radial-gradient(420px 220px at 30% 20%, rgba(124,58,237,.30), transparent 60%),
-        radial-gradient(420px 220px at 70% 80%, rgba(34,211,238,.22), transparent 60%);
-      opacity:.95;
-      pointer-events:none;
-    }
-    .heroBrand:after{
-      content:"";
-      position:absolute; inset:0;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.06), transparent 55%);
-      opacity:.55;
-      pointer-events:none;
-    }
-    .heroBrandInner{
-      position:relative;
-      display:grid;
-      gap:10px;
-      justify-items:center;
-      text-align:center;
-    }
-    .heroBrand img{
-      width:116px;height:116px;
-      border-radius:28px;
-      object-fit:cover;
-      border:1px solid var(--stroke2);
-      background:rgba(255,255,255,.08);
-      box-shadow: 0 18px 58px rgba(0,0,0,.55);
-      filter: drop-shadow(0 0 18px rgba(34,211,238,.18));
-    }
-    .heroBrand .t1{
-      font-family:Orbitron,Inter,sans-serif;
-      font-weight:900;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      font-size:.95rem;
-      background: linear-gradient(90deg, var(--brandB), var(--brandA));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-    }
-    .heroBrand .t2{
-      color:var(--muted);
-      font-weight:800;
-      font-size:.90rem;
-      line-height:1.55;
-    }
-
+    .heroCards{ display:grid; gap:10px; }
     .miniCard{
       border:1px solid var(--stroke);
       background:var(--card);
@@ -306,54 +229,52 @@
       box-shadow: var(--shadow);
       padding:14px;
     }
-    .miniCard h4{
-      margin:0 0 6px;
-      font-size:.98rem;
+    .miniCard h4{ margin:0 0 6px; font-size:.98rem; font-weight:800; letter-spacing:.02em; }
+    .miniCard p{ margin:0; color:var(--muted); font-size:.92rem; line-height:1.6; }
+
+    /* Hero Brand Mark (logo besar full, profesional) */
+    .brandMark{
+      border:1px solid var(--stroke);
+      background: radial-gradient(800px 220px at 15% 0%, rgba(124,58,237,.20), transparent 55%), var(--card);
+      border-radius: 26px;
+      box-shadow: var(--shadow2);
+      padding: 18px;
+      display:grid;
+      gap:12px;
+      align-items:center;
+      text-align:center;
+    }
+    .brandMark .logoWrap{
+      width:100%;
+      border-radius: 22px;
+      border:1px solid var(--stroke2);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 16px 44px rgba(0,0,0,.35);
+      padding: 18px;
+    }
+    html[data-theme="light"] .brandMark .logoWrap{ background: rgba(2,6,23,.03); }
+    .brandMark img{
+      width:100%;
+      max-width: 260px;
+      height:auto;
+      display:block;
+      margin: 0 auto;
+      object-fit:contain; /* FIX: full */
+      filter: drop-shadow(0 16px 32px rgba(0,0,0,.35));
+    }
+    .brandMark .cap{
+      font-family:Orbitron,Inter,sans-serif;
       font-weight:800;
-      letter-spacing:.02em;
-    }
-    .miniCard p{
-      margin:0;
-      color:var(--muted);
+      letter-spacing:.10em;
+      text-transform:uppercase;
       font-size:.92rem;
-      line-height:1.6;
+      color:var(--muted2);
     }
 
-    /* ===== Section Title ===== */
-    .section{
-      padding:18px 0 10px;
-      position:relative;
-    }
-    .section h2{
-      margin:0 0 6px;
-      font-size:1.35rem;
-      font-weight:900;
-      letter-spacing:.02em;
-    }
-    .section .sub{
-      margin:0 0 14px;
-      color:var(--muted);
-      line-height:1.65;
-    }
+    .section{ padding:18px 0 10px; }
+    .section h2{ margin:0 0 6px; font-size:1.35rem; font-weight:900; letter-spacing:.02em; }
+    .section .sub{ margin:0 0 14px; color:var(--muted); line-height:1.65; }
 
-    /* subtle watermark (optional tasteful) */
-    .watermark{
-      position:absolute;
-      right:-26px;
-      bottom:-20px;
-      width:170px;
-      height:170px;
-      opacity:.055;
-      filter: blur(.0px);
-      pointer-events:none;
-      transform: rotate(-10deg);
-      display:none;
-    }
-    @media (min-width:980px){
-      .watermark{display:block;}
-    }
-
-    /* ===== Modules Grid ===== */
     .grid{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -400,27 +321,10 @@
     }
     .iconBox svg{width:22px;height:22px;opacity:.92}
 
-    .cardBody{
-      padding:0 14px 14px;
-    }
-    .cardTitle{
-      margin:2px 0 6px;
-      font-size:1.08rem;
-      font-weight:900;
-      letter-spacing:.01em;
-    }
-    .cardDesc{
-      margin:0 0 12px;
-      color:var(--muted);
-      line-height:1.65;
-      font-size:.94rem;
-    }
+    .cardBody{ padding:0 14px 14px; }
+    .cardTitle{ margin:2px 0 6px; font-size:1.08rem; font-weight:900; letter-spacing:.01em; }
+    .cardDesc{ margin:0 0 12px; color:var(--muted); line-height:1.65; font-size:.94rem; }
 
-    .cardActions{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
     .btn{
       appearance:none;
       border:none;
@@ -451,9 +355,17 @@
     html[data-theme="light"] .btnGhost{background:rgba(2,6,23,.04)}
     .btnFull{width:100%}
 
-    /* NOTE: priceLine on OUTSIDE cards is removed per request */
+    /* price not shown in cards (kunci) */
+    .hintLine{
+      margin-top:10px;
+      padding-top:10px;
+      border-top:1px solid var(--stroke);
+      color:var(--muted2);
+      font-size:.9rem;
+      line-height:1.55;
+      font-weight:700;
+    }
 
-    /* ===== Testimonials ===== */
     .testiWrap{
       display:grid;
       grid-template-columns: repeat(3, 1fr);
@@ -472,7 +384,6 @@
     .testi .name{margin-top:10px; font-weight:900}
     .testi .meta{color:var(--muted2); font-size:.9rem}
 
-    /* ===== Modal ===== */
     .overlay{
       position:fixed; inset:0;
       background:rgba(0,0,0,.55);
@@ -523,16 +434,8 @@
       justify-content:flex-end;
     }
 
-    .field{
-      display:grid;
-      gap:8px;
-      margin-bottom:12px;
-    }
-    .label{
-      font-weight:800;
-      color:var(--muted);
-      font-size:.9rem;
-    }
+    .field{ display:grid; gap:8px; margin-bottom:12px; }
+    .label{ font-weight:800; color:var(--muted); font-size:.9rem; }
     input, select, textarea{
       width:100%;
       padding:12px 12px;
@@ -548,12 +451,7 @@
       background:rgba(2,6,23,.04);
     }
     textarea{min-height:86px; resize:vertical; font-weight:600}
-    .help{
-      margin:6px 0 0;
-      color:var(--muted2);
-      font-size:.9rem;
-      line-height:1.55;
-    }
+    .help{ margin:6px 0 0; color:var(--muted2); font-size:.9rem; line-height:1.55; }
 
     .inline2{
       display:grid;
@@ -562,7 +460,6 @@
     }
     @media (max-width:560px){.inline2{grid-template-columns:1fr;}}
 
-    /* PDF buttons */
     .pdfRow{
       display:grid;
       grid-template-columns: 1fr 1fr;
@@ -571,7 +468,6 @@
     }
     @media (max-width:560px){.pdfRow{grid-template-columns:1fr;}}
 
-    /* ===== Floating Buttons (bawah saja) ===== */
     .floating{
       position:fixed;
       bottom:16px;
@@ -605,7 +501,6 @@
       border:2px solid rgba(0,0,0,.20);
     }
 
-    /* ===== Cart Drawer ===== */
     .drawerOverlay{
       position:fixed; inset:0;
       background:rgba(0,0,0,.55);
@@ -697,7 +592,6 @@
     .totals .value{color:var(--good)}
     .noteSmall{color:var(--muted2); font-size:.88rem; line-height:1.55; margin:0}
 
-    /* ===== Footer ===== */
     footer{
       margin-top: 22px;
       padding: 18px 0 6px;
@@ -713,13 +607,70 @@
       font-size:.88rem;
     }
     .heart{color:#fb7185}
+
+    /* Payment modal */
+    .payGrid{
+      display:grid;
+      gap:12px;
+    }
+    .payTabs{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      user-select:none;
+    }
+    .chip.active{
+      background:linear-gradient(90deg, rgba(124,58,237,.55), rgba(34,211,238,.40));
+      border-color: rgba(232,238,255,.25);
+    }
+    .qrisBox{
+      border:1px solid var(--stroke);
+      border-radius:20px;
+      background:rgba(255,255,255,.05);
+      padding:12px;
+      display:grid;
+      gap:10px;
+      justify-items:center;
+    }
+    .qrisImg{
+      width:min(360px, 100%);
+      height:auto;
+      border-radius:18px;
+      border:1px solid var(--stroke2);
+      background:rgba(0,0,0,.25);
+    }
+    .copyRow{
+      display:flex;
+      gap:10px;
+      align-items:center;
+      flex-wrap:wrap;
+    }
+    .copyBtn{
+      border:1px solid var(--stroke2);
+      background:rgba(255,255,255,.06);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:14px;
+      font-weight:900;
+      cursor:pointer;
+    }
+    .warnText{ color: var(--warn); font-weight:900; }
+    .badText{ color: var(--bad); font-weight:900; }
   </style>
 </head>
 
 <body>
   <div class="bg-grid"></div>
 
-  <!-- Header -->
   <header>
     <div class="container">
       <div class="nav">
@@ -731,7 +682,6 @@
           </div>
         </div>
         <button class="menuBtn" id="menuBtn" aria-label="Menu">
-          <!-- hamburger -->
           <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
             <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
           </svg>
@@ -740,9 +690,7 @@
     </div>
   </header>
 
-  <!-- Main -->
   <main>
-    <!-- Hero -->
     <section class="hero">
       <div class="container">
         <div class="pill">
@@ -761,41 +709,36 @@
               pembaruan area coverage, coaching PPS/Suegeerr, hingga penyusunan presentasi kerja yang rapi untuk
               evaluasi maupun pengajuan jabatan.
             </p>
-          </div>
 
-          <div class="heroCards">
-            <!-- PRO logo placement -->
-            <div class="heroBrand">
-              <div class="heroBrandInner">
-                <img src="retail-cortex-logo.png" alt="Retail-Cortex Logo" onerror="this.style.display='none'">
-                <div class="t1">Retail-Cortex.io</div>
-                <div class="t2">Service Modules • Checkout via WhatsApp</div>
+            <div class="heroCards" style="margin-top:12px;">
+              <div class="miniCard">
+                <h4>Alur Order</h4>
+                <p>Pilih modul → isi seperlunya → masuk keranjang → checkout → pilih pembayaran (QRIS/TF) → kirim konfirmasi via WhatsApp.</p>
+              </div>
+              <div class="miniCard">
+                <h4>Status</h4>
+                <p>Mode: <b id="modeLabel">DARK</b> • Sistem: <b>READY</b> • Checkout: <b>WA</b></p>
               </div>
             </div>
+          </div>
 
-            <div class="miniCard">
-              <h4>Alur Order</h4>
-              <p>Pilih modul → isi seperlunya → masuk keranjang → checkout via WhatsApp (format otomatis).</p>
+          <div class="brandMark">
+            <div class="logoWrap">
+              <img src="retail-cortex-logo.png" alt="Retail-Cortex.io" onerror="this.style.display='none'">
             </div>
-            <div class="miniCard">
-              <h4>Status</h4>
-              <p>Mode: <b id="modeLabel">DARK</b> • Sistem: <b>READY</b> • Checkout: <b>WA</b></p>
-            </div>
+            <div class="cap">BRAND MARK</div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- Modules -->
-    <section class="section" id="modules">
+    <section class="section">
       <div class="container">
         <h2>Cortex Service Modules</h2>
-        <p class="sub">Klik modul, isi seperlunya, lalu checkout. Semua pesan akan tersusun rapi otomatis.</p>
-
-        <!-- subtle watermark -->
-        <img class="watermark" src="retail-cortex-logo.png" alt="" aria-hidden="true">
+        <p class="sub">Klik modul, isi seperlunya, lalu checkout. Harga tampil saat checkout sesuai modul.</p>
 
         <div class="grid" id="moduleGrid">
+
           <!-- MEMBERSHIP -->
           <article class="card">
             <div class="cardTop">
@@ -818,8 +761,10 @@
                 <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
                   <path d="M7 7h10M7 12h10M7 17h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
-                <span>Detail &amp; Input</span>
+                <span>DETAIL &amp; INPUT</span>
               </button>
+
+              <div class="hintLine">Harga akan dihitung otomatis saat checkout.</div>
             </div>
           </article>
 
@@ -828,11 +773,10 @@
             <div class="cardTop">
               <div class="badge">DESIGN</div>
               <div class="iconBox" aria-hidden="true">
-                <!-- map-pin / route style -->
+                <!-- map-pin -->
                 <svg viewBox="0 0 24 24" fill="none">
                   <path d="M12 21s6-5 6-10a6 6 0 1 0-12 0c0 5 6 10 6 10Z" stroke="currentColor" stroke-width="2"/>
                   <path d="M12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2"/>
-                  <path d="M4 20c2-1.2 3.2-2 5-2s3 1.6 5 1.6S17 18 20 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".9"/>
                 </svg>
               </div>
             </div>
@@ -840,15 +784,15 @@
               <div class="cardTitle">Design Area Coverage</div>
               <p class="cardDesc">Update Area Coverage terbaru, detail mapping sesuai radius toko.</p>
 
-              <div class="cardActions">
-                <button class="btn btnPrimary btnFull" data-open="area">
-                  <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
-                    <path d="M12 21s6-5 6-10a6 6 0 1 0-12 0c0 5 6 10 6 10Z" stroke="currentColor" stroke-width="2"/>
-                    <path d="M12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                  <span>Detail &amp; Input</span>
-                </button>
-              </div>
+              <button class="btn btnPrimary btnFull" data-open="area">
+                <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
+                  <path d="M12 21s6-5 6-10a6 6 0 1 0-12 0c0 5 6 10 6 10Z" stroke="currentColor" stroke-width="2"/>
+                  <path d="M12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4Z" stroke="currentColor" stroke-width="2"/>
+                </svg>
+                <span>DETAIL &amp; INPUT</span>
+              </button>
+
+              <div class="hintLine"><b>1× revisi gratis</b> dalam <b>24 jam</b> setelah file dikirim.</div>
             </div>
           </article>
 
@@ -857,26 +801,27 @@
             <div class="cardTop">
               <div class="badge">COACHING</div>
               <div class="iconBox" aria-hidden="true">
-                <!-- meet / video -->
+                <!-- video -->
                 <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M14 10.5v3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M6 8h8a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
-                  <path d="M16 12l4-2v4l-4-2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M15 10l5-3v10l-5-3v-4Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M3 7h10a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2"/>
                 </svg>
               </div>
             </div>
             <div class="cardBody">
               <div class="cardTitle">PPS Coaching (GMeet)</div>
-              <p class="cardDesc">Coaching melalui Google Meet untuk bantu toko paham strategi eksekusi dan alur penawaran.</p>
+              <p class="cardDesc">Coaching via Google Meet sampai paham alur penawaran & eksekusi.</p>
 
-              <button class="btn btnGhost btnFull" data-add-simple="PPS Coaching (GMeet)">
+              <button class="btn btnGhost btnFull" data-add-simple="PPS COACHING (GMEET)">
                 <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
                   <path d="M6 6h15l-1.5 9h-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                   <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
                 </svg>
-                <span>Tambah ke Keranjang</span>
+                <span>TAMBAH KE KERANJANG</span>
               </button>
+
+              <div class="hintLine">Harga tampil saat checkout.</div>
             </div>
           </article>
 
@@ -885,27 +830,29 @@
             <div class="cardTop">
               <div class="badge">COACHING</div>
               <div class="iconBox" aria-hidden="true">
-                <!-- target / growth -->
+                <!-- target -->
                 <svg viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2a10 10 0 1 0 10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  <path d="M12 6a6 6 0 1 0 6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".9"/>
-                  <path d="M12 10a2 2 0 1 0 2 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" opacity=".9"/>
-                  <path d="M14.5 9.5 22 2l-3 9-4.5-1.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                  <path d="M12 22a10 10 0 1 1 10-10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 18a6 6 0 1 1 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M12 14a2 2 0 1 1 2-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                  <path d="M22 2l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                 </svg>
               </div>
             </div>
             <div class="cardBody">
               <div class="cardTitle">Suegeerr Support</div>
-              <p class="cardDesc">Pendampingan eksekusi agar target tercapai, termasuk monitoring dan arahan tindak lanjut.</p>
+              <p class="cardDesc">Pendampingan eksekusi & monitoring sampai paham alur penawaran.</p>
 
-              <button class="btn btnGhost btnFull" data-add-simple="Suegeerr Support">
+              <button class="btn btnGhost btnFull" data-add-simple="SUEGEERR SUPPORT">
                 <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
                   <path d="M6 6h15l-1.5 9h-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                   <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
                 </svg>
-                <span>Tambah ke Keranjang</span>
+                <span>TAMBAH KE KERANJANG</span>
               </button>
+
+              <div class="hintLine">Harga tampil saat checkout.</div>
             </div>
           </article>
 
@@ -925,23 +872,25 @@
             </div>
             <div class="cardBody">
               <div class="cardTitle">Presentasi Karier (PPT)</div>
-              <p class="cardDesc">Presentasi rapi untuk evaluasi/kenaikan jabatan (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dan lainnya.</p>
+              <p class="cardDesc">Presentasi rapi untuk review kenaikan jabatan & kebutuhan LPJ. Harga: konsultasi (beda kebutuhan).</p>
 
-              <button class="btn btnGhost btnFull" data-add-simple="Presentasi Karier (PPT)">
+              <button class="btn btnGhost btnFull" data-add-simple="PRESENTASI KARIER (PPT)">
                 <svg viewBox="0 0 24 24" fill="none" width="18" height="18">
                   <path d="M6 6h15l-1.5 9h-12Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
                   <path d="M6 6 5 3H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
                   <path d="M9 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2ZM18 20a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z" stroke="currentColor" stroke-width="2"/>
                 </svg>
-                <span>Tambah ke Keranjang</span>
+                <span>TAMBAH KE KERANJANG</span>
               </button>
+
+              <div class="hintLine">Harga tidak ditampilkan (langsung konsultasi via WA).</div>
             </div>
           </article>
+
         </div>
       </div>
     </section>
 
-    <!-- Testimonials -->
     <section class="section">
       <div class="container">
         <h2>Ulasan Singkat</h2>
@@ -950,13 +899,13 @@
         <div class="testiWrap">
           <div class="testi">
             <div class="stars">★★★★★</div>
-            <p>“Mantap gausah cari member lg tinggal order, murahh josss”</p>
+            <p>“Mantap gausah cari member lg tinggal order, murahh josss.”</p>
             <div class="name">R***</div>
             <div class="meta">Operational Support</div>
           </div>
           <div class="testi">
             <div class="stars">★★★★★</div>
-            <p>“Design Area coverage nya keren mantull cocok”</p>
+            <p>“Design Area coverage nya keren mantull cocok.”</p>
             <div class="name">A***</div>
             <div class="meta">Store Team</div>
           </div>
@@ -970,7 +919,6 @@
       </div>
     </section>
 
-    <!-- Footer (single) -->
     <footer>
       <div class="container">
         <div class="foot">
@@ -981,14 +929,14 @@
     </footer>
   </main>
 
-  <!-- Floating: Theme (bawah kiri) -->
+  <!-- Floating: Theme -->
   <button class="floating floatingLeft" id="themeBtn" aria-label="Toggle Theme" title="Toggle Theme">
     <svg id="themeIcon" viewBox="0 0 24 24" fill="none" width="22" height="22">
       <path d="M21 13a8 8 0 1 1-10-10 6.5 6.5 0 0 0 10 10Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
     </svg>
   </button>
 
-  <!-- Floating: Cart (bawah kanan) -->
+  <!-- Floating: Cart -->
   <button class="floating floatingRight" id="cartBtn" aria-label="Keranjang" title="Keranjang">
     <span class="count" id="cartCount">0</span>
     <svg viewBox="0 0 24 24" fill="none" width="22" height="22">
@@ -1002,7 +950,7 @@
   <div class="overlay" id="memberOverlay" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modalHeader">
-        <h3>New Member Fresh</h3>
+        <h3>NEW MEMBER FRESH</h3>
         <button class="closeBtn" data-close="member" aria-label="Tutup">
           <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
             <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1012,35 +960,35 @@
 
       <div class="modalBody">
         <p class="help" style="margin-top:0">
-          Isi jumlah member, sistem menghitung harga/member dan total otomatis. Setelah itu tambahkan ke keranjang.
+          Isi jumlah member, sistem menghitung total otomatis. Format WA akan otomatis kapital & rapih.
         </p>
 
         <div class="field">
-          <div class="label">Jumlah member</div>
-          <input type="number" id="m_qty" min="1" step="1" placeholder="Contoh: 12">
+          <div class="label">JUMLAH QTY MEMBER</div>
+          <input type="number" id="m_qty" min="1" step="1" placeholder="CONTOH: 12">
         </div>
 
         <div class="inline2">
           <div class="field">
-            <div class="label">Kode toko</div>
-            <input type="text" id="m_kodetoko" placeholder="Contoh: 1234">
+            <div class="label">KODE TOKO</div>
+            <input type="text" id="m_kodetoko" placeholder="CONTOH: 2G44">
           </div>
           <div class="field">
-            <div class="label">PIN / Tanggal lahir</div>
-            <input type="text" id="m_pin" placeholder="Contoh: 01011999">
+            <div class="label">PIN / TGL LAHIR</div>
+            <input type="text" id="m_pin" placeholder="CONTOH: 101091">
           </div>
         </div>
 
         <div class="field">
-          <div class="label">Ringkasan</div>
+          <div class="label">PREVIEW (FORMAT WA)</div>
           <textarea id="m_preview" readonly></textarea>
-          <p class="help">Catatan: harga Rp5.000/member (di bawah 10). Jika 10 atau lebih: Rp4.500/member.</p>
+          <p class="help">Harga: Rp5.000/member (di bawah 10). Jika 10 atau lebih: Rp4.500/member.</p>
         </div>
       </div>
 
       <div class="modalFooter">
-        <button class="btn btnGhost" data-close="member">Tutup</button>
-        <button class="btn btnPrimary" id="m_addCart">Tambah ke Keranjang</button>
+        <button class="btn btnGhost" data-close="member">TUTUP</button>
+        <button class="btn btnPrimary" id="m_addCart">TAMBAH KE KERANJANG</button>
       </div>
     </div>
   </div>
@@ -1049,9 +997,8 @@
   <div class="overlay" id="areaOverlay" role="dialog" aria-modal="true">
     <div class="modal">
       <div class="modalHeader">
-        <h3>Design Area Coverage</h3>
-
-        <!-- FIX: Add X close button (per request) -->
+        <h3>DESIGN AREA COVERAGE</h3>
+        <!-- FIX: tombol X ada -->
         <button class="closeBtn" data-close="area" aria-label="Tutup">
           <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
             <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1061,59 +1008,52 @@
 
       <div class="modalBody">
         <p class="help" style="margin-top:0">
-          Isi data singkat untuk brief. Contoh PDF tersedia pada tombol di bawah.
+          Isi data singkat untuk brief. <b>1× revisi gratis</b> dalam <b>24 jam</b> setelah file dikirim.
         </p>
 
-        <div class="miniCard" style="margin:10px 0 12px;">
-          <h4 style="margin:0 0 6px;">Info Layanan</h4>
-          <p style="margin:0;color:var(--muted);line-height:1.65;font-size:.92rem">
-            Harga: <b style="color:var(--good)">Rp45.000</b> • Revisi gratis <b>1×24 jam</b>
-          </p>
-        </div>
-
         <div class="inline2">
           <div class="field">
-            <div class="label">Nama toko</div>
-            <input type="text" id="a_namatoko" placeholder="Contoh: Alfamart KP Garung Tambak">
+            <div class="label">NAMA TOKO</div>
+            <input type="text" id="a_namatoko" placeholder="CONTOH: ALFAMART KP GARUNG TAMBAK">
           </div>
           <div class="field">
-            <div class="label">Kode toko</div>
-            <input type="text" id="a_kodetoko" placeholder="Contoh: 1234">
+            <div class="label">KODE TOKO</div>
+            <input type="text" id="a_kodetoko" placeholder="CONTOH: 2G44">
           </div>
         </div>
 
         <div class="inline2">
           <div class="field">
-            <div class="label">Berapa sub</div>
-            <input type="text" id="a_sub" placeholder="Contoh: 5 sub">
+            <div class="label">BERAPA SUB</div>
+            <input type="text" id="a_sub" placeholder="CONTOH: 5 SUB">
           </div>
           <div class="field">
-            <div class="label">Format</div>
+            <div class="label">FORMAT</div>
             <select id="a_format">
-              <option value="">Pilih format</option>
-              <option value="Landscape">Landscape</option>
-              <option value="Portrait">Portrait</option>
+              <option value="">PILIH FORMAT</option>
+              <option value="LANDSCAPE">LANDSCAPE</option>
+              <option value="PORTRAIT">PORTRAIT</option>
             </select>
           </div>
         </div>
 
         <div class="field">
-          <div class="label">Sharelok toko</div>
-          <input type="text" id="a_sharelok" placeholder="Tempel link share location Google Maps">
+          <div class="label">SHARELOK TOKO</div>
+          <input type="text" id="a_sharelok" placeholder="TEMPEL LINK SHARE LOCATION GOOGLE MAPS">
         </div>
 
         <div class="miniCard" style="margin-top:10px;">
-          <h4 style="margin:0 0 8px;">Lihat Contoh PDF</h4>
+          <h4 style="margin:0 0 8px;">LIHAT CONTOH PDF</h4>
           <div class="pdfRow">
-            <button class="btn btnGhost" id="btnPdfLandscape" type="button">Contoh Landscape</button>
-            <button class="btn btnGhost" id="btnPdfPortrait" type="button">Contoh Portrait</button>
+            <button class="btn btnGhost" id="btnPdfLandscape" type="button">CONTOH LANDSCAPE</button>
+            <button class="btn btnGhost" id="btnPdfPortrait" type="button">CONTOH PORTRAIT</button>
           </div>
         </div>
       </div>
 
       <div class="modalFooter">
-        <button class="btn btnGhost" data-close="area">Tutup</button>
-        <button class="btn btnPrimary" id="a_addCart">Tambah ke Keranjang</button>
+        <button class="btn btnGhost" data-close="area">TUTUP</button>
+        <button class="btn btnPrimary" id="a_addCart">TAMBAH KE KERANJANG</button>
       </div>
     </div>
   </div>
@@ -1122,7 +1062,7 @@
   <div class="drawerOverlay" id="drawerOverlay" aria-hidden="true">
     <div class="drawer" role="dialog" aria-modal="true">
       <div class="drawerHeader">
-        <h3>Keranjang</h3>
+        <h3>KERANJANG</h3>
         <button class="closeBtn" id="closeCart" aria-label="Tutup">
           <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
             <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
@@ -1130,46 +1070,132 @@
         </button>
       </div>
 
-      <div class="drawerBody" id="cartItems">
-        <!-- items -->
-      </div>
+      <div class="drawerBody" id="cartItems"></div>
 
       <div class="drawerFooter">
         <div class="totals">
-          <span>Total</span>
+          <span>TOTAL</span>
           <span class="value" id="cartTotal">Rp0</span>
         </div>
         <p class="noteSmall" id="cartNote" style="display:none;"></p>
 
-        <button class="btn btnGhost" id="clearCart">Hapus Keranjang</button>
-        <button class="btn btnPrimary" id="checkoutWA">Checkout via WhatsApp</button>
+        <button class="btn btnGhost" id="clearCart">HAPUS KERANJANG</button>
+        <button class="btn btnPrimary" id="checkoutWA">CHECKOUT</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== Payment Modal ===== -->
+  <div class="overlay" id="payOverlay" role="dialog" aria-modal="true">
+    <div class="modal">
+      <div class="modalHeader">
+        <h3>PEMBAYARAN</h3>
+        <button class="closeBtn" id="payClose" aria-label="Tutup">
+          <svg viewBox="0 0 24 24" fill="none" width="20" height="20">
+            <path d="M6 6l12 12M18 6 6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="modalBody">
+        <div class="payGrid">
+          <div class="totals">
+            <span>TOTAL TAGIHAN</span>
+            <span class="value" id="payTotal">Rp0</span>
+          </div>
+
+          <div class="help" id="payHelp" style="margin-top:-4px;">
+            Pilih metode pembayaran. Setelah bayar, klik <b>KIRIM KONFIRMASI KE WA</b> untuk mengirim order + metode bayar.
+          </div>
+
+          <div class="payTabs">
+            <button class="chip active" id="tabQris" type="button">QRIS</button>
+            <button class="chip" id="tabTf" type="button">TRANSFER</button>
+          </div>
+
+          <!-- QRIS -->
+          <div id="paneQris" class="qrisBox">
+            <img id="qrisImg" class="qrisImg" alt="QRIS" />
+            <div class="help">Scan QRIS di atas. Jika gambar tidak muncul, pastikan file <b>qris.png</b> ada di repo (root).</div>
+          </div>
+
+          <!-- TRANSFER -->
+          <div id="paneTf" style="display:none;">
+            <div class="field" style="margin-bottom:8px;">
+              <div class="label">PILIH JENIS</div>
+              <select id="tfGroup">
+                <option value="ATM">ATM / BANK</option>
+                <option value="EWALLET">EWALLET</option>
+              </select>
+            </div>
+
+            <div class="field" style="margin-bottom:8px;">
+              <div class="label">PILIH TUJUAN</div>
+              <select id="tfTarget"></select>
+              <div class="help">A/N: <b>BRANDO</b></div>
+            </div>
+
+            <div class="copyRow">
+              <button class="copyBtn" id="copyTf" type="button">COPY NOMOR</button>
+              <span class="help" id="copyStatus" style="margin:0;"></span>
+            </div>
+
+            <div class="help" id="tfNote" style="margin-top:10px;">
+              Catatan: <span class="badText">DANA WAJIB +100P</span> (sesuai instruksi).
+            </div>
+          </div>
+
+          <div class="help" style="border-top:1px solid var(--stroke); padding-top:12px;">
+            <b>IMPORTANT</b> — Setelah bayar, kirim bukti via WhatsApp agar diproses lebih cepat.
+          </div>
+        </div>
+      </div>
+
+      <div class="modalFooter">
+        <button class="btn btnGhost" id="payBack" type="button">KEMBALI</button>
+        <button class="btn btnPrimary" id="sendWA" type="button">KIRIM KONFIRMASI KE WA</button>
       </div>
     </div>
   </div>
 
   <script>
     // ====== CONFIG ======
-    // PDF di ROOT repo
     const PDF_LANDSCAPE = "area-coverage-landscape.pdf";
     const PDF_PORTRAIT  = "area-coverage-portrait.pdf";
 
-    // Nomor WA tujuan (tetap tidak ditampilkan di UI)
     const WA_NUMBER = "6287809236556";
 
-    // ====== FIX PRICING (per request) ======
+    // Payment assets (upload file ini ke repo root)
+    const QRIS_IMG = "qris.png";
+
+    // Fixed prices (kunci)
     const PRICE_AREA = 45000;
-    const PRICE_COACHING = 100000; // PPS & Suegeerr
-    const AREA_NOTE = "Revisi gratis 1×24 jam";
-    const COACHING_NOTE = "Sampai paham alur penawaran";
+    const PRICE_PPS  = 100000;
+    const PRICE_SUEG = 100000;
+
+    const TF_DATA = {
+      ATM: [
+        { label:"ALADIN", value:"50418072326", note:"A/N BRANDO" },
+        { label:"BCA", value:"5505059198", note:"A/N BRANDO" },
+        { label:"SEABANK", value:"901245439994", note:"A/N BRANDO" },
+        { label:"SUPERBANK", value:"000075561431", note:"A/N BRANDO" }
+      ],
+      EWALLET: [
+        { label:"SHOPEE", value:"081717872185", note:"(BRANDO26)" },
+        { label:"DANA", value:"085182197994", note:"WAJIB +100P" },
+        { label:"GOPAY", value:"081717872185", note:"(BRANDO)" },
+        { label:"OVO", value:"081717872185", note:"(BRANDO)" }
+      ]
+    };
 
     // ====== HELPERS ======
     const money = (n) => "Rp" + (Number(n || 0)).toLocaleString("id-ID");
+    const moneyDot = (n) => "RP. " + (Number(n || 0)).toLocaleString("id-ID"); // untuk format WA
     const clampInt = (v, min=1) => {
       const x = parseInt(v, 10);
       if (Number.isNaN(x)) return min;
       return Math.max(min, x);
     };
-
     function siteUrl(path){
       const base = window.location.origin.replace(/\/$/, "");
       return base + "/" + String(path || "").replace(/^\//, "");
@@ -1178,13 +1204,11 @@
     // ====== THEME ======
     const themeBtn = document.getElementById("themeBtn");
     const modeLabel = document.getElementById("modeLabel");
-
     function setMode(mode){
       document.documentElement.setAttribute("data-theme", mode);
       localStorage.setItem("rc_theme", mode);
       modeLabel.textContent = (mode === "light" ? "LIGHT" : "DARK");
     }
-
     (function initTheme(){
       const saved = localStorage.getItem("rc_theme") || "dark";
       setMode(saved);
@@ -1200,7 +1224,6 @@
     // ====== MODALS ======
     const memberOverlay = document.getElementById("memberOverlay");
     const areaOverlay   = document.getElementById("areaOverlay");
-
     function openOverlay(which){
       if(which === "member") memberOverlay.classList.add("open");
       if(which === "area")   areaOverlay.classList.add("open");
@@ -1209,7 +1232,6 @@
       if(which === "member") memberOverlay.classList.remove("open");
       if(which === "area")   areaOverlay.classList.remove("open");
     }
-
     document.addEventListener("click", (e) => {
       const open = e.target.closest("[data-open]");
       if(open){
@@ -1222,24 +1244,16 @@
         closeOverlay(id);
       }
     });
-
-    // close when click outside modal
     [memberOverlay, areaOverlay].forEach(ov => {
-      ov.addEventListener("click", (e) => {
-        if(e.target === ov) ov.classList.remove("open");
-      });
+      ov.addEventListener("click", (e) => { if(e.target === ov) ov.classList.remove("open"); });
     });
 
     // ====== PDF BUTTONS ======
-    document.getElementById("btnPdfLandscape").addEventListener("click", () => {
-      window.open(siteUrl(PDF_LANDSCAPE), "_blank");
-    });
-    document.getElementById("btnPdfPortrait").addEventListener("click", () => {
-      window.open(siteUrl(PDF_PORTRAIT), "_blank");
-    });
+    document.getElementById("btnPdfLandscape").addEventListener("click", () => window.open(siteUrl(PDF_LANDSCAPE), "_blank"));
+    document.getElementById("btnPdfPortrait").addEventListener("click", () => window.open(siteUrl(PDF_PORTRAIT), "_blank"));
 
     // ====== CART ======
-    const CART_KEY = "rc_cart_v1";
+    const CART_KEY = "rc_cart_v2";
     const cartBtn = document.getElementById("cartBtn");
     const drawerOverlay = document.getElementById("drawerOverlay");
     const closeCart = document.getElementById("closeCart");
@@ -1258,11 +1272,9 @@
       localStorage.setItem(CART_KEY, JSON.stringify(items));
       renderCart();
     }
-
     function cartQtySum(items){
       return items.reduce((a,b)=>a+(Number(b.qty)||1),0);
     }
-
     function addItem(item){
       const cart = getCart();
       const sig = item.sig || item.title;
@@ -1275,11 +1287,7 @@
       setCart(cart);
       openCart();
     }
-
-    function removeItem(sig){
-      setCart(getCart().filter(x => x.sig !== sig));
-    }
-
+    function removeItem(sig){ setCart(getCart().filter(x => x.sig !== sig)); }
     function changeQty(sig, delta){
       const cart = getCart();
       const it = cart.find(x => x.sig === sig);
@@ -1287,7 +1295,6 @@
       it.qty = Math.max(1, (Number(it.qty)||1) + delta);
       setCart(cart);
     }
-
     function openCart(){
       drawerOverlay.classList.add("open");
       drawerOverlay.setAttribute("aria-hidden","false");
@@ -1296,13 +1303,9 @@
       drawerOverlay.classList.remove("open");
       drawerOverlay.setAttribute("aria-hidden","true");
     }
-
     cartBtn.addEventListener("click", openCart);
     closeCart.addEventListener("click", closeCartFn);
-    drawerOverlay.addEventListener("click", (e) => {
-      if(e.target === drawerOverlay) closeCartFn();
-    });
-
+    drawerOverlay.addEventListener("click", (e) => { if(e.target === drawerOverlay) closeCartFn(); });
     clearCart.addEventListener("click", () => setCart([]));
 
     function renderCart(){
@@ -1322,23 +1325,11 @@
       cartItems.innerHTML = cart.map(it => {
         const price = Number(it.price);
         const known = Number.isFinite(price) && price > 0;
-
-        // PPT: konsultasi (no price)
-        const isConsult = it.type === "ppt";
-
         if(known){
           total += price * (Number(it.qty)||1);
         }else{
-          if(!isConsult) hasUnknown = true;
+          hasUnknown = true;
         }
-
-        const priceLabel = isConsult
-          ? "Konsultasi harga"
-          : (known ? money(price) : "Harga dikonfirmasi admin");
-
-        const priceColor = isConsult
-          ? "var(--warn)"
-          : (known ? "var(--good)" : "var(--warn)");
 
         return `
           <div class="item">
@@ -1346,8 +1337,8 @@
               <div class="t">${it.title}</div>
               <div class="m">
                 ${it.meta ? it.meta : ""}
-                <div style="margin-top:6px;font-weight:900;color:${priceColor}">
-                  ${priceLabel}
+                <div style="margin-top:6px;font-weight:900;color:${known ? "var(--good)" : "var(--warn)"}">
+                  ${known ? money(price) : "Harga: konsultasi admin"}
                 </div>
               </div>
             </div>
@@ -1367,7 +1358,7 @@
 
       if(hasUnknown){
         cartNote.style.display = "block";
-        cartNote.textContent = "Catatan: sebagian item memiliki harga yang akan dikonfirmasi admin.";
+        cartNote.textContent = "Catatan: item konsultasi akan dikonfirmasi admin via WhatsApp.";
       }else{
         cartNote.style.display = "none";
       }
@@ -1388,88 +1379,59 @@
       }
     });
 
-    // ====== SIMPLE ADD (non-form modules) ======
+    // ====== SIMPLE ADD (fixed pricing rules) ======
     document.addEventListener("click", (e) => {
       const b = e.target.closest("[data-add-simple]");
       if(!b) return;
-      const title = b.getAttribute("data-add-simple");
+      const title = (b.getAttribute("data-add-simple") || "").toUpperCase();
 
-      // fixed pricing rules
-      if(title === "PPS Coaching (GMeet)"){
-        addItem({
-          type: "pps",
-          title,
-          qty: 1,
-          price: PRICE_COACHING,
-          meta: `Catatan: ${COACHING_NOTE}.`,
-          sig: "pps::fixed"
-        });
-        return;
-      }
-      if(title === "Suegeerr Support"){
-        addItem({
-          type: "suegeerr",
-          title,
-          qty: 1,
-          price: PRICE_COACHING,
-          meta: `Catatan: ${COACHING_NOTE}.`,
-          sig: "suegeerr::fixed"
-        });
-        return;
-      }
-      if(title === "Presentasi Karier (PPT)"){
-        addItem({
-          type: "ppt",
-          title,
-          qty: 1,
-          price: 0, // konsultasi
-          meta: "Catatan: Mohon konsultasi kebutuhan (harga menyesuaikan).",
-          sig: "ppt::consult"
-        });
-        return;
+      let price = 0;
+      let meta = "Detail akan diinformasikan melalui WhatsApp.";
+
+      if(title.includes("PPS COACHING")){
+        price = PRICE_PPS;
+        meta = "COACHING GMEET • SAMPAI PAHAM ALUR PENAWARAN.";
+      } else if(title.includes("SUEGEERR")){
+        price = PRICE_SUEG;
+        meta = "SUPPORT • SAMPAI PAHAM ALUR PENAWARAN.";
+      } else if(title.includes("PRESENTASI")){
+        price = 0; // konsul
+        meta = "HARGA: KONSULTASI (BERGANTUNG KEBUTUHAN).";
       }
 
-      // fallback (shouldn't be used now)
       addItem({
         type: "simple",
         title,
         qty: 1,
-        price: 0,
-        meta: "Detail akan diinformasikan melalui WhatsApp.",
+        price,
+        meta,
         sig: "simple::" + title
       });
     });
 
-    // ====== MEMBER LOGC (auto price) ======
+    // ====== MEMBER LOGIC (auto price) ======
     const m_qty = document.getElementById("m_qty");
     const m_kodetoko = document.getElementById("m_kodetoko");
     const m_pin = document.getElementById("m_pin");
     const m_preview = document.getElementById("m_preview");
     const m_addCart = document.getElementById("m_addCart");
 
-    function memberPricePer(qty){
-      return (qty >= 10) ? 4500 : 5000;
-    }
+    function memberPricePer(qty){ return (qty >= 10) ? 4500 : 5000; }
 
     function renderMemberPreview(){
       const qty = clampInt(m_qty.value || 0, 1);
       const per = memberPricePer(qty);
       const total = per * qty;
 
-      const kode = (m_kodetoko.value || "").trim();
+      const kode = (m_kodetoko.value || "").trim().toUpperCase();
       const pin  = (m_pin.value || "").trim();
 
       m_preview.value =
-`Halo,
-Saya ingin memesan layanan New Member Fresh.
+`#AKTIVASI#${kode || "-"}
+PIN / TGL LAHIR : ${pin || "-"}
+JUMLAH QTY MEMBER : ${qty}
 
-Jumlah member : ${qty}
-Harga / member : ${money(per)}
-Total : ${money(total)}
-
-Kode toko : ${kode || "-"}
-Pin / tgl lahir : ${pin || "-"}
-Jumlah qty member : ${qty}`;
+TOTAL ${moneyDot(total)}`;
     }
 
     [m_qty, m_kodetoko, m_pin].forEach(el => el.addEventListener("input", renderMemberPreview));
@@ -1480,18 +1442,17 @@ Jumlah qty member : ${qty}`;
       const per = memberPricePer(qty);
       const total = per * qty;
 
-      const kode = (m_kodetoko.value || "").trim();
+      const kode = (m_kodetoko.value || "").trim().toUpperCase();
       const pin  = (m_pin.value || "").trim();
 
       const meta =
-`Jumlah member: ${qty}
-Harga/member: ${money(per)}
-Kode toko: ${kode || "-"}
-PIN/Tgl lahir: ${pin || "-"}`;
+`KODE TOKO: ${kode || "-"}
+PIN/TGL LAHIR: ${pin || "-"}
+JUMLAH QTY MEMBER: ${qty}`;
 
       addItem({
         type:"member",
-        title:"New Member Fresh",
+        title:"NEW MEMBER FRESH",
         qty: 1,
         price: total,
         meta: meta.replace(/\n/g,"<br>"),
@@ -1508,7 +1469,7 @@ PIN/Tgl lahir: ${pin || "-"}`;
       closeOverlay("member");
     });
 
-    // ====== AREA (form) ======
+    // ====== AREA (fixed price 45k + revisi) ======
     const a_namatoko = document.getElementById("a_namatoko");
     const a_kodetoko = document.getElementById("a_kodetoko");
     const a_sub = document.getElementById("a_sub");
@@ -1518,29 +1479,29 @@ PIN/Tgl lahir: ${pin || "-"}`;
 
     a_addCart.addEventListener("click", () => {
       const nama = (a_namatoko.value || "").trim();
-      const kode = (a_kodetoko.value || "").trim();
+      const kode = (a_kodetoko.value || "").trim().toUpperCase();
       const sub  = (a_sub.value || "").trim();
       const link = (a_sharelok.value || "").trim();
       const fmt  = (a_format.value || "").trim();
 
       if(!fmt){
-        alert("Silakan pilih format (Landscape/Portrait).");
+        alert("Silakan pilih format (LANDSCAPE/PORTRAIT).");
         return;
       }
 
       const meta =
-`Nama toko: ${nama || "-"}
-Kode toko: ${kode || "-"}
-Berapa sub: ${sub || "-"}
-Sharelok toko: ${link || "-"}
-Format: ${fmt}
-Info: ${AREA_NOTE}`;
+`NAMA TOKO: ${nama || "-"}
+KODE TOKO: ${kode || "-"}
+BERAPA SUB: ${sub || "-"}
+SHARELOK: ${link || "-"}
+FORMAT: ${fmt}
+REVISI: 1× GRATIS (24 JAM)`;
 
       addItem({
         type:"area",
-        title:"Design Area Coverage",
+        title:"DESIGN AREA COVERAGE",
         qty: 1,
-        price: PRICE_AREA, // FIX: 45k
+        price: PRICE_AREA,
         meta: meta.replace(/\n/g,"<br>"),
         sig: "area::" + (kode||"-") + "::" + (fmt||"-") + "::" + (nama||"-"),
         payload: {
@@ -1555,7 +1516,105 @@ Info: ${AREA_NOTE}`;
       closeOverlay("area");
     });
 
-    // ====== CHECKOUT WA (auto format) ======
+    // ====== Payment Modal logic ======
+    const payOverlay = document.getElementById("payOverlay");
+    const payClose = document.getElementById("payClose");
+    const payBack = document.getElementById("payBack");
+    const payTotal = document.getElementById("payTotal");
+    const sendWA = document.getElementById("sendWA");
+
+    const tabQris = document.getElementById("tabQris");
+    const tabTf   = document.getElementById("tabTf");
+    const paneQris = document.getElementById("paneQris");
+    const paneTf   = document.getElementById("paneTf");
+    const qrisImg  = document.getElementById("qrisImg");
+
+    const tfGroup  = document.getElementById("tfGroup");
+    const tfTarget = document.getElementById("tfTarget");
+    const copyTf   = document.getElementById("copyTf");
+    const copyStatus = document.getElementById("copyStatus");
+    const tfNote   = document.getElementById("tfNote");
+
+    let payMethod = "QRIS"; // default
+    let tfSelected = null;
+
+    function openPayModal(total){
+      payTotal.textContent = money(total);
+      qrisImg.src = siteUrl(QRIS_IMG);
+      payOverlay.classList.add("open");
+      // default QRIS
+      setPayTab("QRIS");
+      loadTfTargets();
+    }
+    function closePayModal(){
+      payOverlay.classList.remove("open");
+    }
+
+    function setPayTab(method){
+      payMethod = method;
+      if(method === "QRIS"){
+        tabQris.classList.add("active");
+        tabTf.classList.remove("active");
+        paneQris.style.display = "";
+        paneTf.style.display = "none";
+      } else {
+        tabTf.classList.add("active");
+        tabQris.classList.remove("active");
+        paneTf.style.display = "";
+        paneQris.style.display = "none";
+      }
+    }
+
+    tabQris.addEventListener("click", ()=>setPayTab("QRIS"));
+    tabTf.addEventListener("click", ()=>setPayTab("TRANSFER"));
+
+    payClose.addEventListener("click", closePayModal);
+    payBack.addEventListener("click", () => { closePayModal(); openCart(); });
+
+    payOverlay.addEventListener("click", (e) => { if(e.target === payOverlay) closePayModal(); });
+
+    function loadTfTargets(){
+      const group = tfGroup.value;
+      const list = TF_DATA[group] || [];
+      tfTarget.innerHTML = list.map((x, i)=>`<option value="${i}">${x.label} — ${x.value} ${x.note ? " " + x.note : ""}</option>`).join("");
+      tfSelected = list[0] || null;
+      updateTfNote();
+    }
+    function updateTfNote(){
+      const group = tfGroup.value;
+      const idx = parseInt(tfTarget.value || "0", 10);
+      const list = TF_DATA[group] || [];
+      tfSelected = list[idx] || list[0] || null;
+
+      if(group === "EWALLET" && tfSelected && tfSelected.label === "DANA"){
+        tfNote.innerHTML = `Catatan: <span class="badText">DANA WAJIB +100P</span> (sesuai instruksi).`;
+      } else {
+        tfNote.innerHTML = `Catatan: Pastikan nominal sesuai total tagihan.`;
+      }
+    }
+
+    tfGroup.addEventListener("change", ()=>{ loadTfTargets(); copyStatus.textContent=""; });
+    tfTarget.addEventListener("change", ()=>{ updateTfNote(); copyStatus.textContent=""; });
+
+    copyTf.addEventListener("click", async () => {
+      updateTfNote();
+      if(!tfSelected) return;
+      try{
+        await navigator.clipboard.writeText(tfSelected.value);
+        copyStatus.textContent = "Tersalin.";
+      }catch{
+        // fallback
+        const ta = document.createElement("textarea");
+        ta.value = tfSelected.value;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        ta.remove();
+        copyStatus.textContent = "Tersalin.";
+      }
+    });
+
+    // ====== CHECKOUT button now opens Payment Modal ======
     checkoutWA.addEventListener("click", () => {
       const cart = getCart();
       if(cart.length === 0){
@@ -1563,94 +1622,112 @@ Info: ${AREA_NOTE}`;
         return;
       }
 
+      // total all known prices (member/area/pps/sueg) + unknown = 0
+      const total = cart.reduce((sum, it) => {
+        const price = Number(it.price);
+        if(Number.isFinite(price) && price > 0) return sum + (price * (Number(it.qty)||1));
+        return sum;
+      }, 0);
+
+      closeCartFn();
+      openPayModal(total);
+    });
+
+    // ====== SEND WA from payment modal ======
+    function buildWAText(method, methodDetail){
+      const cart = getCart();
       let lines = [];
-      lines.push("Halo,");
-      lines.push("Saya ingin melakukan checkout modul berikut:");
+      lines.push("HALO,");
+      lines.push("SAYA INGIN MELAKUKAN CHECKOUT MODUL BERIKUT:");
 
       cart.forEach((it, idx) => {
         const n = idx + 1;
 
         if(it.type === "member" && it.payload){
           const p = it.payload;
+          const kode = (p.kodeToko || "-").toUpperCase();
+          const pin  = (p.pin || "-");
+
           lines.push("");
-          lines.push(`${n}) ${it.title}`);
-          lines.push(`Jumlah member : ${p.qtyMember}`);
-          lines.push(`Harga / member : ${money(p.pricePer)}`);
-          lines.push(`Total : ${money(p.total)}`);
-          lines.push(`Kode toko : ${p.kodeToko || "-"}`);
-          lines.push(`Pin / tgl lahir : ${p.pin || "-"}`);
-          lines.push(`Jumlah qty member : ${p.qtyMember}`);
+          lines.push(`${n}) NEW MEMBER FRESH`);
+          lines.push(`#AKTIVASI#${kode}`);
+          lines.push(`PIN / TGL LAHIR : ${pin}`);
+          lines.push(`JUMLAH QTY MEMBER : ${p.qtyMember}`);
+          lines.push(`TOTAL : ${moneyDot(p.total)}`);
           return;
         }
 
         if(it.type === "area" && it.payload){
           const p = it.payload;
           lines.push("");
-          lines.push(`${n}) ${it.title}`);
-          lines.push(`Nama toko : ${p.namaToko || "-"}`);
-          lines.push(`Kode toko : ${p.kodeToko || "-"}`);
-          lines.push(`Berapa sub : ${p.sub || "-"}`);
-          lines.push(`Sharelok toko : ${p.sharelok || "-"}`);
-          lines.push(`Landscape / Portrait : ${p.format || "-"}`);
-          lines.push(`Harga : ${money(PRICE_AREA)}`);
-          lines.push(`Info : ${AREA_NOTE}`);
+          lines.push(`${n}) DESIGN AREA COVERAGE`);
+          lines.push(`NAMA TOKO : ${(p.namaToko || "-").toUpperCase()}`);
+          lines.push(`KODE TOKO : ${(p.kodeToko || "-").toUpperCase()}`);
+          lines.push(`BERAPA SUB : ${(p.sub || "-").toUpperCase()}`);
+          lines.push(`SHARELOK : ${p.sharelok || "-"}`);
+          lines.push(`FORMAT : ${(p.format || "-").toUpperCase()}`);
+          lines.push(`REVISI : 1X GRATIS (24 JAM)`);
+          lines.push(`HARGA : ${moneyDot(PRICE_AREA)}`);
           return;
         }
 
-        if(it.type === "pps"){
-          lines.push("");
-          lines.push(`${n}) ${it.title}`);
-          lines.push(`Harga : ${money(PRICE_COACHING)}`);
-          lines.push(`Info : ${COACHING_NOTE}`);
-          return;
-        }
-
-        if(it.type === "suegeerr"){
-          lines.push("");
-          lines.push(`${n}) ${it.title}`);
-          lines.push(`Harga : ${money(PRICE_COACHING)}`);
-          lines.push(`Info : ${COACHING_NOTE}`);
-          return;
-        }
-
-        if(it.type === "ppt"){
-          lines.push("");
-          lines.push(`${n}) ${it.title}`);
-          lines.push("Info : Mohon konsultasi kebutuhan (harga menyesuaikan).");
-          return;
-        }
-
-        // fallback
+        // simple
         lines.push("");
         lines.push(`${n}) ${it.title}`);
-        lines.push("Catatan : Mohon informasi detail dan harga.");
+        const price = Number(it.price);
+        if(Number.isFinite(price) && price > 0){
+          lines.push(`HARGA : ${moneyDot(price)}`);
+        } else {
+          lines.push("HARGA : KONSULTASI ADMIN");
+        }
       });
 
-      // total known items only
       const knownTotal = cart.reduce((sum, it) => {
         const price = Number(it.price);
-        const known = Number.isFinite(price) && price > 0;
-        if(!known) return sum;
+        if(!Number.isFinite(price) || price <= 0) return sum;
         return sum + (price * (Number(it.qty)||1));
       }, 0);
 
       lines.push("");
-      lines.push(`Total (item dengan harga pasti) : ${money(knownTotal)}`);
+      lines.push(`TOTAL TAGIHAN : ${moneyDot(knownTotal)}`);
+      lines.push(`METODE PEMBAYARAN : ${method}${methodDetail ? " — " + methodDetail : ""}`);
       lines.push("");
-      lines.push("Terima kasih.");
+      lines.push("SAYA AKAN KIRIM BUKTI PEMBAYARAN DI CHAT INI.");
+      lines.push("TERIMA KASIH.");
 
-      const text = lines.join("\n");
+      return lines.join("\n");
+    }
+
+    sendWA.addEventListener("click", () => {
+      const cart = getCart();
+      if(cart.length === 0){
+        alert("Keranjang masih kosong.");
+        closePayModal();
+        return;
+      }
+
+      let methodDetail = "";
+      if(payMethod === "TRANSFER"){
+        updateTfNote();
+        if(tfSelected){
+          methodDetail = `${tfGroup.value} ${tfSelected.label} ${tfSelected.value}`;
+          if(tfGroup.value === "EWALLET" && tfSelected.label === "DANA"){
+            methodDetail += " (WAJIB +100P)";
+          }
+        }
+      }
+
+      const text = buildWAText(payMethod, methodDetail);
       const url = `https://wa.me/${encodeURIComponent(WA_NUMBER)}?text=${encodeURIComponent(text)}`;
       window.open(url, "_blank");
+      closePayModal();
     });
 
     // init cart render
     renderCart();
 
     // menu button -> open cart
-    document.getElementById("menuBtn").addEventListener("click", () => {
-      openCart();
-    });
+    document.getElementById("menuBtn").addEventListener("click", () => openCart());
   </script>
 </body>
 </html>
