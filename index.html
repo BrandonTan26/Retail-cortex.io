@@ -1,429 +1,504 @@
-<!doctype html>
-<html lang="id" data-theme="dark">
+<!DOCTYPE html>
+<html lang="id" data-theme="dark" style="--nav-h: 84px;">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Retail-Cortex.io — Service Modules</title>
+  <title>Retail-Cortex.io — Layanan Operasional Toko</title>
 
-  <!-- Bootstrap + Font Awesome + Fonts -->
+  <!-- Bootstrap + Font Awesome -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     :root{
       --primary:#7c3aed;
-      --secondary:#22d3ee;
+      --cyan:#22d3ee;
+      --danger:#ef4444;
       --success:#22c55e;
 
-      --bg-page:radial-gradient(circle at top,#1d2040 0%,#020617 55%,#000 100%);
-      --bg-surface:#020617;
+      --bg-page: radial-gradient(circle at top, #2a145f 0%, #030512 55%, #01020a 100%);
+      --bg-surface: rgba(2,6,23,.92);
+      --bg-card: rgba(8,11,30,.92);
+
       --text-main:#e5e7eb;
-      --muted:#9ca3af;
+      --text-muted:#9ca3af;
+      --border: rgba(148,163,184,.35);
 
-      --card-shadow:0 10px 35px rgba(15,23,42,.8);
-      --card-shadow-hover:0 25px 60px rgba(15,23,42,.95);
       --radius:18px;
+      --shadow:0 12px 38px rgba(0,0,0,.72);
+      --shadow-hover:0 22px 60px rgba(0,0,0,.86);
 
-      --gradient:linear-gradient(135deg,#4c1d95 0%,#22c1c3 60%,#22d3ee 100%);
-      --gradient2:linear-gradient(135deg,#e11d48 0%,#a855f7 50%,#22d3ee 100%);
       --nav-h:64px;
+
+      --grad-primary: linear-gradient(135deg, #4c1d95 0%, #22c1c3 60%, #22d3ee 100%);
+      --grad-accent: linear-gradient(135deg, #a855f7 0%, #22d3ee 60%, #e5f6ff 100%);
     }
 
     html[data-theme="light"]{
-      --bg-page:linear-gradient(135deg,#1d4ed8 0%,#7c3aed 45%,#22d3ee 100%);
-      --bg-surface:#f9fafb;
+      --bg-page: linear-gradient(135deg,#1d4ed8 0%,#7c3aed 45%,#22d3ee 100%);
+      --bg-surface: rgba(249,250,251,.92);
+      --bg-card: rgba(255,255,255,.92);
+
       --text-main:#0b1220;
-      --muted:#64748b;
-      --card-shadow:0 6px 18px rgba(15,23,42,.25);
-      --card-shadow-hover:0 18px 40px rgba(15,23,42,.3);
+      --text-muted:#475569;
+      --border: rgba(148,163,184,.45);
+
+      --shadow:0 10px 26px rgba(15,23,42,.18);
+      --shadow-hover:0 18px 46px rgba(15,23,42,.26);
     }
 
-    *{box-sizing:border-box}
+    *{ box-sizing:border-box; }
     body{
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-      background:var(--bg-page);
-      color:var(--text-main);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Arial, sans-serif;
+      background: var(--bg-page);
+      color: var(--text-main);
       min-height:100vh;
-      line-height:1.6;
+      overflow-x:hidden;
     }
 
-    .container-fluid{
-      background:var(--bg-surface);
-      min-height:100vh;
-      margin:0;
-      padding:0;
+    /* background grid */
+    .bg-grid{
+      position:fixed; inset:0;
+      pointer-events:none;
+      opacity:.14;
+      background-image:
+        linear-gradient(rgba(129, 140, 248, 0.18) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(129, 140, 248, 0.18) 1px, transparent 1px);
+      background-size: 52px 52px;
+      animation: gridShift 22s linear infinite;
+      z-index:0;
     }
+    @keyframes gridShift{ 0%{background-position:0 0,0 0} 100%{background-position:120px 120px,120px 120px} }
+
+    main{ position:relative; z-index:1; scroll-margin-top: calc(var(--nav-h) + 16px); }
 
     /* NAV */
     .nav-glass{
       position:sticky; top:0; z-index:1100;
-      background:rgba(15,23,42,.82);
-      backdrop-filter:saturate(1.3) blur(14px);
-      border-bottom:1px solid rgba(148,163,184,.28);
+      background: rgba(2,6,23,.70);
+      backdrop-filter: saturate(1.4) blur(14px);
+      border-bottom:1px solid var(--border);
     }
     html[data-theme="light"] .nav-glass{
-      background:rgba(255,255,255,.68);
-      border-color:#e2e8f0;
+      background: rgba(255,255,255,.55);
     }
 
-    .navbar-brand{
-      font-family:Orbitron,system-ui;
-      font-weight:800;
+    .brand-wrap{
+      display:flex; align-items:center; gap:.75rem;
+      min-width: 210px;
+    }
+    .brand-logo{
+      width:44px; height:44px; border-radius:14px;
+      background: rgba(15,23,42,.65);
+      border:1px solid rgba(148,163,184,.45);
+      display:flex; align-items:center; justify-content:center;
+      overflow:hidden;
+      box-shadow: 0 10px 26px rgba(0,0,0,.30);
+    }
+    html[data-theme="light"] .brand-logo{
+      background: rgba(255,255,255,.75);
+    }
+    .brand-logo img{ width:32px; height:32px; object-fit:contain; }
+    .brand-title{
+      font-family: Orbitron, system-ui;
+      font-weight:700;
       letter-spacing:.12em;
       text-transform:uppercase;
-      font-size:1.02rem;
-      background:var(--gradient);
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
-      user-select:none;
+      font-size: 1rem;
+      line-height:1.1;
     }
     .brand-sub{
-      font-size:.74rem;
-      color:var(--muted);
-      letter-spacing:.08em;
+      font-size:.72rem;
+      letter-spacing:.18em;
       text-transform:uppercase;
-      margin-top:-4px;
+      color: var(--text-muted);
+      margin-top:.05rem;
     }
 
     .nav-link{
       font-weight:700;
       border-radius:999px;
-      padding:.42rem .86rem !important;
-      font-size:.92rem;
-      color:var(--muted) !important;
+      padding:.45rem .9rem !important;
+      font-size:.88rem;
+      color: var(--text-muted) !important;
     }
     .nav-link:hover{
-      background:rgba(148,163,184,.14);
-      color:var(--text-main) !important;
-    }
-    .nav-link.active{
-      color:#0f172a !important;
-      background:var(--gradient);
-    }
-
-    .nav-icon-btn{
-      width:42px; height:42px;
-      display:inline-flex; align-items:center; justify-content:center;
-      border-radius:12px;
-      border:1px solid rgba(148,163,184,.6);
-      background:rgba(15,23,42,.85);
-      color:#e5e7eb;
-    }
-    html[data-theme="light"] .nav-icon-btn{
-      background:#ffffff;
-      color:#0f172a;
-      border-color:#e2e8f0;
-    }
-    .nav-cart-count{
-      position:absolute; top:-6px; right:-6px;
-      min-width:20px; height:20px;
-      border-radius:999px;
-      background:var(--success);
-      color:#0f172a;
-      font-size:.75rem;
-      font-weight:900;
-      display:flex; align-items:center; justify-content:center;
-    }
-
-    .navbar-toggler{
-      border-radius:12px;
-      border:1px solid rgba(148,163,184,.55);
-      padding:.25rem .4rem;
-      background:rgba(15,23,42,.7);
-    }
-    html[data-theme="light"] .navbar-toggler{
-      background:rgba(255,255,255,.72);
-      border-color:#cbd5e1;
-    }
-    .navbar-toggler:focus{ box-shadow:none; }
-    .navbar-toggler-icon{
-      width:1.8rem;height:1.8rem;
-      background-repeat:no-repeat;background-position:center;background-size:100%;
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath stroke='%23e5e7eb' stroke-width='2' stroke-linecap='round' d='M4 6h16M4 12h16M4 18h16'/%3E%3C/svg%3E");
-    }
-    html[data-theme="light"] .navbar-toggler-icon{
-      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath stroke='%23020617' stroke-width='2' stroke-linecap='round' d='M4 6h16M4 12h16M4 18h16'/%3E%3C/svg%3E");
+      background: rgba(148,163,184,.16);
+      color: var(--text-main) !important;
     }
 
     /* HERO */
     .hero{
-      padding:2.2rem 0 1.35rem;
+      padding: 2.8rem 0 2.2rem;
+      border-bottom:1px solid var(--border);
       background:
-        radial-gradient(circle at top left,rgba(56,189,248,.18),transparent 55%),
-        radial-gradient(circle at bottom right,rgba(244,63,94,.12),transparent 55%);
-      border-bottom:1px solid rgba(148,163,184,.22);
+        radial-gradient(circle at top left, rgba(56,189,248,.18), transparent 58%),
+        radial-gradient(circle at bottom right, rgba(168,85,247,.16), transparent 58%);
     }
     html[data-theme="light"] .hero{
-      border-color:#e2e8f0;
       background:
-        radial-gradient(circle at top left,rgba(56,189,248,.16),transparent 55%),
-        radial-gradient(circle at bottom right,rgba(244,63,94,.14),transparent 55%);
+        radial-gradient(circle at top left, rgba(56,189,248,.20), transparent 58%),
+        radial-gradient(circle at bottom right, rgba(168,85,247,.18), transparent 58%);
     }
+
     .hero-badge{
-      display:inline-flex; align-items:center; gap:.45rem;
+      display:inline-flex; align-items:center; gap:.5rem;
       padding:.35rem .85rem;
       border-radius:999px;
-      background:rgba(15,23,42,.72);
-      border:1px solid rgba(148,163,184,.55);
-      font-size:.82rem;
+      background: rgba(15,23,42,.55);
+      border: 1px solid rgba(148,163,184,.45);
+      font-size:.86rem;
       font-weight:700;
-      color:#bae6fd;
+      color: #bae6fd;
     }
     html[data-theme="light"] .hero-badge{
-      background:#eff6ff;
-      color:#1e293b;
-      border-color:#e2e8f0;
+      background: rgba(255,255,255,.75);
+      color:#0f172a;
     }
-    .hero-title{
-      font-family:Orbitron,system-ui;
-      font-weight:900;
-      letter-spacing:.08em;
+
+    .hero h1{
+      font-family: Orbitron, system-ui;
       text-transform:uppercase;
-      margin:.8rem 0 .35rem;
-      font-size:2rem;
+      letter-spacing:.10em;
+      font-size: clamp(1.9rem, 3.6vw, 2.55rem);
+      margin:.9rem 0 .45rem;
+      line-height:1.15;
     }
-    @media(min-width:768px){ .hero-title{font-size:2.45rem;} }
-    .hero-sub{
-      max-width:42rem;
-      color:var(--muted);
-      font-size:.98rem;
-      margin-bottom:1.1rem;
-    }
-    .hero-actions{
-      display:flex; flex-wrap:wrap; gap:.7rem;
-      margin-top:.3rem;
-    }
-    .btn-grad{
-      border:none;
-      background:var(--gradient);
-      color:#0f172a;
-      font-weight:900;
-      border-radius:14px;
-      padding:.7rem 1rem;
-    }
-    .btn-outline-soft{
-      border-radius:14px;
-      padding:.7rem 1rem;
-      font-weight:900;
-      border:1px solid rgba(148,163,184,.55);
-      color:var(--text-main);
-      background:transparent;
-    }
-    html[data-theme="light"] .btn-outline-soft{
-      color:#0f172a;
-      border-color:#dbe3ef;
-      background:rgba(255,255,255,.35);
+    .hero p{
+      max-width: 42rem;
+      color: var(--text-muted);
+      font-size: 1.0rem;
     }
 
-    main{ scroll-margin-top:calc(var(--nav-h) + 16px); }
+    .hero-cards{
+      margin-top:1.1rem;
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: .85rem;
+    }
+    .hero-mini{
+      grid-column: span 6;
+      border-radius: 18px;
+      padding: .95rem 1rem;
+      background: rgba(15,23,42,.62);
+      border: 1px solid rgba(148,163,184,.45);
+      box-shadow: var(--shadow);
+    }
+    html[data-theme="light"] .hero-mini{
+      background: rgba(255,255,255,.82);
+    }
+    .hero-mini strong{ font-weight:800; }
+    .hero-mini .label{ font-size:.82rem; color: var(--text-muted); margin-top:.12rem; }
+    @media (max-width: 768px){
+      .hero-mini{ grid-column: span 12; }
+    }
 
-    /* MODULES */
+    /* SECTION */
     .section{
-      padding:1.65rem 0 1.35rem;
-      background:radial-gradient(circle at top,#111827 0%,#020617 58%);
+      padding: 2.25rem 0 1.7rem;
     }
-    html[data-theme="light"] .section{ background:#e5e7eb; }
-
     .section-title{
-      text-align:center;
       font-weight:900;
       letter-spacing:.03em;
+      text-align:center;
+      font-size: 1.95rem;
       margin-bottom:.25rem;
     }
     .section-sub{
       text-align:center;
-      color:var(--muted);
-      font-size:.95rem;
-      margin-bottom:1.15rem;
+      color: var(--text-muted);
+      margin-bottom: 1.25rem;
     }
 
-    .product-card{
-      background:radial-gradient(circle at top,#111827 0%,#020617 55%);
-      border-radius:var(--radius);
-      box-shadow:var(--card-shadow);
-      transition:all .35s cubic-bezier(.25,.8,.25,1);
-      border:1px solid rgba(148,163,184,.26);
-      overflow:hidden;
+    /* SERVICES GRID */
+    .svc-card{
       height:100%;
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
       position:relative;
+      cursor:pointer;
     }
-    html[data-theme="light"] .product-card{
-      background:#ffffff;
-      border-color:#e2e8f0;
+    .svc-card:hover{
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(226,232,240,.72);
     }
-    .product-card:hover{
-      transform:translateY(-6px);
-      box-shadow:var(--card-shadow-hover);
-    }
-    .product-card::before{
+    .svc-card::before{
       content:"";
-      position:absolute;
-      inset:0;
-      background:conic-gradient(from 180deg,#22d3ee33,#a855f733,#4c1d9533,#22c55e33,#22d3ee33);
+      position:absolute; inset:0;
+      background: conic-gradient(from 180deg,
+        rgba(34,211,238,.16),
+        rgba(168,85,247,.14),
+        rgba(76,29,149,.18),
+        rgba(34,197,94,.10),
+        rgba(34,211,238,.16)
+      );
       opacity:0;
-      transition:opacity .35s;
+      transition: opacity .25s ease;
       pointer-events:none;
     }
-    .product-card:hover::before{opacity:1;}
-    .product-card > *{position:relative; z-index:1;}
+    .svc-card:hover::before{ opacity:1; }
+    .svc-card > *{ position:relative; z-index:1; }
 
-    .product-icon{
-      width:64px;height:64px;
+    .svc-body{ padding: 1rem 1rem .95rem; }
+    .svc-top{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:.75rem;
+      margin-bottom:.65rem;
+    }
+    .svc-badge{
+      display:inline-flex; align-items:center; gap:.45rem;
+      border-radius:999px;
+      padding:.22rem .65rem;
+      background: rgba(15,23,42,.62);
+      border: 1px solid rgba(148,163,184,.45);
+      color: var(--text-muted);
+      font-size:.78rem;
+      font-weight:800;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      white-space:nowrap;
+    }
+    html[data-theme="light"] .svc-badge{
+      background: rgba(255,255,255,.75);
+    }
+
+    .svc-icon{
+      width:56px; height:56px;
       border-radius:18px;
-      display:flex;align-items:center;justify-content:center;
-      background:rgba(15,23,42,.9);
-      border:1px solid rgba(148,163,184,.45);
-      margin:0 auto .9rem;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(15,23,42,.72);
+      border: 1px solid rgba(148,163,184,.45);
+      transition: .25s ease;
+      flex-shrink:0;
     }
-    html[data-theme="light"] .product-icon{
-      background:#ffffff;
-      border-color:#e2e8f0;
+    html[data-theme="light"] .svc-icon{
+      background: rgba(255,255,255,.80);
     }
-    .product-card:hover .product-icon{
-      background:var(--gradient);
-      border-color:transparent;
+    .svc-card:hover .svc-icon{
+      background: var(--grad-primary);
+      border-color: transparent;
+      transform: scale(1.05);
     }
-    .product-icon i{
-      font-size:1.55rem;
-      color:#e5e7eb;
-    }
-    .product-card:hover .product-icon i{ color:#0f172a; }
+    .svc-icon i{ font-size: 1.2rem; color:#e5e7eb; }
+    html[data-theme="light"] .svc-icon i{ color:#0f172a; }
+    .svc-card:hover .svc-icon i{ color:#0b1220; }
 
-    .product-title{
-      font-weight:900;
-      margin-bottom:.35rem;
-      text-align:center;
-      font-size:1.02rem;
-      min-height:2.6em;
+    .svc-title{
+      font-family: Orbitron, system-ui;
+      text-transform: uppercase;
+      letter-spacing:.10em;
+      font-weight:700;
+      font-size: 1.05rem;
+      margin-bottom:.25rem;
+      line-height:1.25;
     }
-    .product-desc{
-      color:var(--muted);
-      font-size:.9rem;
-      text-align:center;
-      min-height:3.2em;
+    .svc-desc{
+      color: var(--text-muted);
+      font-size: .92rem;
+      margin-bottom: .9rem;
+      min-height: 3.2em;
     }
 
-    .product-actions{
-      display:flex;
-      gap:.55rem;
-      margin-top:1rem;
+    .svc-actions{
+      display:flex; gap:.6rem; align-items:center; justify-content:space-between;
+      margin-top:.25rem;
     }
-    .btn-detail-wide{
+
+    .btn-detail{
       width:100%;
-      height:44px;
-      border-radius:14px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.55);
+      background: rgba(15,23,42,.70);
+      color: var(--text-main);
+      font-weight:900;
+      letter-spacing:.03em;
+      padding: .62rem .85rem;
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:.55rem;
-      font-weight:900;
-      border:1px solid rgba(148,163,184,.55);
-      background:rgba(15,23,42,.75);
-      color:var(--text-main);
+      transition: .2s ease;
     }
-    html[data-theme="light"] .btn-detail-wide{
-      background:#f9fafb;
-      border-color:#e2e8f0;
-      color:#0f172a;
+    html[data-theme="light"] .btn-detail{
+      background: rgba(255,255,255,.85);
     }
-    .btn-detail-wide:hover{ transform:translateY(-1px); }
-
-    .btn-add{
-      height:44px;
-      min-width:52px;
-      border-radius:14px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:900;
-      border:1px solid rgba(168,85,247,.65);
-      background:rgba(88,28,135,.55);
-      color:#e9d5ff;
-    }
-    html[data-theme="light"] .btn-add{
-      background:#eef2ff;
-      border-color:#c7d2fe;
-      color:#3730a3;
+    .btn-detail:hover{
+      transform: translateY(-1px);
+      border-color: rgba(226,232,240,.8);
     }
 
-    /* MODAL / OFFCANVAS */
+    /* modal */
     .modal-content{
-      border-radius:var(--radius);
-      border:none;
-      box-shadow:0 25px 50px -12px rgba(0,0,0,.85);
-      background:radial-gradient(circle at top,#020617 0%,#020617 60%,#020617 100%);
-      color:var(--text-main);
+      border-radius: var(--radius);
+      border: none;
+      box-shadow: 0 25px 60px rgba(0,0,0,.55);
+      background: var(--bg-card);
+      color: var(--text-main);
     }
     html[data-theme="light"] .modal-content{
-      background:#ffffff;
-      box-shadow:0 18px 40px rgba(15,23,42,.2);
-      color:#0b1220;
+      box-shadow: 0 18px 46px rgba(15,23,42,.22);
     }
     .modal-header{
-      background:var(--gradient);
-      color:#0f172a;
-      border-radius:var(--radius) var(--radius) 0 0;
-      padding:1.05rem;
+      background: var(--grad-primary);
+      color:#0b1220;
+      border-radius: var(--radius) var(--radius) 0 0;
+      padding: 1.05rem 1.05rem;
     }
-    .btn-close{filter:brightness(0) invert(1)}
-    html[data-theme="light"] .btn-close{filter:none}
-    .modal-body{padding:1rem;}
+    .btn-close{ filter: brightness(0) invert(1); }
+    html[data-theme="light"] .btn-close{ filter:none; }
+
+    .modal-body{ padding: 1rem 1.05rem 1.05rem; }
     .modal-footer{
-      padding:1rem;
-      border-top:1px solid rgba(148,163,184,.28);
+      padding: 1rem 1.05rem 1.05rem;
+      border-top: 1px solid var(--border);
     }
 
-    html[data-theme="dark"] .offcanvas,
-    html[data-theme="dark"] .dropdown-menu{
-      background:#020617;
-      color:#e5e7eb;
-      border-color:#1f2937;
+    .detail-head{
+      border-radius: 18px;
+      padding: .9rem .9rem;
+      background: linear-gradient(135deg, rgba(76,29,149,.55), rgba(34,211,238,.18));
+      border: 1px solid rgba(148,163,184,.35);
+      display:flex;
+      gap: .85rem;
+      align-items:flex-start;
+      margin-bottom: 1rem;
+    }
+    .detail-head .ico{
+      width: 62px; height: 62px;
+      border-radius: 18px;
+      display:flex; align-items:center; justify-content:center;
+      background: rgba(15,23,42,.65);
+      border: 1px solid rgba(148,163,184,.45);
+      flex-shrink:0;
+    }
+    .detail-head .ico i{ font-size: 1.25rem; }
+
+    .detail-title{
+      font-weight: 900;
+      font-size: 1.05rem;
+      margin:0;
+    }
+    .detail-sub{
+      color: var(--text-muted);
+      margin:.25rem 0 0;
+      font-size: .92rem;
     }
 
-    .form-control,.form-select{
-      border-radius:14px;
-      border:1px solid rgba(148,163,184,.35);
-      background:rgba(15,23,42,.6);
-      color:var(--text-main);
-      padding:.7rem .85rem;
+    .field{
+      margin-bottom: .75rem;
+    }
+    .field label{
+      font-size:.82rem;
+      font-weight:800;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing:.08em;
+      margin-bottom:.35rem;
+    }
+    .form-control, .form-select{
+      border-radius: 14px !important;
+      border: 1px solid rgba(148,163,184,.45) !important;
+      background: rgba(15,23,42,.55) !important;
+      color: var(--text-main) !important;
+      padding: .7rem .85rem !important;
     }
     html[data-theme="light"] .form-control,
     html[data-theme="light"] .form-select{
-      background:#ffffff;
-      color:#0f172a;
-      border-color:#e2e8f0;
+      background: rgba(255,255,255,.85) !important;
+      color: #0b1220 !important;
     }
-    .form-control:focus,.form-select:focus{
-      outline:2px solid var(--secondary);
-      outline-offset:2px;
-      box-shadow:none;
-    }
-
-    .mini-note{
-      font-size:.88rem;
-      color:var(--muted);
+    .form-control:focus, .form-select:focus{
+      box-shadow:none !important;
+      outline: 2px solid rgba(34,211,238,.65) !important;
+      outline-offset: 2px;
     }
 
-    /* FLOATING BUTTONS */
+    .qty-wrap{
+      display:flex; align-items:center; gap:.55rem;
+    }
+    .qty-btn{
+      width:44px; height:44px;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.45);
+      background: rgba(15,23,42,.55);
+      color: var(--text-main);
+      font-weight: 900;
+      display:flex; align-items:center; justify-content:center;
+    }
+    html[data-theme="light"] .qty-btn{
+      background: rgba(255,255,255,.85);
+      color:#0b1220;
+    }
+    .qty-num{
+      flex:1;
+      text-align:center;
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.45);
+      background: rgba(15,23,42,.55);
+      padding:.7rem .85rem;
+      font-weight:900;
+    }
+    html[data-theme="light"] .qty-num{
+      background: rgba(255,255,255,.85);
+      color:#0b1220;
+    }
+
+    .price-box{
+      border-radius: 16px;
+      border: 1px solid rgba(148,163,184,.35);
+      background: rgba(15,23,42,.45);
+      padding: .85rem .9rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: .75rem;
+    }
+    html[data-theme="light"] .price-box{
+      background: rgba(255,255,255,.70);
+    }
+    .price-box .muted{ color: var(--text-muted); font-weight:800; font-size:.85rem; }
+    .price-box .val{ font-weight:900; }
+    .price-box .total{ font-weight:900; color: var(--success); }
+
+    /* PDF viewer */
+    .pdf-frame{
+      width:100%;
+      height: min(68vh, 620px);
+      border-radius: 14px;
+      border: 1px solid rgba(148,163,184,.35);
+      background: rgba(15,23,42,.35);
+      overflow:hidden;
+    }
+    .pdf-frame iframe{
+      width:100%;
+      height:100%;
+      border:0;
+      background:transparent;
+    }
+
+    /* Floating controls (BOTTOM only) */
     .floating-cart{
       position:fixed;
       right:16px; bottom:16px;
       z-index:1200;
-      background:var(--gradient);
+      background: var(--grad-primary);
       border:none;
-      color:#0f172a;
+      color:#0b1220;
       border-radius:999px;
-      padding:.85rem 1.05rem;
-      box-shadow:0 18px 45px rgba(0,0,0,.78);
-      display:flex;
-      align-items:center;
-      gap:.6rem;
+      padding:.9rem 1.05rem;
+      box-shadow: 0 18px 45px rgba(0,0,0,.55);
+      display:flex; align-items:center; gap:.6rem;
       font-weight:900;
     }
     .floating-cart .count{
-      background:#0f172a;
+      background:#0b1220;
       color:#e5e7eb;
       font-weight:900;
       padding:.1rem .55rem;
@@ -436,36 +511,54 @@
       position:fixed;
       left:16px; bottom:16px;
       z-index:1200;
-      border:1px solid rgba(148,163,184,.6);
-      background:rgba(15,23,42,.85);
+      border:1px solid rgba(148,163,184,.45);
+      background: rgba(15,23,42,.70);
       border-radius:999px;
-      width:48px;height:48px;
-      display:flex;align-items:center;justify-content:center;
-      box-shadow:0 18px 45px rgba(0,0,0,.78);
-      color:#e5e7eb;
+      width:50px; height:50px;
+      display:flex; align-items:center; justify-content:center;
+      box-shadow: 0 18px 45px rgba(0,0,0,.55);
+      color: var(--text-main);
     }
     html[data-theme="light"] .floating-dark{
-      background:#ffffff;
-      border-color:#e2e8f0;
-      color:#0f172a;
+      background: rgba(255,255,255,.85);
+      color:#0b1220;
     }
 
-    /* FOOTER */
-    .footer-mini{
-      border-top:1px solid rgba(148,163,184,.25);
-      padding:1rem 0;
-      font-size:.85rem;
-      color:var(--muted);
+    /* Offcanvas cart */
+    .offcanvas{
+      background: var(--bg-card);
+      color: var(--text-main);
+      border-left: 1px solid var(--border);
+    }
+    html[data-theme="light"] .offcanvas{
+      background: rgba(255,255,255,.92);
+    }
+    .offcanvas-header{
+      border-bottom: 1px solid var(--border);
+    }
+
+    .empty{
       text-align:center;
+      color: var(--text-muted);
+      padding: 2.25rem 1rem;
     }
-    .footer-mini strong{
-      color:var(--text-main);
-    }
-    .heart{ color:#fb7185; }
+    .empty i{ font-size: 2.2rem; opacity:.55; margin-bottom:.6rem; }
 
-    /* Safe area for modals on mobile */
-    .modal{ z-index:1300; }
-    .offcanvas{ z-index:1300; }
+    footer{
+      padding: 1.4rem 0 5rem;
+      text-align:center;
+      color: var(--text-muted);
+      border-top: 1px solid var(--border);
+      background: rgba(2,6,23,.40);
+    }
+    html[data-theme="light"] footer{
+      background: rgba(255,255,255,.35);
+    }
+
+    /* Mobile modal safe area */
+    .modal{ z-index: 1300; }
+    .offcanvas{ z-index: 1250; }
+
     @supports (padding: max(0px)) {
       .modal{
         padding-top:max(env(safe-area-inset-top,0px),calc(var(--nav-h) + 10px));
@@ -478,145 +571,322 @@
 </head>
 
 <body>
-  <div class="container-fluid">
-    <!-- NAV -->
-    <nav class="navbar navbar-expand-lg nav-glass" id="mainNavbar">
-      <div class="container py-1">
-        <div class="d-flex flex-column">
-          <a class="navbar-brand" href="#home">Retail-Cortex.io</a>
-          <div class="brand-sub">Service Modules</div>
-        </div>
+  <div class="bg-grid"></div>
 
-        <div class="d-flex align-items-center d-lg-none ms-auto gap-2">
-          <button id="navDarkBtn" class="nav-icon-btn position-relative" title="Toggle Mode" type="button">
-            <i class="fa-solid fa-moon"></i>
-          </button>
-          <button class="nav-icon-btn position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" title="Keranjang">
-            <i class="fa-solid fa-bag-shopping"></i>
-            <span id="navCartCount" class="nav-cart-count">0</span>
-          </button>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-        </div>
-
-        <div class="collapse navbar-collapse" id="mainNav">
-          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
-            <li class="nav-item"><a class="nav-link active" data-scroll href="#modules">Modules</a></li>
-            <li class="nav-item"><a class="nav-link" data-scroll href="#cara-order">Cara Order</a></li>
-          </ul>
-
-          <div class="d-none d-lg-flex align-items-center gap-2 ms-lg-3">
-            <button id="navDarkBtnDesk" class="nav-icon-btn position-relative" title="Toggle Mode" type="button">
-              <i class="fa-solid fa-moon"></i>
-            </button>
-            <button class="nav-icon-btn position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" title="Keranjang">
-              <i class="fa-solid fa-bag-shopping"></i>
-              <span id="navCartCountDesk" class="nav-cart-count">0</span>
-            </button>
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg nav-glass" id="mainNavbar">
+    <div class="container py-2">
+      <a class="text-decoration-none text-reset d-flex align-items-center" href="#home">
+        <div class="brand-wrap">
+          <div class="brand-logo">
+            <img src="retail-cortex-logo.png" alt="Retail-Cortex.io"
+                 onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=&quot;fa-solid fa-cubes&quot; style=&quot;color:var(--text-main);font-size:1.25rem;&quot;></i>';">
+          </div>
+          <div>
+            <div class="brand-title">Retail-Cortex.io</div>
+            <div class="brand-sub">Operational Support • Store Teams</div>
           </div>
         </div>
+      </a>
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-label="Menu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="mainNav">
+        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+          <li class="nav-item"><a class="nav-link" href="#modules" data-scroll>Modules</a></li>
+          <li class="nav-item"><a class="nav-link" href="#workflow" data-scroll>Workflow</a></li>
+        </ul>
       </div>
-    </nav>
+    </div>
+  </nav>
 
+  <main id="home">
     <!-- HERO -->
-    <section class="hero" id="home">
+    <section class="hero">
       <div class="container">
-        <div class="hero-badge">
-          <i class="fa-solid fa-shield-check"></i>
-          <span>Portal layanan pendampingan dan eksekusi retail.</span>
-        </div>
+        <div class="row g-4 align-items-center">
+          <div class="col-lg-7">
+            <div class="hero-badge">
+              <i class="fa-solid fa-star"></i>
+              <span>Portal layanan operasional toko — cepat, rapi, dan terukur.</span>
+            </div>
 
-        <h1 class="hero-title">Retail-Cortex</h1>
-        <p class="hero-sub">
-          Membantu toko bekerja lebih rapi, mencapai target secara terukur, dan mempersiapkan jenjang karier.
-          Semua pesanan tersusun otomatis melalui WhatsApp.
-        </p>
+            <h1>Retail-Cortex.io<br class="d-none d-md-block">Layanan untuk eksekusi toko.</h1>
 
-        <div class="hero-actions">
-          <a href="#modules" data-scroll class="btn btn-grad">
-            <i class="fa-solid fa-grid-2 me-2"></i> Lihat Modules
-          </a>
-          <button class="btn btn-outline-soft" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-            <i class="fa-solid fa-bag-shopping me-2"></i> Buka Keranjang
-          </button>
+            <p>
+              Retail-Cortex.io membantu tim toko menyelesaikan kebutuhan operasional seperti penambahan member, pembaruan area coverage,
+              coaching PPS/Suegeerr, hingga penyusunan presentasi kerja yang rapi dan siap digunakan untuk evaluasi maupun pengajuan jabatan.
+            </p>
+
+            <div class="hero-cards">
+              <div class="hero-mini">
+                <div><strong>Order via WhatsApp</strong></div>
+                <div class="label">Keranjang & checkout tersedia di tombol kanan bawah.</div>
+              </div>
+              <div class="hero-mini">
+                <div><strong>Format order otomatis</strong></div>
+                <div class="label">Isi data seperlunya (khusus Member & Area Coverage).</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-5">
+            <div class="hero-mini" style="height:100%;">
+              <div class="d-flex align-items-center gap-3">
+                <div class="brand-logo" style="width:56px;height:56px;">
+                  <img src="retail-cortex-logo.png" alt="Retail-Cortex.io"
+                       onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=&quot;fa-solid fa-cubes&quot; style=&quot;color:var(--text-main);font-size:1.35rem;&quot;></i>';">
+                </div>
+                <div>
+                  <div style="font-weight:900;font-size:1.05rem;">Ringkasan Modul</div>
+                  <div class="label">Pilih modul → lihat detail → masukkan keranjang → checkout.</div>
+                </div>
+              </div>
+              <div class="mt-3 d-grid gap-2">
+                <button class="btn btn-dark" style="border-radius:14px;border:1px solid var(--border);background:rgba(15,23,42,.55);"
+                        onclick="document.getElementById('modules').scrollIntoView({behavior:'smooth'});">
+                  <i class="fa-solid fa-layer-group me-2"></i>Lihat Modules
+                </button>
+                <button class="btn btn-dark" style="border-radius:14px;border:1px solid var(--border);background:rgba(15,23,42,.55);"
+                        onclick="openWhatsAppGeneral();">
+                  <i class="fa-brands fa-whatsapp me-2"></i>Chat via WhatsApp
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- MODULES -->
-    <main id="modules" class="section">
+    <section class="section" id="modules">
       <div class="container">
         <h2 class="section-title">Cortex Service Modules</h2>
-        <p class="section-sub">Pilih modul, tambahkan ke keranjang, lalu checkout via WhatsApp.</p>
+        <p class="section-sub">Klik <strong>Detail</strong> untuk melihat informasi. Tambahkan ke keranjang, lalu checkout otomatis ke WhatsApp.</p>
 
-        <div class="row g-3" id="moduleGrid"></div>
+        <div class="row g-3 g-md-4">
+          <!-- New Member Fresh -->
+          <div class="col-lg-4 col-md-6">
+            <div class="svc-card" role="button" tabindex="0" data-module="member">
+              <div class="svc-body">
+                <div class="svc-top">
+                  <div>
+                    <div class="svc-badge"><i class="fa-solid fa-user-plus"></i> Membership</div>
+                  </div>
+                  <div class="svc-icon"><i class="fa-solid fa-users"></i></div>
+                </div>
+                <div class="svc-title">New Member Fresh</div>
+                <div class="svc-desc">Tambah member baru, tanpa harus pusing mencari member baru.</div>
 
-        <div class="footer-mini mt-4">
-          <div>
-            Crafted <span class="heart">♥</span> <strong>D&amp;D</strong> • <strong>Retail-Cortex.io</strong>
+                <button class="btn-detail" type="button" data-open-detail="member">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>Detail</span>
+                </button>
+              </div>
+            </div>
           </div>
+
+          <!-- Area Coverage -->
+          <div class="col-lg-4 col-md-6">
+            <div class="svc-card" role="button" tabindex="0" data-module="area">
+              <div class="svc-body">
+                <div class="svc-top">
+                  <div>
+                    <div class="svc-badge"><i class="fa-solid fa-map-location-dot"></i> Coverage</div>
+                  </div>
+                  <div class="svc-icon"><i class="fa-solid fa-map"></i></div>
+                </div>
+                <div class="svc-title">Design Area Coverage</div>
+                <div class="svc-desc">Update Area Coverage terbaru, detail mapping sesuai radius toko.</div>
+
+                <button class="btn-detail" type="button" data-open-detail="area">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>Detail</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tugas PPT -->
+          <div class="col-lg-4 col-md-6">
+            <div class="svc-card" role="button" tabindex="0" data-module="ppt">
+              <div class="svc-body">
+                <div class="svc-top">
+                  <div>
+                    <div class="svc-badge"><i class="fa-solid fa-file-powerpoint"></i> Presentasi</div>
+                  </div>
+                  <div class="svc-icon"><i class="fa-solid fa-chart-column"></i></div>
+                </div>
+                <div class="svc-title">Tugas PPT</div>
+                <div class="svc-desc">
+                  Pembuatan presentasi untuk review & kenaikan jabatan (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dan kebutuhan presentasi lain.
+                  Format rapi, sederhana, dan detail.
+                </div>
+
+                <button class="btn-detail" type="button" data-open-detail="ppt">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>Detail</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panduan Rahasia Top 10 Suegeerrr -->
+          <div class="col-lg-4 col-md-6">
+            <div class="svc-card" role="button" tabindex="0" data-module="suegeerr">
+              <div class="svc-body">
+                <div class="svc-top">
+                  <div>
+                    <div class="svc-badge"><i class="fa-solid fa-bullseye"></i> Coaching</div>
+                  </div>
+                  <div class="svc-icon"><i class="fa-solid fa-trophy"></i></div>
+                </div>
+                <div class="svc-title">Panduan Rahasia Top 10 Suegeerrr</div>
+                <div class="svc-desc">Coaching agar eksekusi Suegeerr terarah dan target tercapai.</div>
+
+                <button class="btn-detail" type="button" data-open-detail="suegeerr">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>Detail</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panduan Rahasia Top 10 PPS -->
+          <div class="col-lg-4 col-md-6">
+            <div class="svc-card" role="button" tabindex="0" data-module="pps">
+              <div class="svc-body">
+                <div class="svc-top">
+                  <div>
+                    <div class="svc-badge"><i class="fa-solid fa-chart-line"></i> Coaching</div>
+                  </div>
+                  <div class="svc-icon"><i class="fa-solid fa-gauge-high"></i></div>
+                </div>
+                <div class="svc-title">Panduan Rahasia Top 10 PPS</div>
+                <div class="svc-desc">Coaching via Google Meet untuk membantu toko sampai PPS “pumping” dan stabil mencapai target.</div>
+
+                <button class="btn-detail" type="button" data-open-detail="pps">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>Detail</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- General Consultation (optional module) -->
+          <div class="col-lg-4 col-md-6">
+            <div class="svc-card" role="button" tabindex="0" data-module="consult">
+              <div class="svc-body">
+                <div class="svc-top">
+                  <div>
+                    <div class="svc-badge"><i class="fa-solid fa-comments"></i> Konsultasi</div>
+                  </div>
+                  <div class="svc-icon"><i class="fa-solid fa-headset"></i></div>
+                </div>
+                <div class="svc-title">Konsultasi Operasional</div>
+                <div class="svc-desc">Diskusi kebutuhan toko dan rekomendasi modul yang paling sesuai.</div>
+
+                <button class="btn-detail" type="button" data-open-detail="consult">
+                  <i class="fa-solid fa-circle-info"></i>
+                  <span>Detail</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
         </div>
       </div>
-    </main>
+    </section>
 
-    <!-- CARA ORDER (singkat) -->
-    <section class="section pt-0" id="cara-order">
+    <!-- WORKFLOW -->
+    <section class="section" id="workflow">
       <div class="container">
-        <h2 class="section-title">Cara Order</h2>
-        <p class="section-sub">Langkah ringkas untuk memesan modul.</p>
+        <h2 class="section-title">Workflow</h2>
+        <p class="section-sub">3 langkah sederhana — pilih modul, isi data seperlunya, checkout via WhatsApp.</p>
 
-        <div class="row g-3">
+        <div class="row g-3 g-md-4 mt-1">
           <div class="col-md-4">
-            <div class="product-card p-3">
-              <div class="product-icon"><i class="fa-solid fa-hand-pointer"></i></div>
-              <div class="product-title">1) Pilih Modul</div>
-              <div class="product-desc">Klik Detail untuk melihat informasi dan opsi (jika ada).</div>
+            <div class="hero-mini">
+              <div style="font-weight:900;"><span class="me-2"><i class="fa-solid fa-1"></i></span>Pilih modul</div>
+              <div class="label mt-1">Buka detail untuk melihat informasi modul.</div>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="product-card p-3">
-              <div class="product-icon"><i class="fa-solid fa-cart-plus"></i></div>
-              <div class="product-title">2) Tambah Keranjang</div>
-              <div class="product-desc">Tambahkan item yang diperlukan ke keranjang.</div>
+            <div class="hero-mini">
+              <div style="font-weight:900;"><span class="me-2"><i class="fa-solid fa-2"></i></span>Masukkan keranjang</div>
+              <div class="label mt-1">Khusus Member & Area Coverage: isi data singkat sesuai format.</div>
             </div>
           </div>
           <div class="col-md-4">
-            <div class="product-card p-3">
-              <div class="product-icon"><i class="fa-brands fa-whatsapp"></i></div>
-              <div class="product-title">3) Checkout WhatsApp</div>
-              <div class="product-desc">Format pesan tersusun otomatis. Tinggal kirim.</div>
+            <div class="hero-mini">
+              <div style="font-weight:900;"><span class="me-2"><i class="fa-solid fa-3"></i></span>Checkout</div>
+              <div class="label mt-1">Pesan otomatis terbentuk, tinggal kirim ke WhatsApp.</div>
             </div>
-          </div>
-        </div>
-
-        <div class="footer-mini mt-4">
-          <div>
-            Crafted <span class="heart">♥</span> <strong>D&amp;D</strong> • <strong>Retail-Cortex.io</strong>
           </div>
         </div>
       </div>
     </section>
-  </div>
+
+    <footer>
+      <div>© <span id="footerYear">2025</span> Retail-Cortex.io</div>
+      <div style="margin-top:.25rem;">
+        Crafted with <span aria-label="love" title="love">❤️</span> by D&D A Digital Creative Studio
+      </div>
+    </footer>
+  </main>
+
+  <!-- Floating buttons (BOTTOM only) -->
+  <button class="floating-dark" id="floatingDarkBtn" title="Toggle Dark/Light" aria-label="Toggle Theme">
+    <i class="fa-solid fa-moon"></i>
+  </button>
+
+  <button class="floating-cart" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+    <i class="fa-solid fa-bag-shopping"></i>
+    <span class="count" id="cartCount">0</span>
+  </button>
 
   <!-- MODAL DETAIL -->
-  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+  <div class="modal fade" id="moduleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
-      <div class="modal-content" id="detailModalContent">
+      <div class="modal-content" id="moduleModalContent">
         <div class="modal-header">
-          <h5 class="modal-title" id="detailTitle">
-            <i class="fa-solid fa-circle-info me-2"></i> Detail Modul
+          <h5 class="modal-title" id="moduleModalTitle">
+            <i class="fa-solid fa-circle-info me-2"></i>Detail Modul
           </h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
         </div>
-        <div class="modal-body" id="detailBody"></div>
+        <div class="modal-body" id="moduleModalBody"></div>
         <div class="modal-footer">
-          <button class="btn btn-outline-primary" id="btnAddFromModal">
-            <i class="fa-solid fa-cart-plus me-2"></i><span>Keranjang</span>
+          <button class="btn btn-outline-primary" id="btnAddToCart">
+            <i class="fa-solid fa-cart-plus me-2"></i>Keranjang
           </button>
-          <button class="btn btn-success" id="btnQuickWA">
-            <i class="fa-brands fa-whatsapp me-2"></i><span>Kirim WA (langsung)</span>
+          <button class="btn btn-success" id="btnChatWA" type="button">
+            <i class="fa-brands fa-whatsapp me-2"></i>Chat WhatsApp
           </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL PDF VIEWER -->
+  <div class="modal fade" id="pdfModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="pdfModalTitle">
+            <i class="fa-solid fa-file-pdf me-2"></i>Contoh Area Coverage
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="pdf-frame">
+            <iframe id="pdfFrame" src="" title="PDF Preview"></iframe>
+          </div>
+          <div class="small mt-2" style="color:var(--text-muted);">
+            Jika pratinjau tidak muncul, silakan buka ulang atau pastikan file berada di repo dengan nama yang benar.
+          </div>
         </div>
       </div>
     </div>
@@ -625,9 +895,6 @@
   <!-- OFFCANVAS CART -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
     <div class="offcanvas-header">
-      <button class="btn btn-link text-decoration-none d-inline d-md-none me-2" data-bs-dismiss="offcanvas" aria-label="Kembali">
-        <i class="fa-solid fa-chevron-left"></i>
-      </button>
       <h5 class="offcanvas-title" id="offcanvasCartLabel">
         <i class="fa-solid fa-basket-shopping me-2"></i>Keranjang
       </h5>
@@ -635,13 +902,9 @@
     </div>
 
     <div class="offcanvas-body d-flex flex-column">
-      <div id="cartItems" class="mb-3">
-        <div class="text-center py-4 mini-note">
-          Keranjang kosong
-        </div>
-      </div>
+      <div id="cartItems" class="mb-3"></div>
 
-      <div class="d-flex justify-content-between fw-bold fs-5 mt-auto">
+      <div class="d-flex justify-content-between fw-bold fs-5">
         <span>Total</span>
         <span id="cartTotal">Rp0</span>
       </div>
@@ -654,197 +917,659 @@
           <i class="fa-brands fa-whatsapp me-2"></i>Checkout via WhatsApp
         </a>
       </div>
-
-      <div class="mini-note mt-3">
-        Catatan: Informasi kontak tidak ditampilkan di halaman. Semua checkout diarahkan ke WhatsApp.
-      </div>
     </div>
   </div>
-
-  <!-- FLOATING -->
-  <button class="floating-cart" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
-    <i class="fa-solid fa-bag-shopping"></i> <span class="count" id="cartCount">0</span>
-  </button>
-  <button class="floating-dark" id="floatingDarkBtn" title="Toggle Mode">
-    <i class="fa-solid fa-moon"></i>
-  </button>
 
   <!-- Bootstrap JS -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
   <script>
-    // ===== CONFIG =====
-    const DEFAULT_WA = "6287809236556";
-    const CART_KEY = "rc_cart";
-    const THEME_KEY = "rc_theme";
+    // =============================
+    // CONFIG
+    // =============================
+    const WHATSAPP_NUMBER = "6287809236556";
 
-    // PDF sample paths (pastikan file ada di repo pada folder /samples/)
-    const PDF_LANDSCAPE = "./samples/area-coverage-sample-landscape.pdf";
-    const PDF_PORTRAIT  = "./samples/area-coverage-sample-portrait.pdf";
+    // PDF paths (repo)
+    // If your PDFs are inside /samples/, change to:
+    // const PDF_LANDSCAPE = "samples/area-coverage-landscape.pdf";
+    // const PDF_PORTRAIT  = "samples/area-coverage-portrait.pdf";
+    const PDF_LANDSCAPE = "area-coverage-landscape.pdf";
+    const PDF_PORTRAIT  = "area-coverage-portrait.pdf";
 
-    // ===== DATA MODULES =====
-    const modules = [
-      {
-        id: "member",
+    // Pricing rule for member:
+    // < 10 : 5,000 / member
+    // >=10 : 4,500 / member
+    const MEMBER_PRICE_DEFAULT = 5000;
+    const MEMBER_PRICE_BULK    = 4500;
+    const MEMBER_BULK_MIN_QTY  = 10;
+
+    const money = n => `Rp${(Number(n)||0).toLocaleString('id-ID')}`;
+
+    // =============================
+    // NAV HEIGHT
+    // =============================
+    const navbar = document.getElementById('mainNavbar');
+    function refreshNavH(){
+      const h = navbar ? navbar.offsetHeight : 64;
+      document.documentElement.style.setProperty('--nav-h', h + 'px');
+    }
+    ['resize','orientationchange'].forEach(ev=>window.addEventListener(ev, refreshNavH));
+    document.addEventListener('shown.bs.modal', refreshNavH);
+    document.addEventListener('shown.bs.collapse', refreshNavH);
+    document.addEventListener('hidden.bs.collapse', refreshNavH);
+    refreshNavH();
+
+    // Smooth scroll
+    document.addEventListener('click', (e)=>{
+      const a = e.target.closest('a[data-scroll][href^="#"]');
+      if(!a) return;
+      e.preventDefault();
+      const sel = a.getAttribute('href');
+      const el  = document.querySelector(sel);
+      if(el) el.scrollIntoView({behavior:'smooth'});
+      const coll = document.getElementById('mainNav');
+      if(coll && coll.classList.contains('show')) new bootstrap.Collapse(coll).hide();
+    });
+
+    // =============================
+    // THEME TOGGLE (BOTTOM ONLY)
+    // =============================
+    (function initTheme(){
+      const saved = localStorage.getItem("rc_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+      const btn = document.getElementById("floatingDarkBtn");
+
+      function setIcon(){
+        const mode = document.documentElement.getAttribute("data-theme");
+        btn.innerHTML = `<i class="fa-solid ${mode==='dark'?'fa-sun':'fa-moon'}"></i>`;
+      }
+      setIcon();
+
+      btn.addEventListener("click", ()=>{
+        const mode = document.documentElement.getAttribute("data-theme")==="dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", mode);
+        localStorage.setItem("rc_theme", mode);
+        setIcon();
+      });
+    })();
+
+    // =============================
+    // MODULE DATA
+    // =============================
+    const modules = {
+      member: {
+        key: "member",
         title: "New Member Fresh",
-        icon: "fa-user-plus",
+        badge: "Membership",
+        icon: "fa-users",
         desc: "Tambah member baru, tanpa harus pusing mencari member baru.",
-        type: "form_member"
+        type: "member"
       },
-      {
-        id: "area",
+      area: {
+        key: "area",
         title: "Design Area Coverage",
-        icon: "fa-map-location-dot",
+        badge: "Coverage",
+        icon: "fa-map",
         desc: "Update Area Coverage terbaru, detail mapping sesuai radius toko.",
-        type: "form_area"
+        type: "area"
       },
-      {
-        id: "ppt",
+      ppt: {
+        key: "ppt",
         title: "Tugas PPT",
+        badge: "Presentasi",
         icon: "fa-file-powerpoint",
-        desc: "Pembuatan presentasi untuk review jenjang karier (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dan kebutuhan laporan lainnya. Disusun rapi, jelas, dan siap digunakan.",
+        desc: "Pembuatan presentasi untuk review & kenaikan jabatan (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dan kebutuhan presentasi lain. Format rapi, sederhana, dan detail.",
         type: "simple"
       },
-      {
-        id: "pps",
-        title: "Panduan Rahasia Top 10 PPS",
-        icon: "fa-chart-line",
-        desc: "Pendampingan dan coaching melalui Google Meet untuk membantu toko mencapai dan menjaga performa PPS.",
-        type: "simple"
-      },
-      {
-        id: "suegerr",
+      suegeerr: {
+        key: "suegeerr",
         title: "Panduan Rahasia Top 10 Suegeerrr",
-        icon: "fa-bullseye",
-        desc: "Pendampingan terarah untuk membantu toko mencapai target Suegeerrr.",
+        badge: "Coaching",
+        icon: "fa-trophy",
+        desc: "Coaching agar eksekusi Suegeerr terarah dan target tercapai.",
+        type: "simple"
+      },
+      pps: {
+        key: "pps",
+        title: "Panduan Rahasia Top 10 PPS",
+        badge: "Coaching",
+        icon: "fa-gauge-high",
+        desc: "Coaching via Google Meet untuk membantu toko sampai PPS “pumping” dan stabil mencapai target.",
+        type: "simple"
+      },
+      consult: {
+        key: "consult",
+        title: "Konsultasi Operasional",
+        badge: "Konsultasi",
+        icon: "fa-headset",
+        desc: "Diskusi kebutuhan toko dan rekomendasi modul yang paling sesuai.",
         type: "simple"
       }
-    ];
+    };
 
-    // ===== HELPERS =====
-    const money = n => `Rp${(Number(n)||0).toLocaleString('id-ID')}`;
-    const getStorage = (k,f)=>{try{return JSON.parse(localStorage.getItem(k)) ?? f;}catch{return f;}};
-    const setStorage = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
+    // =============================
+    // CART STORAGE
+    // =============================
+    const CART_KEY = "rc_cart";
+    const getStorage = (k, fallback)=>{
+      try{ return JSON.parse(localStorage.getItem(k)) ?? fallback; }
+      catch{ return fallback; }
+    };
+    const setStorage = (k, v)=> localStorage.setItem(k, JSON.stringify(v));
 
-    function setNavH(){
-      const nav = document.getElementById("mainNavbar");
-      const h = nav ? (nav.offsetHeight || 64) : 64;
-      document.documentElement.style.setProperty("--nav-h", h + "px");
-    }
-
-    // ===== THEME =====
-    function applyTheme(mode){
-      document.documentElement.setAttribute("data-theme", mode);
-      localStorage.setItem(THEME_KEY, mode);
-      const iconClass = (mode === "dark") ? "fa-sun" : "fa-moon";
-      const html = `<i class="fa-solid ${iconClass}"></i>`;
-      const f = document.getElementById("floatingDarkBtn");
-      const n1 = document.getElementById("navDarkBtn");
-      const n2 = document.getElementById("navDarkBtnDesk");
-      if (f) f.innerHTML = html;
-      if (n1) n1.innerHTML = html;
-      if (n2) n2.innerHTML = html;
-    }
-    function toggleTheme(){
-      const cur = document.documentElement.getAttribute("data-theme") || "dark";
-      applyTheme(cur === "dark" ? "light" : "dark");
-    }
-
-    // ===== CART =====
     function getCart(){ return getStorage(CART_KEY, []); }
     function setCart(c){ setStorage(CART_KEY, c); updateCartUI(); }
+
+    function cartCount(){
+      const cart = getCart();
+      return cart.reduce((a,b)=> a + (Number(b.qty)||1), 0);
+    }
+
+    function addToCart(item){
+      const cart = getCart();
+
+      // Merge logic:
+      // - member: single line, merge by key
+      // - area: merge by key + orientation
+      // - others: merge by key
+      const key = item.key;
+      let matchIdx = -1;
+
+      if(item.type === 'area'){
+        matchIdx = cart.findIndex(x => x.key===key && x.data?.orientation===item.data?.orientation);
+      }else{
+        matchIdx = cart.findIndex(x => x.key===key);
+      }
+
+      if(matchIdx > -1){
+        // For member: replace qty + data (latest)
+        if(item.type === 'member'){
+          cart[matchIdx] = item;
+        }else{
+          cart[matchIdx].qty = (Number(cart[matchIdx].qty)||1) + (Number(item.qty)||1);
+        }
+      }else{
+        cart.push(item);
+      }
+
+      setCart(cart);
+    }
+
+    function removeFromCart(index){
+      const cart = getCart();
+      cart.splice(index,1);
+      setCart(cart);
+    }
+
+    function changeQty(index, delta){
+      const cart = getCart();
+      if(!cart[index]) return;
+      const cur = Number(cart[index].qty)||1;
+      cart[index].qty = Math.max(1, cur + delta);
+      // Recompute member pricing if member
+      if(cart[index].type==='member'){
+        const q = cart[index].qty;
+        const p = (q >= MEMBER_BULK_MIN_QTY) ? MEMBER_PRICE_BULK : MEMBER_PRICE_DEFAULT;
+        cart[index].priceEach = p;
+        cart[index].price = q * p;
+        cart[index].data.qty = q;
+        cart[index].data.priceEach = p;
+        cart[index].data.total = cart[index].price;
+      }else{
+        cart[index].price = (Number(cart[index].priceEach)||0) * (Number(cart[index].qty)||1);
+      }
+      setCart(cart);
+    }
+
     function clearCart(){ setCart([]); }
-    function addCartItem(item){
-      // item: {name, price, qty, metaTextForWA}
+
+    function computeTotal(){
+      return getCart().reduce((a,b)=> a + (Number(b.price)||0), 0);
+    }
+
+    // =============================
+    // WHATSAPP
+    // =============================
+    function waLink(text){
+      const base = "https://wa.me/" + WHATSAPP_NUMBER;
+      return base + "?text=" + encodeURIComponent(text);
+    }
+
+    function openWhatsAppGeneral(){
+      const text = "Halo, saya ingin bertanya mengenai layanan di Retail-Cortex.io. Mohon informasi modul yang sesuai untuk toko saya.";
+      window.open(waLink(text), "_blank");
+    }
+
+    function buildCheckoutText(){
       const cart = getCart();
-      cart.push({
-        name: item.name,
-        price: Number(item.price)||0,
-        qty: Number(item.qty)||1,
-        metaTextForWA: item.metaTextForWA || ""
+      if(cart.length===0){
+        return "Halo, saya ingin bertanya mengenai layanan di Retail-Cortex.io.";
+      }
+
+      const lines = [];
+      lines.push("Halo, saya ingin memesan layanan berikut:");
+      lines.push("");
+
+      cart.forEach((it, idx)=>{
+        if(it.type === 'member'){
+          // formal format requested
+          const q = Number(it.data?.qty)||Number(it.qty)||0;
+          const pe = Number(it.data?.priceEach)||Number(it.priceEach)||0;
+          const tot = Number(it.data?.total)||Number(it.price)||0;
+
+          lines.push(`*${it.title}*`);
+          lines.push(`Jumlah member : ${q}`);
+          lines.push(`Harga / member : ${money(pe)}`);
+          lines.push(`Total : ${money(tot)}`);
+          lines.push("");
+          lines.push("Kode toko : " + (it.data?.kodeToko || ""));
+          lines.push("Pin / tgl lahir : " + (it.data?.pinAtauTgl || ""));
+          lines.push("Jumlah qty member : " + (it.data?.qty || q));
+          lines.push("");
+        }
+        else if(it.type === 'area'){
+          lines.push(`*${it.title}*`);
+          lines.push("Nama toko : " + (it.data?.namaToko || ""));
+          lines.push("Kode toko : " + (it.data?.kodeToko || ""));
+          lines.push("Berapa sub : " + (it.data?.sub || ""));
+          lines.push("Sharelok toko : " + (it.data?.sharelok || ""));
+          lines.push("Landscape / Portrait : " + (it.data?.orientation || ""));
+          lines.push("");
+        }
+        else{
+          const qty = Number(it.qty)||1;
+          lines.push(`• ${it.title} x${qty}`);
+        }
       });
-      setCart(cart);
-    }
-    function removeCartIndex(i){
-      const cart = getCart();
-      cart.splice(i,1);
-      setCart(cart);
-    }
-    function changeQty(i,delta){
-      const cart = getCart();
-      if(!cart[i]) return;
-      cart[i].qty = Math.max(1, (cart[i].qty||1) + delta);
-      setCart(cart);
+
+      const total = computeTotal();
+      if(total > 0){
+        lines.push("");
+        lines.push(`Total Perkiraan: ${money(total)}`);
+      }
+
+      return lines.join("\n");
     }
 
-    function buildCheckoutText(cart){
-      let total = 0;
-      const lines = cart.map((it,idx)=>{
-        const sub = (it.price||0) * (it.qty||1);
-        total += sub;
+    // =============================
+    // UI: MODAL DETAIL
+    // =============================
+    const moduleModalEl = document.getElementById('moduleModal');
+    const moduleModal   = new bootstrap.Modal(moduleModalEl);
+    const moduleTitleEl = document.getElementById('moduleModalTitle');
+    const moduleBodyEl  = document.getElementById('moduleModalBody');
+    const btnAddToCart  = document.getElementById('btnAddToCart');
+    const btnChatWA     = document.getElementById('btnChatWA');
 
-        // Meta text (formal) — only for Member & Area Coverage
-        const extra = (it.metaTextForWA || "").trim();
-        const extraBlock = extra ? `\n${extra}\n` : "";
+    let currentModuleKey = null;
 
-        return `• ${it.name}\n  Qty : ${it.qty}\n  Subtotal : ${money(sub)}${extraBlock}`;
-      }).join("\n");
+    function openModuleDetail(key){
+      const m = modules[key];
+      if(!m) return;
+      currentModuleKey = key;
 
-      const text =
-`Halo,
-Saya ingin melakukan checkout layanan berikut:
+      moduleTitleEl.innerHTML = `<i class="fa-solid fa-circle-info me-2"></i>${m.title}`;
 
-${lines}
+      const head = `
+        <div class="detail-head">
+          <div class="ico"><i class="fa-solid ${m.icon}"></i></div>
+          <div>
+            <div class="detail-title">${m.title}</div>
+            <div class="detail-sub">${m.desc}</div>
+          </div>
+        </div>
+      `;
 
-Total : ${money(total)}
+      let body = head;
 
-Terima kasih.`;
+      if(m.type === 'member'){
+        body += renderMemberFields();
+      }
+      else if(m.type === 'area'){
+        body += renderAreaFields();
+      }
+      else{
+        body += `
+          <div class="mt-2">
+            <div class="price-box">
+              <div>
+                <div class="muted">Keterangan</div>
+                <div class="val">Tambahkan ke keranjang untuk checkout via WhatsApp.</div>
+              </div>
+              <div class="text-end">
+                <div class="muted">Qty</div>
+                <div class="val">1</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }
 
-      return {text, total};
+      moduleBodyEl.innerHTML = body;
+
+      // Button behaviors
+      btnAddToCart.onclick = ()=> addCurrentToCart();
+      btnChatWA.onclick    = ()=> chatCurrent();
+
+      // Bind member qty +/- & live pricing
+      if(m.type === 'member'){
+        bindMemberPricing();
+      }
+      if(m.type === 'area'){
+        bindAreaPreviewButtons();
+      }
+
+      moduleModal.show();
     }
 
-    function updateCartUI(){
-      const cart = getCart();
-      const totalQty = cart.reduce((a,b)=>a+(b.qty||1),0);
+    function renderMemberFields(){
+      // Default qty 10 (so it looks good), still user can change
+      const defaultQty = 10;
+      const priceEach = (defaultQty >= MEMBER_BULK_MIN_QTY) ? MEMBER_PRICE_BULK : MEMBER_PRICE_DEFAULT;
+      const total = defaultQty * priceEach;
 
-      const cartCount = document.getElementById("cartCount");
-      const navCount = document.getElementById("navCartCount");
-      const navCountDesk = document.getElementById("navCartCountDesk");
-      if(cartCount) cartCount.textContent = totalQty;
-      if(navCount) navCount.textContent = totalQty;
-      if(navCountDesk) navCountDesk.textContent = totalQty;
+      return `
+        <div class="mt-2">
+          <div class="price-box mb-3">
+            <div>
+              <div class="muted">Skema harga</div>
+              <div class="val">Di bawah ${MEMBER_BULK_MIN_QTY} member: ${money(MEMBER_PRICE_DEFAULT)} / member<br>Mulai ${MEMBER_BULK_MIN_QTY} member: ${money(MEMBER_PRICE_BULK)} / member</div>
+            </div>
+          </div>
 
-      const wrap = document.getElementById("cartItems");
-      const totalEl = document.getElementById("cartTotal");
-      const checkoutBtn = document.getElementById("btnCheckoutWA");
+          <div class="field">
+            <label>Jumlah Member</label>
+            <div class="qty-wrap">
+              <button class="qty-btn" type="button" id="memberMinus" aria-label="Kurangi">-</button>
+              <div class="qty-num" id="memberQty">${defaultQty}</div>
+              <button class="qty-btn" type="button" id="memberPlus" aria-label="Tambah">+</button>
+            </div>
+          </div>
 
-      if(!wrap || !totalEl || !checkoutBtn) return;
+          <div class="price-box mb-3">
+            <div>
+              <div class="muted">Harga / member</div>
+              <div class="val" id="memberPriceEach">${money(priceEach)}</div>
+            </div>
+            <div class="text-end">
+              <div class="muted">Total</div>
+              <div class="total" id="memberTotal">${money(total)}</div>
+            </div>
+          </div>
 
-      if(cart.length === 0){
-        wrap.innerHTML = `<div class="text-center py-4 mini-note">Keranjang kosong</div>`;
-        totalEl.textContent = money(0);
-        checkoutBtn.href = "#";
+          <hr class="my-3" style="border-color:var(--border);">
+
+          <div class="field">
+            <label>Kode toko</label>
+            <input class="form-control" id="memberKodeToko" placeholder="Contoh: 12345" />
+          </div>
+
+          <div class="field">
+            <label>Pin / tgl lahir</label>
+            <input class="form-control" id="memberPinTgl" placeholder="Contoh: 1234 / 01-01-2000" />
+          </div>
+
+          <div class="field">
+            <label>Jumlah qty member</label>
+            <input class="form-control" id="memberQtyField" placeholder="Akan terisi otomatis" readonly />
+          </div>
+        </div>
+      `;
+    }
+
+    function bindMemberPricing(){
+      const qtyEl = document.getElementById('memberQty');
+      const minus = document.getElementById('memberMinus');
+      const plus  = document.getElementById('memberPlus');
+      const priceEachEl = document.getElementById('memberPriceEach');
+      const totalEl     = document.getElementById('memberTotal');
+      const qtyField    = document.getElementById('memberQtyField');
+
+      function calc(){
+        const q = Number(qtyEl.textContent)||0;
+        const pe = (q >= MEMBER_BULK_MIN_QTY) ? MEMBER_PRICE_BULK : MEMBER_PRICE_DEFAULT;
+        const tot = q * pe;
+        priceEachEl.textContent = money(pe);
+        totalEl.textContent     = money(tot);
+        qtyField.value          = String(q);
+      }
+
+      minus.addEventListener('click', ()=>{
+        let q = Number(qtyEl.textContent)||1;
+        q = Math.max(1, q-1);
+        qtyEl.textContent = String(q);
+        calc();
+      });
+
+      plus.addEventListener('click', ()=>{
+        let q = Number(qtyEl.textContent)||1;
+        q = q+1;
+        qtyEl.textContent = String(q);
+        calc();
+      });
+
+      // initial
+      calc();
+    }
+
+    function renderAreaFields(){
+      return `
+        <div class="mt-2">
+          <div class="price-box mb-3">
+            <div>
+              <div class="muted">Contoh</div>
+              <div class="val">Pilih orientasi untuk melihat contoh PDF.</div>
+            </div>
+            <div class="text-end">
+              <button class="btn btn-dark btn-sm" style="border-radius:12px;border:1px solid var(--border);background:rgba(15,23,42,.55);"
+                      type="button" id="btnPreviewLandscape">
+                <i class="fa-solid fa-file-pdf me-2"></i>Landscape
+              </button>
+              <button class="btn btn-dark btn-sm ms-2" style="border-radius:12px;border:1px solid var(--border);background:rgba(15,23,42,.55);"
+                      type="button" id="btnPreviewPortrait">
+                <i class="fa-solid fa-file-pdf me-2"></i>Portrait
+              </button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>Nama toko</label>
+            <input class="form-control" id="areaNamaToko" placeholder="Nama toko" />
+          </div>
+
+          <div class="field">
+            <label>Kode toko</label>
+            <input class="form-control" id="areaKodeToko" placeholder="Kode toko" />
+          </div>
+
+          <div class="field">
+            <label>Berapa sub</label>
+            <input class="form-control" id="areaSub" placeholder="Contoh: 3" />
+          </div>
+
+          <div class="field">
+            <label>Sharelok toko</label>
+            <input class="form-control" id="areaSharelok" placeholder="Tempel link Sharelok" />
+          </div>
+
+          <div class="field">
+            <label>Landscape / Portrait</label>
+            <select class="form-select" id="areaOrientation">
+              <option value="">Pilih</option>
+              <option value="Landscape">Landscape</option>
+              <option value="Portrait">Portrait</option>
+            </select>
+          </div>
+        </div>
+      `;
+    }
+
+    // PDF modal
+    const pdfModalEl = document.getElementById('pdfModal');
+    const pdfModal   = new bootstrap.Modal(pdfModalEl);
+    const pdfFrame   = document.getElementById('pdfFrame');
+    const pdfTitle   = document.getElementById('pdfModalTitle');
+
+    function bindAreaPreviewButtons(){
+      const btnL = document.getElementById('btnPreviewLandscape');
+      const btnP = document.getElementById('btnPreviewPortrait');
+
+      btnL.addEventListener('click', ()=>{
+        openPdf("Contoh Area Coverage — Landscape", PDF_LANDSCAPE);
+      });
+      btnP.addEventListener('click', ()=>{
+        openPdf("Contoh Area Coverage — Portrait", PDF_PORTRAIT);
+      });
+    }
+
+    function openPdf(title, url){
+      pdfTitle.innerHTML = `<i class="fa-solid fa-file-pdf me-2"></i>${title}`;
+      // Use cache-bust so updates appear quickly
+      const bust = (url.includes('?') ? '&' : '?') + 'v=' + Date.now();
+      pdfFrame.src = url + bust;
+      pdfModal.show();
+    }
+
+    // Add current module to cart
+    function addCurrentToCart(){
+      const m = modules[currentModuleKey];
+      if(!m) return;
+
+      if(m.type === 'member'){
+        const qty = Number(document.getElementById('memberQty').textContent)||1;
+        const priceEach = (qty >= MEMBER_BULK_MIN_QTY) ? MEMBER_PRICE_BULK : MEMBER_PRICE_DEFAULT;
+        const total = qty * priceEach;
+
+        const data = {
+          qty,
+          priceEach,
+          total,
+          kodeToko: (document.getElementById('memberKodeToko').value || "").trim(),
+          pinAtauTgl: (document.getElementById('memberPinTgl').value || "").trim()
+        };
+
+        addToCart({
+          key: m.key,
+          title: m.title,
+          type: 'member',
+          qty: qty,
+          priceEach: priceEach,
+          price: total,
+          data
+        });
+
+        new bootstrap.Offcanvas('#offcanvasCart').show();
         return;
       }
 
-      let total = 0;
-      wrap.innerHTML = cart.map((it,idx)=>{
-        const sub = (it.price||0) * (it.qty||1);
-        total += sub;
+      if(m.type === 'area'){
+        const orientation = (document.getElementById('areaOrientation').value || "").trim();
+        const data = {
+          namaToko: (document.getElementById('areaNamaToko').value || "").trim(),
+          kodeToko: (document.getElementById('areaKodeToko').value || "").trim(),
+          sub: (document.getElementById('areaSub').value || "").trim(),
+          sharelok: (document.getElementById('areaSharelok').value || "").trim(),
+          orientation
+        };
+
+        // Price is not specified -> keep 0, still can checkout
+        addToCart({
+          key: m.key,
+          title: m.title,
+          type: 'area',
+          qty: 1,
+          priceEach: 0,
+          price: 0,
+          data
+        });
+
+        new bootstrap.Offcanvas('#offcanvasCart').show();
+        return;
+      }
+
+      // Simple module
+      addToCart({
+        key: m.key,
+        title: m.title,
+        type: 'simple',
+        qty: 1,
+        priceEach: 0,
+        price: 0,
+        data: {}
+      });
+
+      new bootstrap.Offcanvas('#offcanvasCart').show();
+    }
+
+    function chatCurrent(){
+      const m = modules[currentModuleKey];
+      if(!m) return;
+
+      let text = `Halo, saya ingin bertanya mengenai layanan *${m.title}* di Retail-Cortex.io.`;
+      if(m.type === 'member'){
+        const qty = Number(document.getElementById('memberQty').textContent)||1;
+        const pe = (qty >= MEMBER_BULK_MIN_QTY) ? MEMBER_PRICE_BULK : MEMBER_PRICE_DEFAULT;
+        const total = qty * pe;
+        text += `\n\nJumlah member : ${qty}\nHarga / member : ${money(pe)}\nTotal : ${money(total)}`;
+      }
+      window.open(waLink(text), "_blank");
+    }
+
+    // Open detail from buttons
+    document.addEventListener('click', (e)=>{
+      const btn = e.target.closest('[data-open-detail]');
+      if(!btn) return;
+      e.preventDefault();
+      const key = btn.getAttribute('data-open-detail');
+      openModuleDetail(key);
+    });
+
+    // =============================
+    // CART UI + CHECKOUT
+    // =============================
+    function updateCartUI(){
+      document.getElementById('cartCount').textContent = String(cartCount());
+
+      const cart = getCart();
+      const wrap = document.getElementById('cartItems');
+      const total = computeTotal();
+
+      document.getElementById('cartTotal').textContent = money(total);
+
+      if(cart.length===0){
+        wrap.innerHTML = `
+          <div class="empty">
+            <i class="fa-regular fa-face-frown"></i>
+            <div style="font-weight:900;">Keranjang kosong</div>
+            <div class="mt-1">Tambahkan modul, lalu checkout via WhatsApp.</div>
+          </div>
+        `;
+        document.getElementById('btnCheckoutWA').href = "#";
+        return;
+      }
+
+      wrap.innerHTML = cart.map((it, idx)=>{
+        const qty = Number(it.qty)||1;
+        const priceLine = (Number(it.price)||0) > 0 ? `<div class="small" style="color:var(--text-muted);">${money(it.price)}</div>` : `<div class="small" style="color:var(--text-muted);">—</div>`;
+
+        const subtitle = (it.type==='member')
+          ? `<div class="small" style="color:var(--text-muted);">Jumlah member: ${qty} • ${money(it.priceEach||0)}/member</div>`
+          : (it.type==='area')
+            ? `<div class="small" style="color:var(--text-muted);">Orientasi: ${(it.data?.orientation||'-')}</div>`
+            : `<div class="small" style="color:var(--text-muted);">Qty: ${qty}</div>`;
 
         return `
-          <div class="d-flex align-items-start justify-content-between border rounded-3 p-2 mb-2">
-            <div class="me-2">
-              <div class="fw-bold">${it.name}</div>
-              <div class="mini-note">${money(it.price)} × ${it.qty} = <strong>${money(sub)}</strong></div>
-              ${it.metaTextForWA ? `<div class="mini-note mt-1">${it.metaTextForWA.replace(/\n/g,"<br>")}</div>` : ``}
+          <div class="d-flex align-items-start justify-content-between border rounded-3 p-2 mb-2" style="border-color:var(--border)!important;">
+            <div style="min-width:0;">
+              <div class="fw-bold text-truncate">${it.title}</div>
+              ${subtitle}
+              ${priceLine}
             </div>
-            <div class="d-flex flex-column align-items-end gap-2">
-              <div class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-secondary" data-qtyminus="${idx}">-</button>
-                <button class="btn btn-sm btn-outline-secondary" data-qtyplus="${idx}">+</button>
-              </div>
-              <button class="btn btn-sm btn-outline-danger" data-remove="${idx}">
+
+            <div class="d-flex align-items-center gap-2">
+              <button class="btn btn-sm btn-outline-secondary" data-minus="${idx}" aria-label="Kurangi">-</button>
+              <button class="btn btn-sm btn-outline-secondary" data-plus="${idx}" aria-label="Tambah">+</button>
+              <button class="btn btn-sm btn-outline-danger" data-del="${idx}" aria-label="Hapus">
                 <i class="fa-solid fa-trash"></i>
               </button>
             </div>
@@ -852,379 +1577,47 @@ Terima kasih.`;
         `;
       }).join("");
 
-      totalEl.textContent = money(total);
-
-      const {text} = buildCheckoutText(cart);
-      checkoutBtn.href = `https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`;
+      const txt = buildCheckoutText();
+      document.getElementById('btnCheckoutWA').href = waLink(txt);
     }
 
-    // ===== RENDER MODULES =====
-    function renderModules(){
-      const grid = document.getElementById("moduleGrid");
-      if(!grid) return;
-
-      grid.innerHTML = modules.map((m,idx)=>`
-        <div class="col-lg-4 col-md-6">
-          <div class="product-card p-3 h-100">
-            <div class="product-icon"><i class="fa-solid ${m.icon}"></i></div>
-            <div class="product-title">${m.title}</div>
-            <div class="product-desc">${m.desc}</div>
-
-            <div class="product-actions">
-              <button class="btn-detail-wide" data-detail="${m.id}">
-                <i class="fa-solid fa-circle-info"></i><span>Detail</span>
-              </button>
-              <button class="btn-add" title="Tambah ke keranjang" data-add="${m.id}">
-                <i class="fa-solid fa-cart-plus"></i>
-              </button>
-            </div>
-          </div>
-        </div>
-      `).join("");
-    }
-
-    // ===== DETAIL MODAL =====
-    const modalEl = document.getElementById("detailModal");
-    const bsModal = modalEl ? new bootstrap.Modal(modalEl) : null;
-
-    let currentModuleId = null;
-
-    function memberPricePer(qty){
-      const n = Number(qty)||0;
-      if(n >= 10) return 4500;
-      if(n > 0) return 5000;
-      return 0;
-    }
-
-    function buildMemberWA(qty){
-      const n = Number(qty)||0;
-      const p = memberPricePer(n);
-      const total = n * p;
-
-      return `Halo,
-Saya ingin memesan layanan New Member Fresh.
-
-Jumlah member : ${n || ""}
-Harga / member : ${p ? money(p) : ""}
-Total : ${total ? money(total) : ""}
-
-Kode toko :
-Pin / tgl lahir :
-Jumlah qty member : ${n || ""}`;
-    }
-
-    function buildAreaWA(form){
-      return `Halo,
-Saya ingin memesan layanan Design Area Coverage.
-
-Nama toko : ${form.namaToko || ""}
-Kode toko : ${form.kodeToko || ""}
-Berapa sub : ${form.sub || ""}
-Sharelok toko : ${form.sharelok || ""}
-Format : ${form.format || ""}`;
-    }
-
-    function openDetail(moduleId){
-      const mod = modules.find(x=>x.id===moduleId);
-      if(!mod || !bsModal) return;
-
-      currentModuleId = moduleId;
-
-      document.getElementById("detailTitle").innerHTML =
-        `<i class="fa-solid fa-circle-info me-2"></i> ${mod.title}`;
-
-      const body = document.getElementById("detailBody");
-      const addBtn = document.getElementById("btnAddFromModal");
-      const quickBtn = document.getElementById("btnQuickWA");
-
-      if(!body || !addBtn || !quickBtn) return;
-
-      // Default actions
-      addBtn.disabled = false;
-      quickBtn.disabled = false;
-
-      if(mod.type === "simple"){
-        body.innerHTML = `
-          <div class="mb-2"><strong>Ringkasan</strong></div>
-          <div class="mini-note">${mod.desc}</div>
-          <hr class="my-3">
-          <div class="mini-note">
-            Item ini dapat langsung ditambahkan ke keranjang, lalu checkout via WhatsApp.
-          </div>
-        `;
-
-        addBtn.onclick = ()=>{
-          addCartItem({
-            name: mod.title,
-            price: 0,
-            qty: 1,
-            metaTextForWA: ""
-          });
-          bsModal.hide();
-          new bootstrap.Offcanvas('#offcanvasCart').show();
-        };
-
-        quickBtn.onclick = ()=>{
-          const text =
-`Halo,
-Saya ingin memesan layanan ${mod.title}.
-
-Terima kasih.`;
-          window.open(`https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`, "_blank");
-        };
-      }
-
-      if(mod.type === "form_member"){
-        body.innerHTML = `
-          <div class="mb-2"><strong>Ringkasan</strong></div>
-          <div class="mini-note">${mod.desc}</div>
-
-          <hr class="my-3">
-
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Jumlah member</label>
-              <input type="number" min="1" step="1" class="form-control" id="memberQty" placeholder="Contoh: 12">
-              <div class="mini-note mt-2">
-                Ketentuan harga:
-                <ul class="mb-0">
-                  <li>Di bawah 10 member: <strong>Rp5.000</strong> / member</li>
-                  <li>10 member atau lebih: <strong>Rp4.500</strong> / member</li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="col-md-6">
-              <div class="product-card p-3">
-                <div class="fw-bold mb-1">Ringkasan</div>
-                <div class="mini-note">Harga / member: <strong id="memberUnit">-</strong></div>
-                <div class="mini-note">Total: <strong id="memberTotal">-</strong></div>
-                <div class="mini-note mt-2">Format pesan akan ditambahkan otomatis saat checkout.</div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        const qtyEl = () => document.getElementById("memberQty");
-        const unitEl = () => document.getElementById("memberUnit");
-        const totEl  = () => document.getElementById("memberTotal");
-
-        function recalc(){
-          const q = Number(qtyEl().value)||0;
-          const p = memberPricePer(q);
-          const t = q * p;
-          unitEl().textContent = p ? money(p) : "-";
-          totEl().textContent  = t ? money(t) : "-";
-        }
-
-        setTimeout(()=>{
-          qtyEl().addEventListener("input", recalc);
-          recalc();
-        },0);
-
-        addBtn.onclick = ()=>{
-          const q = Number(qtyEl().value)||0;
-          if(q <= 0){
-            qtyEl().focus();
-            return;
-          }
-          const p = memberPricePer(q);
-          const total = q * p;
-
-          addCartItem({
-            name: `New Member Fresh`,
-            price: total,
-            qty: 1,
-            metaTextForWA:
-`Jumlah member : ${q}
-Harga / member : ${money(p)}
-Kode toko :
-Pin / tgl lahir :
-Jumlah qty member : ${q}`
-          });
-
-          bsModal.hide();
-          new bootstrap.Offcanvas('#offcanvasCart').show();
-        };
-
-        quickBtn.onclick = ()=>{
-          const q = Number(qtyEl().value)||0;
-          const text = buildMemberWA(q);
-          window.open(`https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`, "_blank");
-        };
-      }
-
-      if(mod.type === "form_area"){
-        body.innerHTML = `
-          <div class="mb-2"><strong>Ringkasan</strong></div>
-          <div class="mini-note">${mod.desc}</div>
-
-          <hr class="my-3">
-
-          <div class="row g-3">
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Nama toko</label>
-              <input class="form-control" id="areaNamaToko" placeholder="Nama toko">
-
-              <label class="form-label fw-semibold mt-2">Kode toko</label>
-              <input class="form-control" id="areaKodeToko" placeholder="Kode toko">
-
-              <label class="form-label fw-semibold mt-2">Berapa sub</label>
-              <input class="form-control" id="areaSub" placeholder="Contoh: 3">
-
-              <label class="form-label fw-semibold mt-2">Sharelok toko</label>
-              <input class="form-control" id="areaSharelok" placeholder="Link sharelok / maps">
-
-              <label class="form-label fw-semibold mt-2">Format</label>
-              <select class="form-select" id="areaFormat">
-                <option value="">Pilih format</option>
-                <option value="Landscape">Landscape</option>
-                <option value="Portrait">Portrait</option>
-              </select>
-            </div>
-
-            <div class="col-md-6">
-              <div class="product-card p-3">
-                <div class="fw-bold mb-2">Lihat Contoh PDF</div>
-                <div class="mini-note mb-2">File harus berada di repo pada folder <strong>/samples/</strong>.</div>
-
-                <div class="d-grid gap-2">
-                  <a class="btn btn-outline-primary" href="${PDF_LANDSCAPE}" target="_blank" rel="noopener">
-                    <i class="fa-regular fa-file-pdf me-2"></i> Contoh Landscape
-                  </a>
-                  <a class="btn btn-outline-primary" href="${PDF_PORTRAIT}" target="_blank" rel="noopener">
-                    <i class="fa-regular fa-file-pdf me-2"></i> Contoh Portrait
-                  </a>
-                </div>
-
-                <div class="mini-note mt-3">
-                  Jika tautan tidak terbuka: pastikan file ada di repo dan GitHub Pages sudah ter-deploy.
-                </div>
-              </div>
-            </div>
-          </div>
-        `;
-
-        const getForm = ()=>{
-          return {
-            namaToko: document.getElementById("areaNamaToko")?.value?.trim() || "",
-            kodeToko: document.getElementById("areaKodeToko")?.value?.trim() || "",
-            sub: document.getElementById("areaSub")?.value?.trim() || "",
-            sharelok: document.getElementById("areaSharelok")?.value?.trim() || "",
-            format: document.getElementById("areaFormat")?.value?.trim() || ""
-          };
-        };
-
-        function validateArea(form){
-          // Minimal wajib: nama toko + kode toko + format
-          return (form.namaToko && form.kodeToko && form.format);
-        }
-
-        addBtn.onclick = ()=>{
-          const f = getForm();
-          if(!validateArea(f)){
-            // fokus ke field pertama kosong yang penting
-            if(!f.namaToko) document.getElementById("areaNamaToko")?.focus();
-            else if(!f.kodeToko) document.getElementById("areaKodeToko")?.focus();
-            else document.getElementById("areaFormat")?.focus();
-            return;
-          }
-
-          addCartItem({
-            name: `Design Area Coverage`,
-            price: 0,
-            qty: 1,
-            metaTextForWA:
-`Nama toko : ${f.namaToko}
-Kode toko : ${f.kodeToko}
-Berapa sub : ${f.sub}
-Sharelok toko : ${f.sharelok}
-Format : ${f.format}`
-          });
-
-          bsModal.hide();
-          new bootstrap.Offcanvas('#offcanvasCart').show();
-        };
-
-        quickBtn.onclick = ()=>{
-          const f = getForm();
-          const text = buildAreaWA(f);
-          window.open(`https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`, "_blank");
-        };
-      }
-
-      bsModal.show();
-    }
-
-    // ===== EVENTS =====
-    document.addEventListener("click",(e)=>{
-      const a = e.target.closest("a[data-scroll][href^='#']");
-      if(a){
-        e.preventDefault();
-        const sel = a.getAttribute("href");
-        const el = document.querySelector(sel);
-        if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
-        const coll = document.getElementById("mainNav");
-        if(coll && coll.classList.contains("show")) new bootstrap.Collapse(coll).hide();
-      }
-
-      const detail = e.target.closest("[data-detail]");
-      if(detail){
-        openDetail(detail.dataset.detail);
-        return;
-      }
-
-      const add = e.target.closest("[data-add]");
-      if(add){
-        const id = add.dataset.add;
-        const mod = modules.find(x=>x.id===id);
-        if(!mod) return;
-
-        // Form-based modules -> open detail (agar input keisi)
-        if(mod.type === "form_member" || mod.type === "form_area"){
-          openDetail(id);
-          return;
-        }
-
-        // Simple modules -> langsung masuk keranjang
-        addCartItem({name: mod.title, price:0, qty:1, metaTextForWA:""});
-        new bootstrap.Offcanvas('#offcanvasCart').show();
-        return;
-      }
-
-      const cartAction = e.target.closest("[data-remove],[data-qtyminus],[data-qtyplus]");
-      if(cartAction){
-        if(cartAction.dataset.remove !== undefined){
-          removeCartIndex(Number(cartAction.dataset.remove));
-        }else if(cartAction.dataset.qtyminus !== undefined){
-          changeQty(Number(cartAction.dataset.qtyminus), -1);
-        }else if(cartAction.dataset.qtyplus !== undefined){
-          changeQty(Number(cartAction.dataset.qtyplus), +1);
-        }
+    document.getElementById('cartItems').addEventListener('click', (e)=>{
+      const minus = e.target.closest('[data-minus]');
+      const plus  = e.target.closest('[data-plus]');
+      const del   = e.target.closest('[data-del]');
+      if(minus){
+        changeQty(Number(minus.getAttribute('data-minus')), -1);
+      }else if(plus){
+        changeQty(Number(plus.getAttribute('data-plus')), +1);
+      }else if(del){
+        removeFromCart(Number(del.getAttribute('data-del')));
       }
     });
 
-    document.getElementById("btnClearCart")?.addEventListener("click", clearCart);
+    document.getElementById('btnClearCart').addEventListener('click', clearCart);
 
-    document.getElementById("floatingDarkBtn")?.addEventListener("click", toggleTheme);
-    document.getElementById("navDarkBtn")?.addEventListener("click", toggleTheme);
-    document.getElementById("navDarkBtnDesk")?.addEventListener("click", toggleTheme);
+    // =============================
+    // Footer year
+    // =============================
+    document.getElementById('footerYear').textContent = new Date().getFullYear();
 
-    // ===== INIT =====
-    document.addEventListener("DOMContentLoaded", ()=>{
-      const saved = localStorage.getItem(THEME_KEY) || "dark";
-      applyTheme(saved);
+    // =============================
+    // Init
+    // =============================
+    updateCartUI();
 
-      renderModules();
-      updateCartUI();
-      setNavH();
-
-      window.addEventListener("resize", setNavH);
-      window.addEventListener("orientationchange", setNavH);
-      document.addEventListener("shown.bs.collapse", setNavH);
-      document.addEventListener("hidden.bs.collapse", setNavH);
-      document.addEventListener("shown.bs.modal", setNavH);
-    });
+    // Optional: close swipe for modal (mobile)
+    (function enableModalSwipeClose(){
+      const content=document.getElementById('moduleModalContent'); let startY=null;
+      if(!content) return;
+      content.addEventListener('touchstart',e=>{startY=e.touches[0].clientY;},{passive:true});
+      content.addEventListener('touchmove',e=>{
+        if(startY===null) return;
+        const dy=e.touches[0].clientY-startY;
+        if(dy>90){ startY=null; moduleModal.hide(); }
+      }, {passive:true});
+      content.addEventListener('touchend',()=>{startY=null;});
+    })();
   </script>
 </body>
 </html>
