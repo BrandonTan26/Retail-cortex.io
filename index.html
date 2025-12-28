@@ -1,1022 +1,1442 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html lang="id" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Retail-Cortex.io — Tech & AI Retail Services</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retail-Cortex.io — Retail Services</title>
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap + FA -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+  <!-- PDF.js (viewer watermark) -->
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.js"></script>
 
   <style>
-    :root {
-      --bg-dark: #030512;
-      --bg-grad: radial-gradient(circle at top, #311b92 0, #030512 52%, #01020a 100%);
-      --neon-accent: #8b5cf6;  /* ungu neon */
-      --neon-cyan: #22d3ee;    /* biru neon */
-      --neon-purple: #7c3aed;
-      --text-main: #f9fafb;
-      --text-soft: #9ca3af;
-      --card-bg: rgba(8, 11, 30, 0.96);
-      --border-glass: rgba(129, 140, 248, 0.6);
-      --radius-xl: 20px;
-      --shadow-neon: 0 0 40px rgba(34, 211, 238, 0.25);
-      --transition-fast: 0.22s ease;
+    :root{
+      --nav-h:72px;
+
+      /* DARK */
+      --bg-page: radial-gradient(circle at top, #1b1b3a 0%, #050718 55%, #000 100%);
+      --bg-surface: rgba(10, 12, 32, 0.86);
+      --bg-card: rgba(8, 11, 30, 0.95);
+
+      --text-main:#e5e7eb;
+      --text-muted:#9ca3af;
+
+      --border: rgba(148,163,184,.35);
+      --shadow: 0 18px 45px rgba(0,0,0,.8);
+      --shadow-hover: 0 28px 70px rgba(0,0,0,.92);
+
+      --grad: linear-gradient(135deg, #7c3aed 0%, #22d3ee 55%, #e5f6ff 100%);
+      --grad-2: linear-gradient(135deg, #22d3ee 0%, #a855f7 55%, #7c3aed 100%);
+      --success:#22c55e;
+      --danger:#ef4444;
+      --warn:#f59e0b;
+
+      --radius:18px;
     }
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
+    html[data-theme="light"]{
+      --bg-page: linear-gradient(135deg,#1d4ed8 0%,#7c3aed 45%,#22d3ee 100%);
+      --bg-surface: rgba(255,255,255,.82);
+      --bg-card: #ffffff;
+
+      --text-main:#0b1220;
+      --text-muted:#475569;
+
+      --border: rgba(226,232,240,1);
+      --shadow: 0 10px 28px rgba(15,23,42,.20);
+      --shadow-hover: 0 22px 52px rgba(15,23,42,.28);
     }
 
-    html, body {
-      height: 100%;
-    }
-
-    body {
-      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg-grad);
+    *{box-sizing:border-box}
+    body{
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      background: var(--bg-page);
       color: var(--text-main);
-      overflow-x: hidden;
+      min-height: 100vh;
+      overflow-x:hidden;
     }
 
-    .container {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 0 18px;
-      position: relative;
-      z-index: 1;
-    }
-
-    section {
-      padding: 64px 0;
-      position: relative;
-      z-index: 1;
-    }
-
-    h1, h2 {
-      font-family: "Orbitron", system-ui;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    /* BACKGROUND ORBS + GRID */
-    .bg-grid {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: 0.18;
+    /* subtle moving grid */
+    .bg-grid{
+      position:fixed; inset:0; pointer-events:none; z-index:0;
+      opacity:.16;
       background-image:
         linear-gradient(rgba(129, 140, 248, 0.2) 1px, transparent 1px),
         linear-gradient(90deg, rgba(129, 140, 248, 0.2) 1px, transparent 1px);
-      background-size: 52px 52px;
+      background-size: 56px 56px;
       animation: gridShift 22s linear infinite;
-      z-index: 0;
+    }
+    @keyframes gridShift{
+      0%{background-position:0 0,0 0}
+      100%{background-position:120px 120px,120px 120px}
     }
 
-    .orb {
-      position: fixed;
-      border-radius: 999px;
-      filter: blur(4px);
-      opacity: 0.38;
-      mix-blend-mode: screen;
-      pointer-events: none;
-      z-index: 0;
+    /* NAV */
+    .nav-glass{
+      position:sticky; top:0; z-index:1100;
+      backdrop-filter: blur(14px) saturate(1.2);
+      background: rgba(2,6,23,.70);
+      border-bottom: 1px solid var(--border);
+    }
+    html[data-theme="light"] .nav-glass{
+      background: rgba(255,255,255,.62);
     }
 
-    .orb--top {
-      width: 420px;
-      height: 420px;
-      background: radial-gradient(circle, rgba(124, 58, 237, 0.85), transparent 70%);
-      top: -60px;
-      right: -120px;
-      animation: floatOrb 18s ease-in-out infinite;
-    }
-
-    .orb--bottom {
-      width: 360px;
-      height: 360px;
-      background: radial-gradient(circle, rgba(34, 211, 238, 0.8), transparent 70%);
-      bottom: -80px;
-      left: -80px;
-      animation: floatOrb 20s ease-in-out infinite reverse;
-    }
-
-    @keyframes gridShift {
-      0% { background-position: 0 0, 0 0; }
-      100% { background-position: 120px 120px, 120px 120px; }
-    }
-
-    @keyframes floatOrb {
-      0%, 100% { transform: translateY(0) translateX(0); }
-      50% { transform: translateY(30px) translateX(10px); }
-    }
-
-    /* NAVBAR */
-    .navbar {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      backdrop-filter: blur(16px);
-      background: linear-gradient(to right, rgba(10, 10, 31, 0.96), rgba(15, 23, 42, 0.98));
-      border-bottom: 1px solid rgba(129, 140, 248, 0.5);
-    }
-
-    .navbar-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      padding: 10px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-    }
-
-    .logo-wrap {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .logo-img {
-      height: 40px;
-      width: auto;
-      display: block;
-    }
-
-    .logo-text-main {
-      font-family: "Orbitron", system-ui;
-      font-size: 17px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-    }
-
-    .logo-text-sub {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.22em;
-      color: var(--text-soft);
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 18px;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-    }
-
-    .nav-links a {
-      color: var(--text-soft);
-      text-decoration: none;
-      position: relative;
-      padding-bottom: 2px;
-    }
-
-    .nav-links a::after {
-      content: "";
-      position: absolute;
-      left: 0;
-      bottom: 0;
-      width: 0;
-      height: 2px;
-      border-radius: 999px;
-      background: linear-gradient(90deg, var(--neon-cyan), var(--neon-accent));
-      box-shadow: 0 0 10px rgba(34, 211, 238, 0.8);
-      transition: width var(--transition-fast);
-    }
-
-    .nav-links a:hover::after {
-      width: 100%;
-    }
-
-    @media (max-width: 720px) {
-      .nav-links {
-        display: none;
-      }
-    }
-
-    /* HERO */
-    .hero {
-      padding-top: 48px;
-    }
-
-    .hero-inner {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 32px;
-      align-items: center;
-    }
-
-    @media (max-width: 880px) {
-      .hero-inner {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .tagline {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 6px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(129, 140, 248, 0.6);
-      background: rgba(15, 23, 42, 0.96);
-      box-shadow: 0 0 18px rgba(34, 211, 238, 0.3);
-      font-size: 11px;
-      color: var(--text-soft);
-      margin-bottom: 14px;
-    }
-
-    .tag-dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 30% 20%, #e5f6ff, var(--neon-cyan));
-      box-shadow: 0 0 14px rgba(34, 211, 238, 1);
-    }
-
-    .hero-title {
-      font-size: clamp(30px, 4vw, 38px);
-      margin-bottom: 14px;
-      text-transform: uppercase;
-    }
-
-    .hero-title span.highlight {
-      background: linear-gradient(120deg, var(--neon-cyan), var(--neon-accent), #e5f6ff);
-      -webkit-background-clip: text;
-      color: transparent;
-    }
-
-    .hero-sub {
-      font-size: 14px;
-      color: var(--text-soft);
-      max-width: 480px;
-      margin-bottom: 20px;
-    }
-
-    .hero-badges {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-bottom: 22px;
-    }
-
-    .pill {
-      font-size: 11px;
-      border-radius: 999px;
-      padding: 5px 11px;
-      border: 1px solid rgba(129, 140, 248, 0.7);
-      background: rgba(15, 23, 42, 0.96);
-      color: var(--text-soft);
-    }
-
-    .hero-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-      align-items: center;
-    }
-
-    .btn-primary {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 11px 22px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      background: radial-gradient(circle at 10% 0, #e5f6ff, var(--neon-cyan));
-      color: #020617;
-      font-size: 12px;
-      font-weight: 600;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      box-shadow:
-        0 16px 30px rgba(34, 211, 238, 0.5),
-        0 0 18px rgba(124, 58, 237, 0.7);
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    }
-
-    .btn-primary span.icon {
-      font-size: 16px;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow:
-        0 24px 40px rgba(34, 211, 238, 0.7),
-        0 0 26px rgba(124, 58, 237, 0.9);
-    }
-
-    .btn-ghost {
-      border-radius: 999px;
-      border: 1px dashed rgba(129, 140, 248, 0.9);
-      padding: 9px 17px;
-      background: rgba(15, 23, 42, 0.96);
-      color: var(--text-soft);
-      font-size: 12px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-    }
-
-    .btn-ghost:hover {
-      border-style: solid;
+    .brand{
+      display:flex; align-items:center; gap:.65rem;
+      text-decoration:none;
       color: var(--text-main);
     }
-
-    .hero-visual {
-      position: relative;
-      height: 270px;
+    .brand-badge{
+      width:40px; height:40px;
+      border-radius: 14px;
+      background: var(--grad);
+      box-shadow: 0 14px 34px rgba(34,211,238,.25);
+      display:flex; align-items:center; justify-content:center;
+      color:#0b1220;
+      font-weight:900;
+      letter-spacing:.06em;
+      font-family: Orbitron, system-ui;
+    }
+    .brand-title{
+      font-family: Orbitron, system-ui;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      font-weight:700;
+      font-size:.95rem;
+      line-height:1.15;
+      margin:0;
+    }
+    .brand-sub{
+      font-size:.70rem;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color: var(--text-muted);
+      margin:0;
     }
 
-    .core-orbit {
-      position: absolute;
-      inset: 0;
-      border-radius: 26px;
+    .nav-link{
+      font-weight:700;
+      border-radius:999px;
+      padding:.45rem .9rem !important;
+      font-size:.88rem;
+      color: var(--text-muted) !important;
+      letter-spacing:.02em;
+    }
+    .nav-link:hover{
+      background: rgba(148,163,184,.14);
+      color: var(--text-main) !important;
+    }
+    .nav-icon-btn{
+      width:44px; height:44px;
+      border-radius:14px;
+      border: 1px solid var(--border);
+      background: rgba(2,6,23,.55);
+      color: var(--text-main);
+      display:inline-flex; align-items:center; justify-content:center;
+      box-shadow: var(--shadow);
+    }
+    html[data-theme="light"] .nav-icon-btn{
+      background:#ffffff;
+    }
+    .nav-icon-btn:hover{ transform: translateY(-1px); }
+
+    /* HERO */
+    .hero{
+      position:relative;
+      z-index:1;
+      padding: 2.4rem 0 1.2rem;
+    }
+    .hero-card{
+      border-radius: calc(var(--radius) + 6px);
       background:
-        radial-gradient(circle at 0 0, rgba(124, 58, 237, 0.8), transparent 65%),
-        radial-gradient(circle at 100% 100%, rgba(34, 211, 238, 0.7), transparent 65%),
-        rgba(15, 23, 42, 0.98);
-      border: 1px solid rgba(129, 140, 248, 0.9);
-      box-shadow:
-        0 18px 40px rgba(0, 0, 0, 0.8),
-        0 0 40px rgba(34, 211, 238, 0.35);
-      overflow: hidden;
+        radial-gradient(circle at top left, rgba(34,211,238,.22), transparent 55%),
+        radial-gradient(circle at bottom right, rgba(168,85,247,.18), transparent 55%),
+        var(--bg-surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      padding: 1.35rem 1.2rem;
+      overflow:hidden;
+    }
+    .hero-pill{
+      display:inline-flex; align-items:center; gap:.45rem;
+      padding:.35rem .75rem;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background: rgba(2,6,23,.35);
+      color: var(--text-muted);
+      font-weight:700;
+      font-size:.78rem;
+      letter-spacing:.03em;
+    }
+    html[data-theme="light"] .hero-pill{
+      background: rgba(255,255,255,.65);
     }
 
-    .hero-logo-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0.08;
+    .hero-title{
+      font-family: Orbitron, system-ui;
+      text-transform:uppercase;
+      letter-spacing:.14em;
+      font-weight:800;
+      font-size: clamp(1.55rem, 3.7vw, 2.3rem);
+      margin: .85rem 0 .55rem;
+    }
+    .hero-title .grad{
+      background: var(--grad);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .hero-sub{
+      color: var(--text-muted);
+      font-size: .98rem;
+      max-width: 46rem;
+      margin-bottom: 1rem;
+    }
+    .hero-actions{
+      display:flex; flex-wrap:wrap; gap:.6rem;
+      margin-top: .6rem;
+    }
+    .btn-grad{
+      border:none;
+      background: var(--grad);
+      color:#0b1220;
+      font-weight:900;
+      letter-spacing:.06em;
+      border-radius:999px;
+      padding:.72rem 1.05rem;
+      box-shadow: 0 18px 45px rgba(34,211,238,.18);
+    }
+    .btn-grad:hover{ filter: brightness(1.03); transform: translateY(-1px); }
+    .btn-ghost{
+      border-radius:999px;
+      border:1px dashed rgba(148,163,184,.7);
+      padding:.66rem 1.0rem;
+      background: rgba(2,6,23,.25);
+      color: var(--text-main);
+      font-weight:800;
+      letter-spacing:.04em;
+    }
+    html[data-theme="light"] .btn-ghost{
+      background: rgba(255,255,255,.55);
+    }
+    .btn-ghost:hover{ border-style: solid; }
+
+    /* SECTION */
+    section{ position:relative; z-index:1; padding: 2.0rem 0; }
+    .section-title{
+      text-align:center;
+      font-weight:900;
+      letter-spacing:.04em;
+      margin-bottom:.15rem;
+    }
+    .section-sub{
+      text-align:center;
+      color: var(--text-muted);
+      margin-bottom: 1.1rem;
+      font-size:.95rem;
     }
 
-    .hero-logo-overlay img {
-      max-width: 80%;
-      height: auto;
-      filter: drop-shadow(0 0 18px rgba(34,211,238,0.9));
+    /* CARDS */
+    .service-card{
+      border-radius: var(--radius);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      height:100%;
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+      position:relative;
     }
-
-    .core-orbit::before,
-    .core-orbit::after {
-      content: "";
-      position: absolute;
-      width: 160%;
-      height: 160%;
-      border-radius: 999px;
-      border: 1px dashed rgba(129, 140, 248, 0.9);
-      top: -30%;
-      left: -30%;
-      animation: orbitSpin 20s linear infinite;
+    .service-card::before{
+      content:"";
+      position:absolute; inset:0;
+      background: conic-gradient(from 180deg, rgba(34,211,238,.10), rgba(168,85,247,.10), rgba(124,58,237,.10), rgba(34,197,94,.08), rgba(34,211,238,.10));
+      opacity:0;
+      transition: opacity .25s ease;
+      pointer-events:none;
     }
-
-    .core-orbit::after {
-      border-style: solid;
-      border-color: rgba(88, 28, 211, 0.9);
-      animation-direction: reverse;
-      animation-duration: 26s;
+    .service-card:hover{
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: rgba(226,232,240,.65);
     }
+    .service-card:hover::before{ opacity:1; }
+    .service-card > *{ position:relative; z-index:1; }
 
-    .ai-core {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      pointer-events: none;
+    .svc-top{
+      padding: 1.0rem 1.0rem .7rem;
+      display:flex; gap:.85rem; align-items:flex-start;
     }
+    .svc-icon{
+      width:56px; height:56px;
+      border-radius: 16px;
+      background: rgba(2,6,23,.35);
+      border: 1px solid var(--border);
+      display:flex; align-items:center; justify-content:center;
+      font-size: 1.25rem;
+    }
+    html[data-theme="light"] .svc-icon{
+      background: rgba(255,255,255,.72);
+    }
+    .svc-tag{
+      font-size:.72rem;
+      color: var(--text-muted);
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      margin-bottom:.25rem;
+    }
+    .svc-name{
+      font-family: Orbitron, system-ui;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      font-weight:800;
+      font-size: .98rem;
+      margin:0 0 .35rem;
+    }
+    .svc-desc{
+      color: var(--text-muted);
+      font-size: .90rem;
+      margin: 0;
+      min-height: 3.1em;
+    }
+    .svc-bottom{
+      padding: .85rem 1.0rem 1.0rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:.6rem;
+    }
+    .chip{
+      font-size:.74rem;
+      padding:.22rem .6rem;
+      border-radius:999px;
+      border:1px solid var(--border);
+      color: var(--text-muted);
+      background: rgba(2,6,23,.18);
+      font-weight:800;
+      white-space:nowrap;
+    }
+    html[data-theme="light"] .chip{
+      background: rgba(255,255,255,.60);
+    }
+    .btn-detail{
+      border:none;
+      border-radius: 14px;
+      padding: .60rem .85rem;
+      font-weight:900;
+      letter-spacing:.04em;
+      background: var(--grad-2);
+      color:#0b1220;
+      display:inline-flex; align-items:center; gap:.5rem;
+      white-space:nowrap;
+    }
+    .btn-detail:hover{ filter: brightness(1.03); transform: translateY(-1px); }
 
-    .ai-chip {
-      width: 150px;
-      height: 90px;
+    /* MODAL */
+    .modal-content{
+      border:none;
       border-radius: 18px;
-      background: radial-gradient(circle at 0 0, #e5f6ff, #c7d2fe 28%, #111827 70%);
-      box-shadow:
-        0 0 26px rgba(226, 232, 240, 0.9),
-        0 0 40px rgba(34, 211, 238, 0.7);
-      position: relative;
-      overflow: hidden;
+      overflow:hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,.75);
+      background: var(--bg-card);
+      color: var(--text-main);
+    }
+    .modal-header{
+      border-bottom:1px solid var(--border);
+      background: var(--grad);
+      color:#0b1220;
+    }
+    .btn-close{ filter: brightness(0) invert(1); }
+    html[data-theme="light"] .btn-close{ filter:none; }
+    .modal-footer{
+      border-top:1px solid var(--border);
     }
 
-    .ai-chip::before,
-    .ai-chip::after {
-      content: "";
-      position: absolute;
-      inset: 10px;
-      border-radius: 12px;
-      border: 2px solid rgba(15, 23, 42, 0.95);
+    /* FORM */
+    .form-control, .form-select{
+      border-radius: 14px;
+      border:1px solid var(--border);
+      background: rgba(2,6,23,.22);
+      color: var(--text-main);
+      padding: .72rem .85rem;
+    }
+    html[data-theme="light"] .form-control,
+    html[data-theme="light"] .form-select{
+      background:#ffffff;
+      color:#0b1220;
+    }
+    .form-control:focus, .form-select:focus{
+      outline:none;
+      box-shadow:none;
+      border-color: rgba(34,211,238,.85);
+    }
+    .help{
+      color: var(--text-muted);
+      font-size:.86rem;
+      margin-top:.25rem;
+    }
+    .calc-box{
+      border-radius: 16px;
+      border:1px solid var(--border);
+      background: rgba(2,6,23,.18);
+      padding: .85rem .9rem;
+    }
+    html[data-theme="light"] .calc-box{
+      background: rgba(255,255,255,.65);
+    }
+    .calc-row{
+      display:flex; justify-content:space-between; gap:1rem;
+      font-weight:800;
+      margin:.25rem 0;
+    }
+    .calc-row span:last-child{
+      font-family: Orbitron, system-ui;
+      letter-spacing:.08em;
     }
 
-    .ai-chip::after {
-      inset: 24px 32px;
-      border-color: transparent;
-      border-left: 2px solid rgba(15, 23, 42, 0.95);
-      border-right: 2px solid rgba(15, 23, 42, 0.95);
+    /* PDF VIEWER */
+    .pdf-wrap{
+      border-radius: 16px;
+      border:1px solid var(--border);
+      background: rgba(2,6,23,.18);
+      overflow:hidden;
+      box-shadow: var(--shadow);
+      position:relative;
+      user-select:none;
+    }
+    html[data-theme="light"] .pdf-wrap{
+      background: rgba(255,255,255,.75);
+    }
+    .pdf-toolbar{
+      display:flex; align-items:center; justify-content:space-between;
+      padding:.6rem .75rem;
+      border-bottom:1px solid var(--border);
+      background: rgba(2,6,23,.25);
+      gap:.5rem;
+    }
+    html[data-theme="light"] .pdf-toolbar{ background: rgba(255,255,255,.7); }
+    .pdf-toolbar .mini{
+      color: var(--text-muted);
+      font-size:.85rem;
+      font-weight:700;
+    }
+    .pdf-canvas-holder{
+      display:flex;
+      justify-content:center;
+      padding:.75rem;
+      background: rgba(0,0,0,.25);
+    }
+    html[data-theme="light"] .pdf-canvas-holder{ background: rgba(15,23,42,.05); }
+    canvas{ max-width:100%; height:auto; border-radius: 12px; }
+
+    /* Footer */
+    footer{
+      padding: 1.6rem 0 2.0rem;
+      text-align:center;
+      color: var(--text-muted);
+      font-size:.88rem;
+      position:relative;
+      z-index:1;
+    }
+    .footer-main{
+      font-weight:900;
+      letter-spacing:.04em;
     }
 
-    .ai-core-logo {
-      position: absolute;
-      inset: 16px 30px;
-      border-radius: 8px;
-      background: radial-gradient(circle at 30% 0, var(--neon-cyan), var(--neon-accent));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: "Orbitron", system-ui;
-      font-size: 13px;
-      color: #020617;
-      text-transform: uppercase;
-      letter-spacing: 0.16em;
-    }
-
-    .ai-lines {
-      position: absolute;
-      inset: 10px;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .ai-line {
-      width: 3px;
-      border-radius: 999px;
-      background: linear-gradient(to bottom, var(--neon-cyan), transparent);
-      opacity: 0.9;
-      box-shadow: 0 0 16px rgba(34, 211, 238, 0.9);
-      animation: dataFlow 1.7s linear infinite;
-    }
-
-    .ai-line:nth-child(2) {
-      background: linear-gradient(to bottom, var(--neon-accent), transparent);
-      animation-delay: 0.4s;
-    }
-
-    .ai-line:nth-child(3) {
-      animation-delay: 0.8s;
-    }
-
-    .scan-line {
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(239, 246, 255, 0.95), transparent);
-      top: 0;
-      mix-blend-mode: screen;
-      animation: scanDown 2.8s linear infinite;
-      opacity: 0.7;
-    }
-
-    @keyframes orbitSpin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    @keyframes dataFlow {
-      0% { transform: translateY(70px); opacity: 0; }
-      30% { opacity: 1; }
-      100% { transform: translateY(-70px); opacity: 0; }
-    }
-
-    @keyframes scanDown {
-      0% { transform: translateY(-120%); }
-      100% { transform: translateY(220%); }
-    }
-
-    /* SECTION HEADINGS */
-    .section-heading {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .section-heading h2 {
-      font-size: 22px;
-      margin-bottom: 6px;
-    }
-
-    .section-heading p {
-      font-size: 13px;
-      color: var(--text-soft);
-    }
-
-    /* SERVICES GRID */
-    .services-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-      gap: 22px;
-    }
-
-    .service-card {
-      background: var(--card-bg);
-      border-radius: var(--radius-xl);
-      padding: 18px 18px 16px;
-      border: 1px solid var(--border-glass);
-      box-shadow: 0 18px 32px rgba(0, 0, 0, 0.9);
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(16px);
-      transform: translateY(0);
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
-    }
-
-    .service-card::before {
-      content: "";
-      position: absolute;
-      width: 120px;
-      height: 120px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(124, 58, 237, 0.8), transparent 70%);
-      top: -40px;
-      right: -50px;
-      opacity: 0.6;
-    }
-
-    .service-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(226, 232, 240, 0.95);
-      box-shadow: 0 24px 44px rgba(0, 0, 0, 1);
-    }
-
-    .service-tag {
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--text-soft);
-      margin-bottom: 4px;
-    }
-
-    .service-name {
-      font-family: "Orbitron", system-ui;
-      font-size: 15px;
-      letter-spacing: 0.12em;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-    }
-
-    .service-desc {
-      font-size: 12px;
-      color: var(--text-soft);
-      margin-bottom: 12px;
-      min-height: 44px;
-    }
-
-    .service-actions {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .btn-order {
-      border: none;
-      cursor: pointer;
-      padding: 8px 14px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 10% 0, #e5f6ff, var(--neon-accent));
-      color: #020617;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      box-shadow:
-        0 10px 22px rgba(124, 58, 237, 0.7),
-        0 0 16px rgba(34, 211, 238, 0.7);
-      transition: transform var(--transition-fast), box-shadow var(--transition-fast);
-    }
-
-    .btn-order span.icon {
-      font-size: 15px;
-    }
-
-    .btn-order:hover {
-      transform: translateY(-1px);
-      box-shadow:
-        0 16px 30px rgba(124, 58, 237, 0.9),
-        0 0 22px rgba(34, 211, 238, 0.95);
-    }
-
-    .chip {
-      font-size: 10px;
-      padding: 5px 9px;
-      border-radius: 999px;
-      border: 1px solid rgba(129, 140, 248, 0.9);
-      color: var(--text-soft);
-      background: rgba(15, 23, 42, 0.98);
-    }
-
-    /* CONTACT BOX */
-    .contact-box {
-      max-width: 720px;
-      margin: 0 auto;
-      padding: 20px 18px;
-      border-radius: 22px;
-      background: rgba(15, 23, 42, 0.98);
-      border: 1px solid rgba(129, 140, 248, 0.9);
-      box-shadow: 0 22px 40px rgba(0, 0, 0, 1);
-      backdrop-filter: blur(16px);
-    }
-
-    .contact-box h3 {
-      font-family: "Orbitron", system-ui;
-      font-size: 18px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-
-    .contact-box p {
-      font-size: 13px;
-      color: var(--text-soft);
-      margin-bottom: 12px;
-    }
-
-    .contact-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
-      gap: 10px;
-      font-size: 12px;
-    }
-
-    .contact-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.18em;
-      color: var(--text-soft);
-      margin-bottom: 2px;
-    }
-
-    footer {
-      text-align: center;
-      padding: 20px 0 28px;
-      font-size: 11px;
-      color: var(--text-soft);
-    }
-
-    /* FLOATING WHATSAPP */
-    .floating-wa {
-      position: fixed;
-      right: 18px;
-      bottom: 18px;
-      width: 58px;
-      height: 58px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 25% 0, #e5f6ff, #22c55e);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow:
-        0 18px 38px rgba(0, 0, 0, 0.9),
-        0 0 26px rgba(34, 197, 94, 0.95);
-      cursor: pointer;
-      z-index: 40;
-      animation: floatPulse 2.8s ease-in-out infinite;
-    }
-
-    .floating-wa-inner {
-      width: 30px;
-      height: 30px;
-      position: relative;
-    }
-
-    .wa-bubble {
-      position: absolute;
-      inset: 0;
-      border-radius: 10px;
-      border-bottom-left-radius: 4px;
-      background: #075e54;
-      transform: rotate(-4deg);
-    }
-
-    .wa-bubble::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      left: 6px;
-      border-width: 6px;
-      border-style: solid;
-      border-color: #075e54 transparent transparent transparent;
-      transform: rotate(25deg);
-    }
-
-    .wa-phone {
-      position: absolute;
-      inset: 4px 5px 4px 5px;
-      border-radius: 8px;
-      border: 2px solid #ffffff;
-      box-sizing: border-box;
-    }
-
-    .wa-phone-line {
-      position: absolute;
-      inset: 8px 10px;
-      border-radius: 50%;
-      border: 2px solid #ffffff;
-      border-color: transparent transparent #ffffff #ffffff;
-      transform: rotate(-35deg);
-    }
-
-    .floating-wa-tooltip {
-      position: absolute;
-      right: 66px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(15, 23, 42, 0.98);
-      color: #f9fafb;
-      padding: 6px 12px;
-      border-radius: 999px;
-      font-size: 11px;
-      white-space: nowrap;
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 1);
-    }
-
-    .floating-wa-tooltip::after {
-      content: "";
-      position: absolute;
-      right: -6px;
-      top: 50%;
-      transform: translateY(-50%);
-      border-width: 6px;
-      border-style: solid;
-      border-color: transparent transparent transparent rgba(15, 23, 42, 0.98);
-    }
-
-    @keyframes floatPulse {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-4px); }
-    }
-
-    @media (max-width: 520px) {
-      .floating-wa-tooltip {
-        display: none;
-      }
+    /* Mobile */
+    @media (max-width: 576px){
+      .svc-desc{ min-height:auto; }
     }
   </style>
 </head>
+
 <body>
-
   <div class="bg-grid"></div>
-  <div class="orb orb--top"></div>
-  <div class="orb orb--bottom"></div>
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="navbar-inner">
-      <div class="logo-wrap">
-        <img src="retail-cortex-logo.png" alt="Retail-Cortex.io logo" class="logo-img">
+  <!-- NAV -->
+  <nav class="navbar navbar-expand-lg nav-glass" id="mainNavbar">
+    <div class="container py-2">
+      <a class="brand" href="#home" onclick="scrollToId('home')">
+        <div class="brand-badge">RC</div>
         <div>
-          <div class="logo-text-main">Retail-Cortex.io</div>
-          <div class="logo-text-sub">AI • RETAIL • AUTOMATION</div>
+          <p class="brand-title m-0">Retail-Cortex.io</p>
+          <p class="brand-sub m-0">Retail Services</p>
         </div>
+      </a>
+
+      <div class="d-flex align-items-center gap-2 ms-auto">
+        <button class="nav-icon-btn" id="btnTheme" type="button" title="Toggle Dark/Light">
+          <i class="fa-solid fa-moon"></i>
+        </button>
+
+        <button class="navbar-toggler nav-icon-btn" type="button" data-bs-toggle="collapse" data-bs-target="#navLinks" aria-label="Menu">
+          <i class="fa-solid fa-bars"></i>
+        </button>
       </div>
-      <nav class="nav-links">
-        <a href="#home">Home</a>
-        <a href="#services">Services</a>
-        <a href="#how">Workflow</a>
-        <a href="#contact">Contact</a>
-      </nav>
+
+      <div class="collapse navbar-collapse" id="navLinks">
+        <ul class="navbar-nav ms-auto mt-2 mt-lg-0">
+          <li class="nav-item"><a class="nav-link" href="#services" data-scroll>Services</a></li>
+          <li class="nav-item"><a class="nav-link" href="#workflow" data-scroll>Workflow</a></li>
+          <li class="nav-item"><a class="nav-link" href="#contact" data-scroll>Contact</a></li>
+        </ul>
+      </div>
     </div>
-  </header>
+  </nav>
 
   <!-- HERO -->
-  <main id="home" class="hero">
+  <header class="hero" id="home">
     <div class="container">
-      <div class="hero-inner">
-        <div>
-          <div class="tagline">
-            <span class="tag-dot"></span>
-            RETAIL AUTOMATION • POWERED BY AI
-          </div>
-          <h1 class="hero-title">
-            Plug your store into the <span class="highlight">Retail-Cortex</span>.
-          </h1>
-          <p class="hero-sub">
-            Studio digital yang fokus di AI & data buat bantu personil toko ngerjain task berat:
-            dari new member sampai PPT report, semua dibungkus rapi dan otomatis langsung ke WhatsApp.
-          </p>
-          <div class="hero-badges">
-            <span class="pill">Neon Cyberpunk Interface</span>
-            <span class="pill">AI-Assisted Workflow</span>
-            <span class="pill">Built for Store Teams</span>
-          </div>
-          <div class="hero-cta">
-            <button class="btn-primary" onclick="openWhatsAppGeneral()">
-              <span class="icon">⚡</span>
-              <span>Chat Retail-Cortex via WA</span>
-            </button>
-            <button class="btn-ghost" onclick="scrollToSection('services')">
-              <span>👁 View Cortex Modules</span>
-            </button>
-          </div>
-        </div>
+      <div class="hero-card">
+        <div class="row g-3 align-items-center">
+          <div class="col-lg-8">
+            <span class="hero-pill">
+              <i class="fa-solid fa-bolt"></i>
+              <span>Tools & coaching untuk target toko</span>
+            </span>
 
-        <aside class="hero-visual">
-          <div class="core-orbit">
-            <div class="hero-logo-overlay">
-              <img src="retail-cortex-logo.png" alt="Retail-Cortex.io logo">
+            <h1 class="hero-title">
+              Sistem rapi buat ngejar <span class="grad">PPS</span>, <span class="grad">Suegeerr</span>, dan presentasi karier.
+            </h1>
+
+            <p class="hero-sub">
+              Pilih modul sesuai kebutuhan. Semua order langsung ke WhatsApp dengan format yang sudah rapih.
+              Tanpa ribet, tinggal isi field-nya.
+            </p>
+
+            <div class="hero-actions">
+              <button class="btn btn-grad" type="button" onclick="openWA('Halo, saya mau tanya dulu tentang layanan di Retail-Cortex.io. Bisa jelasin modul yang cocok buat toko saya?')">
+                <i class="fa-brands fa-whatsapp me-2"></i>Chat via WhatsApp
+              </button>
+              <button class="btn btn-ghost" type="button" onclick="scrollToId('services')">
+                <i class="fa-regular fa-eye me-2"></i>Lihat Modul
+              </button>
             </div>
-            <div class="ai-core">
-              <div class="ai-chip">
-                <div class="scan-line"></div>
-                <div class="ai-core-logo">RC • AI</div>
-                <div class="ai-lines">
-                  <div class="ai-line"></div>
-                  <div class="ai-line"></div>
-                  <div class="ai-line"></div>
-                </div>
+          </div>
+
+          <div class="col-lg-4">
+            <div class="calc-box">
+              <div class="calc-row"><span>Mode</span><span id="modeLabel">DARK</span></div>
+              <div class="calc-row"><span>Status</span><span>READY</span></div>
+              <div class="calc-row"><span>Order</span><span>WA</span></div>
+              <div class="help mt-2">
+                Catatan: watermark bisa bikin “nggak nyaman” buat nyomot file, tapi <b>tidak bisa 100% mencegah screenshot</b>.
               </div>
             </div>
           </div>
-        </aside>
+        </div>
       </div>
     </div>
-  </main>
+  </header>
 
   <!-- SERVICES -->
   <section id="services">
     <div class="container">
-      <div class="section-heading">
-        <h2>Cortex Service Modules</h2>
-        <p>Pilih modul sesuai kebutuhan toko, klik order, auto kebuka WhatsApp dengan teks siap kirim.</p>
-      </div>
+      <h2 class="section-title">Cortex Service Modules</h2>
+      <p class="section-sub">Klik detail, isi field, lalu kirim WhatsApp (format auto rapih).</p>
 
-      <div class="services-grid">
-
-        <!-- NEW MEMBER FRESH -->
-        <article class="service-card">
-          <div class="service-tag">Membership Engine</div>
-          <h3 class="service-name">New Member Fresh</h3>
-          <p class="service-desc">
-            Pembuatan new member Alfamart khusus buat kamu yang member-nya flop, seret, atau stagnan. Disusun biar aliran member baru ke toko jadi lebih segar lagi.
-          </p>
-          <div class="service-actions">
-            <button class="btn-order" onclick="orderService('NEW MEMBER FRESH')">
-              <span class="icon">💬</span>
-              <span>Order via WA</span>
-            </button>
-            <span class="chip">Growth & Acquisition</span>
+      <div class="row g-3 g-md-4">
+        <!-- NEW MEMBER -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="svc-top">
+              <div class="svc-icon"><i class="fa-solid fa-user-plus"></i></div>
+              <div>
+                <div class="svc-tag">Membership</div>
+                <h3 class="svc-name">New Member Fresh</h3>
+                <p class="svc-desc">Input jumlah member, harga otomatis (di bawah 10 = 5k / member, 10+ = 4.5k / member). Format chat auto jadi.</p>
+              </div>
+            </div>
+            <div class="svc-bottom">
+              <span class="chip">Auto Pricing</span>
+              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalMember">
+                <i class="fa-solid fa-circle-info"></i>Detail
+              </button>
+            </div>
           </div>
-        </article>
+        </div>
 
-        <!-- DESIGN AREA COVERAGE -->
-        <article class="service-card">
-          <div class="service-tag">Geo Intelligence</div>
-          <h3 class="service-name">Design Area Coverage</h3>
-          <p class="service-desc">
-            Pembuatan desain area coverage / mapping area dengan tampilan 3D, biar potensi sekitar toko kebaca jelas dan enak dijelasin ke atasan.
-          </p>
-          <div class="service-actions">
-            <button class="btn-order" onclick="orderService('DESIGN AREA COVERAGE')">
-              <span class="icon">💬</span>
-              <span>Order via WA</span>
-            </button>
-            <span class="chip">Coverage Mapping</span>
+        <!-- AREA COVERAGE -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="svc-top">
+              <div class="svc-icon"><i class="fa-solid fa-map-location-dot"></i></div>
+              <div>
+                <div class="svc-tag">Coverage</div>
+                <h3 class="svc-name">Design Area Coverage</h3>
+                <p class="svc-desc">Order mapping area. Ada tombol “lihat contoh” (PDF portrait/landscape) + watermark viewer.</p>
+              </div>
+            </div>
+            <div class="svc-bottom">
+              <span class="chip">PDF Sample</span>
+              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalCoverage">
+                <i class="fa-solid fa-circle-info"></i>Detail
+              </button>
+            </div>
           </div>
-        </article>
+        </div>
 
-        <!-- TUGAS PPT -->
-        <article class="service-card">
-          <div class="service-tag">Deck Engine</div>
-          <h3 class="service-name">Tugas PPT</h3>
-          <p class="service-desc">
-            Pembuatan PPT presentasi strategi, laporan toko, atau bahan meeting yang kelihatan mahal: clean, data-driven, dan siap tampil depan BM/AM.
-          </p>
-          <div class="service-actions">
-            <button class="btn-order" onclick="orderService('TUGAS PPT')">
-              <span class="icon">💬</span>
-              <span>Order via WA</span>
-            </button>
-            <span class="chip">Presentation Suite</span>
+        <!-- PPT -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="svc-top">
+              <div class="svc-icon"><i class="fa-solid fa-file-powerpoint"></i></div>
+              <div>
+                <div class="svc-tag">Deck</div>
+                <h3 class="svc-name">Tugas PPT</h3>
+                <p class="svc-desc">Buat review & presentasi karier: IP COS, DP COS, Crew. Termasuk LPJ NSB, LPJ PPS, dll (rapih, simple, detail).</p>
+              </div>
+            </div>
+            <div class="svc-bottom">
+              <span class="chip">Presentation</span>
+              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalPPT">
+                <i class="fa-solid fa-circle-info"></i>Detail
+              </button>
+            </div>
           </div>
-        </article>
+        </div>
 
-        <!-- PANDUAN RAHASIA TOP 10 SUEGEERRR -->
-        <article class="service-card">
-          <div class="service-tag">Playbook</div>
-          <h3 class="service-name">Panduan Rahasia Top 10 Suegeerrr</h3>
-          <p class="service-desc">
-            Strategi rahasia bikin toko kamu tembus top 10 suegeerrr tanpa harus jual ke agen. Fokus ke eksekusi ritel murni, bukan numpang volume.
-          </p>
-          <div class="service-actions">
-            <button class="btn-order" onclick="orderService('PANDUAN RAHASIA TOP 10 SUEGEERRR')">
-              <span class="icon">💬</span>
-              <span>Order via WA</span>
-            </button>
-            <span class="chip">Top 10 Guide</span>
+        <!-- PPS -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="svc-top">
+              <div class="svc-icon"><i class="fa-solid fa-chart-line"></i></div>
+              <div>
+                <div class="svc-tag">Coaching</div>
+                <h3 class="svc-name">PPS Coaching</h3>
+                <p class="svc-desc">Coaching via Google Meet. Fokus bantu toko sampai “pumping” PPS dan ngejar targetnya.</p>
+              </div>
+            </div>
+            <div class="svc-bottom">
+              <span class="chip">GMeet</span>
+              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalPPS">
+                <i class="fa-solid fa-circle-info"></i>Detail
+              </button>
+            </div>
           </div>
-        </article>
+        </div>
 
-        <!-- PANDUAN RAHASIA TOP 10 PPS -->
-        <article class="service-card">
-          <div class="service-tag">Playbook</div>
-          <h3 class="service-name">Panduan Rahasia Top 10 PPS</h3>
-          <p class="service-desc">
-            Strategi rahasia bikin toko kamu tembus top 10 PPS tanpa jual ke agen. Isinya pola kerja, prioritas, dan eksekusi yang realistis buat di lapangan.
-          </p>
-          <div class="service-actions">
-            <button class="btn-order" onclick="orderService('PANDUAN RAHASIA TOP 10 PPS')">
-              <span class="icon">💬</span>
-              <span>Order via WA</span>
-            </button>
-            <span class="chip">PPS Mastery</span>
+        <!-- SUEGEERR -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="svc-top">
+              <div class="svc-icon"><i class="fa-solid fa-trophy"></i></div>
+              <div>
+                <div class="svc-tag">Coaching</div>
+                <h3 class="svc-name">Suegeerr Coaching</h3>
+                <p class="svc-desc">Pendampingan eksekusi biar capai target Suegeerr. Intinya: gerak, rapih, konsisten, dan ketahuan progress-nya.</p>
+              </div>
+            </div>
+            <div class="svc-bottom">
+              <span class="chip">Target</span>
+              <button class="btn-detail" type="button" data-bs-toggle="modal" data-bs-target="#modalSuegeerr">
+                <i class="fa-solid fa-circle-info"></i>Detail
+              </button>
+            </div>
           </div>
-        </article>
+        </div>
+
+        <!-- OPTIONAL EXTRA -->
+        <div class="col-md-6 col-lg-4">
+          <div class="service-card">
+            <div class="svc-top">
+              <div class="svc-icon"><i class="fa-solid fa-list-check"></i></div>
+              <div>
+                <div class="svc-tag">Playbook</div>
+                <h3 class="svc-name">Panduan Eksekusi</h3>
+                <p class="svc-desc">Template kerja & checklist lapangan (biar nggak muter di teori). Bisa disesuaikan kondisi toko.</p>
+              </div>
+            </div>
+            <div class="svc-bottom">
+              <span class="chip">Checklist</span>
+              <button class="btn-detail" type="button" onclick="openWA('Halo, saya mau tanya Panduan Eksekusi. Bisa jelasin paket yang tersedia?')">
+                <i class="fa-brands fa-whatsapp"></i>Order
+              </button>
+            </div>
+          </div>
+        </div>
 
       </div>
     </div>
   </section>
 
-  <!-- HOW IT WORKS -->
-  <section id="how">
+  <!-- WORKFLOW -->
+  <section id="workflow">
     <div class="container">
-      <div class="section-heading">
-        <h2>How Retail-Cortex Works</h2>
-        <p>Simple 3 langkah — semua komunikasi lewat WhatsApp, human touch + sentuhan AI.</p>
+      <h2 class="section-title">Workflow</h2>
+      <p class="section-sub">3 langkah — pilih modul, isi field, kirim WhatsApp.</p>
+
+      <div class="row g-3 g-md-4">
+        <div class="col-md-4">
+          <div class="calc-box h-100">
+            <div class="calc-row"><span>01</span><span>Pilih Modul</span></div>
+            <div class="help">Klik <b>Detail</b> untuk buka form sesuai layanan.</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="calc-box h-100">
+            <div class="calc-row"><span>02</span><span>Isi Field</span></div>
+            <div class="help">Kode toko, qty, link lokasi, format output auto rapih.</div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="calc-box h-100">
+            <div class="calc-row"><span>03</span><span>Kirim WA</span></div>
+            <div class="help">Tombol WA langsung nyusun pesan sesuai template yang lu minta.</div>
+          </div>
+        </div>
       </div>
 
-      <div class="contact-box">
-        <h3>01. Pilih Modul • 02. Chat • 03. Eksekusi</h3>
-        <p>
-          Kamu cukup pilih layanan yang cocok buat toko, klik tombol order, dan jelasin brief via WhatsApp.
-          Retail-Cortex bakal bantu nyusun struktur, teks, sampai ide eksekusinya.
-        </p>
-        <div class="contact-grid">
-          <div>
-            <div class="contact-label">Brand</div>
-            <div>Retail-Cortex.io — Tech &amp; AI Retail Studio</div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="container">
+      <h2 class="section-title">Contact</h2>
+      <p class="section-sub">Langsung chat untuk konsultasi modul.</p>
+
+      <div class="row g-3">
+        <div class="col-lg-7">
+          <div class="calc-box">
+            <div class="calc-row"><span>WhatsApp</span><span id="waDisplay">087809236556</span></div>
+            <div class="calc-row"><span>Email</span><span>brandotan94@gmail.com</span></div>
+            <div class="help mt-2">
+              Klik tombol di bawah untuk chat.
+            </div>
+            <div class="d-flex flex-wrap gap-2 mt-3">
+              <button class="btn btn-grad" type="button" onclick="openWA('Halo, saya mau tanya modul di Retail-Cortex.io. Ini kebutuhan toko saya: ...')">
+                <i class="fa-brands fa-whatsapp me-2"></i>Chat Sekarang
+              </button>
+              <a class="btn btn-ghost text-decoration-none" href="mailto:brandotan94@gmail.com">
+                <i class="fa-solid fa-envelope me-2"></i>Email
+              </a>
+            </div>
           </div>
-          <div>
-            <div class="contact-label">WhatsApp</div>
-            <div>087809236556</div>
-          </div>
-          <div>
-            <div class="contact-label">Email</div>
-            <div>brandotan94@gmail.com</div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="calc-box">
+            <div class="calc-row"><span>Jam</span><span>08.00 – 23.00</span></div>
+            <div class="help mt-2">
+              Di luar jam itu, respon bisa agak lambat.
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- CONTACT / FOOTER -->
-  <section id="contact">
-    <footer>
-      <div>© 2025 Retail-Cortex.io — AI Retail Support crafted for store teams.</div>
-      <div style="margin-top:4px;font-size:11px;">
-        Email:
-        <a href="mailto:brandotan94@gmail.com" style="color:#22d3ee;text-decoration:none;">
-          brandotan94@gmail.com
-        </a>
-        • WhatsApp: 087809236556
-      </div>
-    </footer>
-  </section>
-
-  <!-- FLOATING WHATSAPP BUTTON -->
-  <div class="floating-wa" onclick="openWhatsAppGeneral()">
-    <div class="floating-wa-inner">
-      <div class="wa-bubble"></div>
-      <div class="wa-phone"></div>
-      <div class="wa-phone-line"></div>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-main">
+      © <span id="yearNow"></span> Retail-Cortex.io
     </div>
-    <div class="floating-wa-tooltip">Chat Retail-Cortex via WhatsApp</div>
+    <div>
+      Crafted by D&D A Digital Creative Studio ♥
+    </div>
+  </footer>
+
+  <!-- ===================== MODALS ===================== -->
+
+  <!-- NEW MEMBER MODAL -->
+  <div class="modal fade" id="modalMember" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title m-0"><i class="fa-solid fa-user-plus me-2"></i>New Member Fresh</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Jumlah member</label>
+              <input id="m_qty" type="number" min="1" class="form-control" placeholder="contoh: 12" />
+              <div class="help">Harga otomatis: <b>&lt; 10</b> = Rp5.000 / member, <b>≥ 10</b> = Rp4.500 / member.</div>
+
+              <div class="mt-3 calc-box">
+                <div class="calc-row"><span>Harga / member</span><span id="m_price">Rp0</span></div>
+                <div class="calc-row"><span>Total</span><span id="m_total">Rp0</span></div>
+              </div>
+
+              <div class="help mt-2">
+                Format WA akan otomatis jadi seperti template yang lu minta.
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Kode toko</label>
+              <input id="m_kodetoko" type="text" class="form-control" placeholder="contoh: A123" />
+
+              <label class="fw-bold mb-1 mt-3">PIN / tgl lahir</label>
+              <input id="m_pin" type="text" class="form-control" placeholder="contoh: 01092018 / 1234" />
+
+              <label class="fw-bold mb-1 mt-3">Jumlah qty member (opsional)</label>
+              <input id="m_qty2" type="number" min="1" class="form-control" placeholder="otomatis ngikut jumlah member, boleh lu isi ulang" />
+
+              <div class="mt-3">
+                <label class="fw-bold mb-1">Preview pesan</label>
+                <textarea id="m_preview" class="form-control" rows="9" readonly></textarea>
+                <div class="help">Lu bisa copy manual, tapi tombol WA udah otomatis.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex gap-2 flex-wrap">
+          <button class="btn btn-ghost" type="button" onclick="copyText('m_preview')">
+            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
+          </button>
+          <button class="btn btn-grad" type="button" id="btnMemberWA">
+            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 
+  <!-- COVERAGE MODAL -->
+  <div class="modal fade" id="modalCoverage" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title m-0"><i class="fa-solid fa-map-location-dot me-2"></i>Design Area Coverage</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Nama toko</label>
+              <input id="c_namatoko" type="text" class="form-control" placeholder="contoh: KP Garung Tambak" />
+
+              <label class="fw-bold mb-1 mt-3">Kode toko</label>
+              <input id="c_kodetoko" type="text" class="form-control" placeholder="contoh: A123" />
+
+              <label class="fw-bold mb-1 mt-3">Berapa sub</label>
+              <input id="c_sub" type="number" min="0" class="form-control" placeholder="contoh: 3" />
+
+              <label class="fw-bold mb-1 mt-3">Sharelok toko</label>
+              <input id="c_shareloc" type="text" class="form-control" placeholder="paste link maps: https://maps.app.goo.gl/..." />
+
+              <label class="fw-bold mb-1 mt-3">Format</label>
+              <select id="c_format" class="form-select">
+                <option value="Landscape">Landscape</option>
+                <option value="Portrait">Portrait</option>
+              </select>
+
+              <div class="mt-3">
+                <label class="fw-bold mb-1">Preview pesan</label>
+                <textarea id="c_preview" class="form-control" rows="8" readonly></textarea>
+              </div>
+            </div>
+
+            <div class="col-lg-6">
+              <div class="calc-box">
+                <div class="d-flex align-items-start justify-content-between gap-2">
+                  <div>
+                    <div class="fw-bold">Lihat contoh (PDF)</div>
+                    <div class="help mt-1">
+                      Viewer pakai watermark overlay. Tapi harus jujur: <b>nggak ada cara web yang bisa 100% blok screenshot</b>.
+                    </div>
+                  </div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-ghost" type="button" onclick="openPdfSample('landscape')">
+                      <i class="fa-regular fa-file-pdf me-2"></i>Landscape
+                    </button>
+                    <button class="btn btn-ghost" type="button" onclick="openPdfSample('portrait')">
+                      <i class="fa-regular fa-file-pdf me-2"></i>Portrait
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="mt-3 pdf-wrap" id="pdfWrap" style="display:none;">
+                <div class="pdf-toolbar">
+                  <div class="mini" id="pdfTitle">Sample PDF</div>
+                  <div class="d-flex gap-2">
+                    <button class="btn btn-sm btn-ghost" type="button" onclick="pdfZoom(-0.1)">
+                      <i class="fa-solid fa-magnifying-glass-minus"></i>
+                    </button>
+                    <button class="btn btn-sm btn-ghost" type="button" onclick="pdfZoom(0.1)">
+                      <i class="fa-solid fa-magnifying-glass-plus"></i>
+                    </button>
+                    <button class="btn btn-sm btn-ghost" type="button" onclick="closePdfSample()">
+                      <i class="fa-solid fa-xmark"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="pdf-canvas-holder" oncontextmenu="return false;">
+                  <canvas id="pdfCanvas"></canvas>
+                </div>
+              </div>
+
+              <div class="help mt-2">
+                Nama file PDF di repo (silakan samakan):
+                <ul class="mb-0 mt-1">
+                  <li><b>area-coverage-landscape.pdf</b></li>
+                  <li><b>area-coverage-portrait.pdf</b></li>
+                </ul>
+                Kalau nama file lu beda, tinggal ganti variabel di script.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex gap-2 flex-wrap">
+          <button class="btn btn-ghost" type="button" onclick="copyText('c_preview')">
+            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
+          </button>
+          <button class="btn btn-grad" type="button" id="btnCoverageWA">
+            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PPT MODAL -->
+  <div class="modal fade" id="modalPPT" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title m-0"><i class="fa-solid fa-file-powerpoint me-2"></i>Tugas PPT</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="calc-box mb-3">
+            <div class="fw-bold mb-1">Fungsi</div>
+            <div class="help m-0">
+              Buat bikin review yang mau naik jabatan (IP COS, DP COS, Crew). Format presentasi rapih, simple, tapi detail.
+              Bisa juga untuk LPJ NSB, LPJ PPS, bahan meeting, dan laporan progres.
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Jenis PPT</label>
+              <select id="p_type" class="form-select">
+                <option value="Review Karier (IP COS / DP COS / Crew)">Review Karier (IP COS / DP COS / Crew)</option>
+                <option value="LPJ PPS">LPJ PPS</option>
+                <option value="LPJ NSB">LPJ NSB</option>
+                <option value="Strategi / Meeting">Strategi / Meeting</option>
+                <option value="Laporan Toko">Laporan Toko</option>
+              </select>
+
+              <label class="fw-bold mb-1 mt-3">Nama toko</label>
+              <input id="p_toko" class="form-control" placeholder="contoh: KP Garung Tambak" />
+
+              <label class="fw-bold mb-1 mt-3">Kode toko</label>
+              <input id="p_kode" class="form-control" placeholder="contoh: A123" />
+            </div>
+
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Brief singkat (isi poin penting)</label>
+              <textarea id="p_brief" class="form-control" rows="7" placeholder="contoh: target, masalah utama, data yang mau dimasukin, periode, dll"></textarea>
+
+              <div class="mt-3">
+                <label class="fw-bold mb-1">Preview pesan</label>
+                <textarea id="p_preview" class="form-control" rows="7" readonly></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex gap-2 flex-wrap">
+          <button class="btn btn-ghost" type="button" onclick="copyText('p_preview')">
+            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
+          </button>
+          <button class="btn btn-grad" type="button" id="btnPPTWA">
+            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PPS MODAL -->
+  <div class="modal fade" id="modalPPS" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title m-0"><i class="fa-solid fa-chart-line me-2"></i>PPS Coaching</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="calc-box mb-3">
+            <div class="fw-bold mb-1">Keterangan</div>
+            <div class="help m-0">
+              Coaching via Google Meet. Fokus bantu toko sampai pumping PPS dan ngejar target. Outputnya: arah eksekusi, prioritas, dan tracking.
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Nama toko</label>
+              <input id="pps_toko" class="form-control" placeholder="contoh: KP Garung Tambak" />
+
+              <label class="fw-bold mb-1 mt-3">Kode toko</label>
+              <input id="pps_kode" class="form-control" placeholder="contoh: A123" />
+
+              <label class="fw-bold mb-1 mt-3">Kondisi PPS saat ini (singkat)</label>
+              <textarea id="pps_kondisi" class="form-control" rows="5" placeholder="contoh: gap target, kendala, pola jam, dsb"></textarea>
+            </div>
+
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Preferensi jadwal GMeet</label>
+              <input id="pps_jadwal" class="form-control" placeholder="contoh: Senin 10.00 WIB / fleksibel" />
+
+              <div class="mt-3">
+                <label class="fw-bold mb-1">Preview pesan</label>
+                <textarea id="pps_preview" class="form-control" rows="9" readonly></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex gap-2 flex-wrap">
+          <button class="btn btn-ghost" type="button" onclick="copyText('pps_preview')">
+            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
+          </button>
+          <button class="btn btn-grad" type="button" id="btnPPSWA">
+            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SUEGEERR MODAL -->
+  <div class="modal fade" id="modalSuegeerr" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title m-0"><i class="fa-solid fa-trophy me-2"></i>Suegeerr Coaching</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body">
+          <div class="calc-box mb-3">
+            <div class="fw-bold mb-1">Keterangan</div>
+            <div class="help m-0">
+              Pendampingan eksekusi agar capai target Suegeerr. Intinya: target kebaca, plan jalan, progress ketahuan.
+            </div>
+          </div>
+
+          <div class="row g-3">
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Nama toko</label>
+              <input id="s_toko" class="form-control" placeholder="contoh: KP Garung Tambak" />
+
+              <label class="fw-bold mb-1 mt-3">Kode toko</label>
+              <input id="s_kode" class="form-control" placeholder="contoh: A123" />
+
+              <label class="fw-bold mb-1 mt-3">Target Suegeerr</label>
+              <input id="s_target" class="form-control" placeholder="contoh: tembus target bulan ini" />
+            </div>
+
+            <div class="col-lg-6">
+              <label class="fw-bold mb-1">Kondisi saat ini (singkat)</label>
+              <textarea id="s_kondisi" class="form-control" rows="6" placeholder="contoh: gap, kendala display, eksekusi, dsb"></textarea>
+
+              <div class="mt-3">
+                <label class="fw-bold mb-1">Preview pesan</label>
+                <textarea id="s_preview" class="form-control" rows="7" readonly></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer d-flex gap-2 flex-wrap">
+          <button class="btn btn-ghost" type="button" onclick="copyText('s_preview')">
+            <i class="fa-solid fa-copy me-2"></i>Copy Pesan
+          </button>
+          <button class="btn btn-grad" type="button" id="btnSuegeerrWA">
+            <i class="fa-brands fa-whatsapp me-2"></i>Kirim WhatsApp
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating WA -->
+  <button class="position-fixed" style="
+      right:16px; bottom:16px; z-index:1200;
+      border:none; border-radius:999px;
+      padding:.9rem 1.05rem;
+      background: var(--grad);
+      color:#0b1220;
+      font-weight:900;
+      box-shadow: var(--shadow);
+    " onclick="openWA('Halo, saya mau tanya modul di Retail-Cortex.io. Bisa jelasin?')"
+    title="WhatsApp">
+    <i class="fa-brands fa-whatsapp me-2"></i>WA
+  </button>
+
+  <!-- Bootstrap -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
   <script>
-    // Nomor WA: 087809236556 -> format internasional
+    /* ================== CONFIG ================== */
     const WHATSAPP_NUMBER = "6287809236556";
 
-    function orderService(serviceName) {
-      const baseUrl = "https://wa.me/" + WHATSAPP_NUMBER;
-      const text =
-        "Halo, saya mau menggunakan layanan *" +
-        serviceName +
-        "* dari Retail-Cortex.io untuk bantu pekerjaan toko.";
-      const url = baseUrl + "?text=" + encodeURIComponent(text);
+    // PDF names in repo (samakan)
+    const PDF_LANDSCAPE = "area-coverage-landscape.pdf";
+    const PDF_PORTRAIT  = "area-coverage-portrait.pdf";
+
+    const money = n => `Rp${(Number(n)||0).toLocaleString('id-ID')}`;
+
+    function openWA(text){
+      const url = "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(text);
       window.open(url, "_blank");
     }
 
-    function openWhatsAppGeneral() {
-      const baseUrl = "https://wa.me/" + WHATSAPP_NUMBER;
-      const text =
-        "Halo, saya mau tanya dulu tentang layanan di Retail-Cortex.io. Bisa jelasin modul yang cocok buat toko saya?";
-      const url = baseUrl + "?text=" + encodeURIComponent(text);
-      window.open(url, "_blank");
-    }
-
-    function scrollToSection(id) {
+    function scrollToId(id){
       const el = document.getElementById(id);
-      if (!el) return;
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
+      if(!el) return;
+      el.scrollIntoView({behavior:"smooth", block:"start"});
+    }
+
+    // smooth scroll for nav
+    document.addEventListener("click",(e)=>{
+      const a = e.target.closest('a[data-scroll][href^="#"]');
+      if(!a) return;
+      e.preventDefault();
+      const sel = a.getAttribute("href");
+      const el = document.querySelector(sel);
+      if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+      const nav = document.getElementById("navLinks");
+      if(nav && nav.classList.contains("show")){
+        bootstrap.Collapse.getOrCreateInstance(nav).hide();
+      }
+    });
+
+    // year
+    document.getElementById("yearNow").textContent = new Date().getFullYear();
+
+    /* ================== THEME ================== */
+    (function initTheme(){
+      const saved = localStorage.getItem("rc_theme") || "dark";
+      document.documentElement.setAttribute("data-theme", saved);
+      updateThemeIcon();
+
+      document.getElementById("btnTheme").addEventListener("click", ()=>{
+        const cur = document.documentElement.getAttribute("data-theme");
+        const next = (cur === "dark") ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        localStorage.setItem("rc_theme", next);
+        updateThemeIcon();
+      });
+
+      function updateThemeIcon(){
+        const mode = document.documentElement.getAttribute("data-theme");
+        const btn = document.getElementById("btnTheme");
+        const label = document.getElementById("modeLabel");
+        if(btn){
+          btn.innerHTML = (mode === "dark")
+            ? '<i class="fa-solid fa-sun"></i>'
+            : '<i class="fa-solid fa-moon"></i>';
+        }
+        if(label) label.textContent = (mode || "").toUpperCase();
+      }
+    })();
+
+    /* ================== NEW MEMBER CALC + WA ================== */
+    const m_qty = document.getElementById("m_qty");
+    const m_qty2 = document.getElementById("m_qty2");
+    const m_kodetoko = document.getElementById("m_kodetoko");
+    const m_pin = document.getElementById("m_pin");
+    const m_priceEl = document.getElementById("m_price");
+    const m_totalEl = document.getElementById("m_total");
+    const m_preview = document.getElementById("m_preview");
+    const btnMemberWA = document.getElementById("btnMemberWA");
+
+    function memberUnitPrice(qty){
+      const q = Number(qty)||0;
+      if(q >= 10) return 4500;
+      if(q >= 1) return 5000;
+      return 0;
+    }
+
+    function buildMemberMessage(){
+      const qty = Math.max(0, Number(m_qty.value)||0);
+      const unit = memberUnitPrice(qty);
+      const total = qty * unit;
+
+      const kode = (m_kodetoko.value || "").trim();
+      const pin  = (m_pin.value || "").trim();
+
+      const qtyMember = (Number(m_qty2.value)||0) > 0 ? Number(m_qty2.value) : qty;
+
+      // template sesuai yang lu minta
+      const msg =
+`Halo,
+Saya ingin memesan layanan New Member Fresh.
+
+Jumlah member : ${qty || ""}
+Harga / member : ${unit ? money(unit) : ""}
+Total : ${total ? money(total) : ""}
+
+Kode toko : ${kode}
+Pin / tgl lahir : ${pin}
+Jumlah qty member : ${qtyMember || ""}`;
+
+      return { msg, qty, unit, total };
+    }
+
+    function refreshMemberUI(){
+      const { msg, qty, unit, total } = buildMemberMessage();
+      m_priceEl.textContent = unit ? money(unit) : "Rp0";
+      m_totalEl.textContent = total ? money(total) : "Rp0";
+      m_preview.value = msg;
+    }
+
+    [m_qty, m_kodetoko, m_pin, m_qty2].forEach(el=>{
+      el.addEventListener("input", ()=>{
+        // auto set qty2 kalau kosong
+        if(el === m_qty && (!m_qty2.value || Number(m_qty2.value) <= 0)){
+          m_qty2.value = m_qty.value;
+        }
+        refreshMemberUI();
+      });
+    });
+
+    btnMemberWA.addEventListener("click", ()=>{
+      const { msg } = buildMemberMessage();
+      openWA(msg);
+    });
+
+    // init
+    refreshMemberUI();
+
+    /* ================== COVERAGE WA + PDF SAMPLE ================== */
+    const c_namatoko = document.getElementById("c_namatoko");
+    const c_kodetoko = document.getElementById("c_kodetoko");
+    const c_sub = document.getElementById("c_sub");
+    const c_shareloc = document.getElementById("c_shareloc");
+    const c_format = document.getElementById("c_format");
+    const c_preview = document.getElementById("c_preview");
+    const btnCoverageWA = document.getElementById("btnCoverageWA");
+
+    function buildCoverageMessage(){
+      const nama = (c_namatoko.value||"").trim();
+      const kode = (c_kodetoko.value||"").trim();
+      const sub  = (c_sub.value||"").toString().trim();
+      const loc  = (c_shareloc.value||"").trim();
+      const fmt  = (c_format.value||"").trim();
+
+      return `Halo,
+Saya ingin memesan layanan Design Area Coverage.
+
+Nama toko : ${nama}
+Kode toko : ${kode}
+Berapa sub : ${sub}
+Sharelok toko : ${loc}
+Format : ${fmt}`;
+    }
+
+    function refreshCoverageUI(){
+      c_preview.value = buildCoverageMessage();
+    }
+    [c_namatoko, c_kodetoko, c_sub, c_shareloc, c_format].forEach(el=>{
+      el.addEventListener("input", refreshCoverageUI);
+      el.addEventListener("change", refreshCoverageUI);
+    });
+    btnCoverageWA.addEventListener("click", ()=> openWA(buildCoverageMessage()));
+    refreshCoverageUI();
+
+    /* ================== PPT WA ================== */
+    const p_type = document.getElementById("p_type");
+    const p_toko = document.getElementById("p_toko");
+    const p_kode = document.getElementById("p_kode");
+    const p_brief = document.getElementById("p_brief");
+    const p_preview = document.getElementById("p_preview");
+    const btnPPTWA = document.getElementById("btnPPTWA");
+
+    function buildPPTMessage(){
+      return `Halo,
+Saya ingin memesan layanan Tugas PPT.
+
+Jenis PPT : ${(p_type.value||"").trim()}
+Nama toko : ${(p_toko.value||"").trim()}
+Kode toko : ${(p_kode.value||"").trim()}
+
+Brief :
+${(p_brief.value||"").trim()}`;
+    }
+    function refreshPPTUI(){ p_preview.value = buildPPTMessage(); }
+    [p_type,p_toko,p_kode,p_brief].forEach(el=>{
+      el.addEventListener("input", refreshPPTUI);
+      el.addEventListener("change", refreshPPTUI);
+    });
+    btnPPTWA.addEventListener("click", ()=> openWA(buildPPTMessage()));
+    refreshPPTUI();
+
+    /* ================== PPS WA ================== */
+    const pps_toko = document.getElementById("pps_toko");
+    const pps_kode = document.getElementById("pps_kode");
+    const pps_kondisi = document.getElementById("pps_kondisi");
+    const pps_jadwal = document.getElementById("pps_jadwal");
+    const pps_preview = document.getElementById("pps_preview");
+    const btnPPSWA = document.getElementById("btnPPSWA");
+
+    function buildPPSMessage(){
+      return `Halo,
+Saya ingin memesan layanan PPS Coaching (Google Meet).
+
+Nama toko : ${(pps_toko.value||"").trim()}
+Kode toko : ${(pps_kode.value||"").trim()}
+
+Kondisi PPS saat ini :
+${(pps_kondisi.value||"").trim()}
+
+Preferensi jadwal GMeet :
+${(pps_jadwal.value||"").trim()}`;
+    }
+    function refreshPPSUI(){ pps_preview.value = buildPPSMessage(); }
+    [pps_toko,pps_kode,pps_kondisi,pps_jadwal].forEach(el=>{
+      el.addEventListener("input", refreshPPSUI);
+      el.addEventListener("change", refreshPPSUI);
+    });
+    btnPPSWA.addEventListener("click", ()=> openWA(buildPPSMessage()));
+    refreshPPSUI();
+
+    /* ================== SUEGEERR WA ================== */
+    const s_toko = document.getElementById("s_toko");
+    const s_kode = document.getElementById("s_kode");
+    const s_target = document.getElementById("s_target");
+    const s_kondisi = document.getElementById("s_kondisi");
+    const s_preview = document.getElementById("s_preview");
+    const btnSuegeerrWA = document.getElementById("btnSuegeerrWA");
+
+    function buildSuegeerrMessage(){
+      return `Halo,
+Saya ingin memesan layanan Suegeerr Coaching.
+
+Nama toko : ${(s_toko.value||"").trim()}
+Kode toko : ${(s_kode.value||"").trim()}
+Target Suegeerr : ${(s_target.value||"").trim()}
+
+Kondisi saat ini :
+${(s_kondisi.value||"").trim()}`;
+    }
+    function refreshSuegeerrUI(){ s_preview.value = buildSuegeerrMessage(); }
+    [s_toko,s_kode,s_target,s_kondisi].forEach(el=>{
+      el.addEventListener("input", refreshSuegeerrUI);
+      el.addEventListener("change", refreshSuegeerrUI);
+    });
+    btnSuegeerrWA.addEventListener("click", ()=> openWA(buildSuegeerrMessage()));
+    refreshSuegeerrUI();
+
+    /* ================== COPY ================== */
+    function copyText(id){
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.select();
+      el.setSelectionRange(0, 999999);
+      document.execCommand("copy");
+    }
+
+    /* ================== PDF VIEWER + WATERMARK ==================
+      Catatan jujur:
+      - Watermark overlay + disable right-click bisa mengurangi orang “nyomot”
+      - Tapi tidak ada cara web yang bisa 100% blok screenshot
+    ============================================================= */
+    pdfjsLib.GlobalWorkerOptions.workerSrc =
+      "https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.js";
+
+    const pdfWrap = document.getElementById("pdfWrap");
+    const pdfTitle = document.getElementById("pdfTitle");
+    const pdfCanvas = document.getElementById("pdfCanvas");
+    const pdfCtx = pdfCanvas.getContext("2d");
+
+    let pdfDoc = null;
+    let pdfScale = 1.2;
+    let currentPdfUrl = "";
+
+    function openPdfSample(type){
+      const url = (type === "portrait") ? PDF_PORTRAIT : PDF_LANDSCAPE;
+      currentPdfUrl = url;
+      pdfTitle.textContent = `Sample PDF — ${type.toUpperCase()}`;
+      pdfWrap.style.display = "block";
+      renderPdfFirstPage(url);
+    }
+
+    function closePdfSample(){
+      pdfWrap.style.display = "none";
+      pdfDoc = null;
+      currentPdfUrl = "";
+      pdfCtx.clearRect(0,0,pdfCanvas.width,pdfCanvas.height);
+    }
+
+    async function renderPdfFirstPage(url){
+      try{
+        const loadingTask = pdfjsLib.getDocument(url);
+        pdfDoc = await loadingTask.promise;
+        const page = await pdfDoc.getPage(1);
+
+        const viewport = page.getViewport({ scale: pdfScale });
+        pdfCanvas.width = Math.floor(viewport.width);
+        pdfCanvas.height = Math.floor(viewport.height);
+
+        await page.render({ canvasContext: pdfCtx, viewport }).promise;
+
+        drawWatermark();
+      }catch(err){
+        console.error(err);
+        pdfCtx.clearRect(0,0,pdfCanvas.width,pdfCanvas.height);
+        pdfCanvas.width = 900;
+        pdfCanvas.height = 250;
+        pdfCtx.fillStyle = "rgba(0,0,0,0.0)";
+        pdfCtx.fillRect(0,0,pdfCanvas.width,pdfCanvas.height);
+        pdfCtx.font = "bold 18px Inter, Arial";
+        pdfCtx.fillStyle = "rgba(239,68,68,0.95)";
+        pdfCtx.fillText("Gagal load PDF. Pastikan file ada di repo & nama sama.", 20, 60);
+        pdfCtx.font = "14px Inter, Arial";
+        pdfCtx.fillStyle = "rgba(156,163,175,0.95)";
+        pdfCtx.fillText("Expected: " + PDF_LANDSCAPE + " dan " + PDF_PORTRAIT, 20, 92);
+      }
+    }
+
+    function drawWatermark(){
+      // watermark diagonal repeated
+      const text = "Retail-Cortex.io • SAMPLE";
+      const time = new Date().toLocaleString("id-ID");
+      const wm = `${text} • ${time}`;
+
+      const w = pdfCanvas.width;
+      const h = pdfCanvas.height;
+
+      pdfCtx.save();
+      pdfCtx.globalAlpha = 0.12;
+      pdfCtx.fillStyle = "#ffffff";
+      pdfCtx.font = "700 18px Orbitron, Inter, Arial";
+      pdfCtx.translate(w/2, h/2);
+      pdfCtx.rotate(-Math.PI / 4);
+
+      const stepX = 380;
+      const stepY = 180;
+
+      for(let y = -h; y < h; y += stepY){
+        for(let x = -w; x < w; x += stepX){
+          pdfCtx.fillText(wm, x, y);
+        }
+      }
+
+      // stronger corner mark
+      pdfCtx.globalAlpha = 0.22;
+      pdfCtx.font = "900 22px Orbitron, Inter, Arial";
+      pdfCtx.fillText("Retail-Cortex.io", -w/2 + 24, -h/2 + 36);
+
+      pdfCtx.restore();
+    }
+
+    async function pdfZoom(delta){
+      if(!currentPdfUrl) return;
+      pdfScale = Math.max(0.8, Math.min(2.2, pdfScale + delta));
+      await renderPdfFirstPage(currentPdfUrl);
     }
   </script>
 </body>
-  </html>
+</html>
