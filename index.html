@@ -1,266 +1,1230 @@
-<!DOCTYPE html>
-<html lang="id">
+<!doctype html>
+<html lang="id" data-theme="dark">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Retail-Cortex.io</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Retail-Cortex.io — Service Modules</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <!-- Bootstrap + Font Awesome + Fonts -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-<style>
-:root{
-  --bg:#030512;
-  --card:rgba(15,23,42,.95);
-  --glass:rgba(129,140,248,.35);
-  --text:#f9fafb;
-  --muted:#9ca3af;
-  --accent:#8b5cf6;
-  --cyan:#22d3ee;
-  --radius:18px;
-}
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:Inter,system-ui;
-  background:radial-gradient(circle at top,#311b92 0,#030512 55%,#01020a 100%);
-  color:var(--text);
-}
-.container{max-width:1100px;margin:auto;padding:0 18px}
-section{padding:72px 0}
+  <style>
+    :root{
+      --primary:#7c3aed;
+      --secondary:#22d3ee;
+      --success:#22c55e;
 
-/* ===== NAV ===== */
-.nav{
-  position:sticky;top:0;z-index:20;
-  backdrop-filter:blur(14px);
-  background:rgba(3,5,18,.9);
-  border-bottom:1px solid var(--glass);
-}
-.nav-inner{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:14px 0;
-}
-.brand{
-  display:flex;align-items:center;gap:10px;
-  font-family:Orbitron;
-  letter-spacing:.18em;
-}
-.brand img{height:36px}
-.nav-actions{
-  display:flex;gap:10px;align-items:center;
-}
-.icon-btn{
-  width:42px;height:42px;border-radius:50%;
-  display:grid;place-items:center;
-  background:var(--card);
-  border:1px solid var(--glass);
-  cursor:pointer;
-}
+      --bg-page:radial-gradient(circle at top,#1d2040 0%,#020617 55%,#000 100%);
+      --bg-surface:#020617;
+      --text-main:#e5e7eb;
+      --muted:#9ca3af;
 
-/* ===== HERO ===== */
-.hero{text-align:center}
-.hero h1{
-  font-family:Orbitron;
-  font-size:clamp(28px,5vw,40px);
-  letter-spacing:.18em;
-  margin-bottom:16px;
-}
-.hero p{
-  max-width:680px;
-  margin:0 auto 26px;
-  color:var(--muted);
-  line-height:1.7;
-}
-.hero-points{
-  display:grid;
-  gap:12px;
-  max-width:520px;
-  margin:0 auto 34px;
-  font-size:14px;
-}
-.hero-cta{
-  display:flex;gap:14px;justify-content:center;
-}
-.btn{
-  padding:12px 26px;border-radius:999px;
-  font-size:12px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  cursor:pointer;
-}
-.btn-primary{
-  background:linear-gradient(120deg,var(--cyan),var(--accent));
-  color:#020617;border:none;
-}
-.btn-ghost{
-  background:transparent;
-  border:1px dashed var(--glass);
-  color:var(--muted);
-}
+      --card-shadow:0 10px 35px rgba(15,23,42,.8);
+      --card-shadow-hover:0 25px 60px rgba(15,23,42,.95);
+      --radius:18px;
 
-/* ===== MODULES ===== */
-.section-title{
-  text-align:center;margin-bottom:34px;
-}
-.section-title h2{
-  font-family:Orbitron;
-  letter-spacing:.16em;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
-  gap:22px;
-}
-.card{
-  background:var(--card);
-  border-radius:var(--radius);
-  padding:18px;
-  border:1px solid var(--glass);
-}
-.card h3{
-  font-family:Orbitron;
-  font-size:14px;
-  letter-spacing:.14em;
-  margin-bottom:8px;
-}
-.card p{
-  font-size:13px;
-  color:var(--muted);
-  margin-bottom:16px;
-}
-.card-actions{
-  display:flex;justify-content:space-between;align-items:center;
-}
-.cart-btn{
-  border:none;
-  border-radius:999px;
-  padding:9px 16px;
-  background:linear-gradient(120deg,var(--accent),var(--cyan));
-  color:#020617;
-  font-size:11px;
-  cursor:pointer;
-}
-.link-btn{
-  font-size:11px;
-  color:var(--cyan);
-  cursor:pointer;
-}
+      --gradient:linear-gradient(135deg,#4c1d95 0%,#22c1c3 60%,#22d3ee 100%);
+      --gradient2:linear-gradient(135deg,#e11d48 0%,#a855f7 50%,#22d3ee 100%);
+      --nav-h:64px;
+    }
 
-/* ===== FOOTER ===== */
-footer{
-  text-align:center;
-  font-size:11px;
-  color:var(--muted);
-  padding:30px 0;
-}
-</style>
+    html[data-theme="light"]{
+      --bg-page:linear-gradient(135deg,#1d4ed8 0%,#7c3aed 45%,#22d3ee 100%);
+      --bg-surface:#f9fafb;
+      --text-main:#0b1220;
+      --muted:#64748b;
+      --card-shadow:0 6px 18px rgba(15,23,42,.25);
+      --card-shadow-hover:0 18px 40px rgba(15,23,42,.3);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg-page);
+      color:var(--text-main);
+      min-height:100vh;
+      line-height:1.6;
+    }
+
+    .container-fluid{
+      background:var(--bg-surface);
+      min-height:100vh;
+      margin:0;
+      padding:0;
+    }
+
+    /* NAV */
+    .nav-glass{
+      position:sticky; top:0; z-index:1100;
+      background:rgba(15,23,42,.82);
+      backdrop-filter:saturate(1.3) blur(14px);
+      border-bottom:1px solid rgba(148,163,184,.28);
+    }
+    html[data-theme="light"] .nav-glass{
+      background:rgba(255,255,255,.68);
+      border-color:#e2e8f0;
+    }
+
+    .navbar-brand{
+      font-family:Orbitron,system-ui;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      font-size:1.02rem;
+      background:var(--gradient);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      user-select:none;
+    }
+    .brand-sub{
+      font-size:.74rem;
+      color:var(--muted);
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-top:-4px;
+    }
+
+    .nav-link{
+      font-weight:700;
+      border-radius:999px;
+      padding:.42rem .86rem !important;
+      font-size:.92rem;
+      color:var(--muted) !important;
+    }
+    .nav-link:hover{
+      background:rgba(148,163,184,.14);
+      color:var(--text-main) !important;
+    }
+    .nav-link.active{
+      color:#0f172a !important;
+      background:var(--gradient);
+    }
+
+    .nav-icon-btn{
+      width:42px; height:42px;
+      display:inline-flex; align-items:center; justify-content:center;
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.6);
+      background:rgba(15,23,42,.85);
+      color:#e5e7eb;
+    }
+    html[data-theme="light"] .nav-icon-btn{
+      background:#ffffff;
+      color:#0f172a;
+      border-color:#e2e8f0;
+    }
+    .nav-cart-count{
+      position:absolute; top:-6px; right:-6px;
+      min-width:20px; height:20px;
+      border-radius:999px;
+      background:var(--success);
+      color:#0f172a;
+      font-size:.75rem;
+      font-weight:900;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .navbar-toggler{
+      border-radius:12px;
+      border:1px solid rgba(148,163,184,.55);
+      padding:.25rem .4rem;
+      background:rgba(15,23,42,.7);
+    }
+    html[data-theme="light"] .navbar-toggler{
+      background:rgba(255,255,255,.72);
+      border-color:#cbd5e1;
+    }
+    .navbar-toggler:focus{ box-shadow:none; }
+    .navbar-toggler-icon{
+      width:1.8rem;height:1.8rem;
+      background-repeat:no-repeat;background-position:center;background-size:100%;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath stroke='%23e5e7eb' stroke-width='2' stroke-linecap='round' d='M4 6h16M4 12h16M4 18h16'/%3E%3C/svg%3E");
+    }
+    html[data-theme="light"] .navbar-toggler-icon{
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath stroke='%23020617' stroke-width='2' stroke-linecap='round' d='M4 6h16M4 12h16M4 18h16'/%3E%3C/svg%3E");
+    }
+
+    /* HERO */
+    .hero{
+      padding:2.2rem 0 1.35rem;
+      background:
+        radial-gradient(circle at top left,rgba(56,189,248,.18),transparent 55%),
+        radial-gradient(circle at bottom right,rgba(244,63,94,.12),transparent 55%);
+      border-bottom:1px solid rgba(148,163,184,.22);
+    }
+    html[data-theme="light"] .hero{
+      border-color:#e2e8f0;
+      background:
+        radial-gradient(circle at top left,rgba(56,189,248,.16),transparent 55%),
+        radial-gradient(circle at bottom right,rgba(244,63,94,.14),transparent 55%);
+    }
+    .hero-badge{
+      display:inline-flex; align-items:center; gap:.45rem;
+      padding:.35rem .85rem;
+      border-radius:999px;
+      background:rgba(15,23,42,.72);
+      border:1px solid rgba(148,163,184,.55);
+      font-size:.82rem;
+      font-weight:700;
+      color:#bae6fd;
+    }
+    html[data-theme="light"] .hero-badge{
+      background:#eff6ff;
+      color:#1e293b;
+      border-color:#e2e8f0;
+    }
+    .hero-title{
+      font-family:Orbitron,system-ui;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin:.8rem 0 .35rem;
+      font-size:2rem;
+    }
+    @media(min-width:768px){ .hero-title{font-size:2.45rem;} }
+    .hero-sub{
+      max-width:42rem;
+      color:var(--muted);
+      font-size:.98rem;
+      margin-bottom:1.1rem;
+    }
+    .hero-actions{
+      display:flex; flex-wrap:wrap; gap:.7rem;
+      margin-top:.3rem;
+    }
+    .btn-grad{
+      border:none;
+      background:var(--gradient);
+      color:#0f172a;
+      font-weight:900;
+      border-radius:14px;
+      padding:.7rem 1rem;
+    }
+    .btn-outline-soft{
+      border-radius:14px;
+      padding:.7rem 1rem;
+      font-weight:900;
+      border:1px solid rgba(148,163,184,.55);
+      color:var(--text-main);
+      background:transparent;
+    }
+    html[data-theme="light"] .btn-outline-soft{
+      color:#0f172a;
+      border-color:#dbe3ef;
+      background:rgba(255,255,255,.35);
+    }
+
+    main{ scroll-margin-top:calc(var(--nav-h) + 16px); }
+
+    /* MODULES */
+    .section{
+      padding:1.65rem 0 1.35rem;
+      background:radial-gradient(circle at top,#111827 0%,#020617 58%);
+    }
+    html[data-theme="light"] .section{ background:#e5e7eb; }
+
+    .section-title{
+      text-align:center;
+      font-weight:900;
+      letter-spacing:.03em;
+      margin-bottom:.25rem;
+    }
+    .section-sub{
+      text-align:center;
+      color:var(--muted);
+      font-size:.95rem;
+      margin-bottom:1.15rem;
+    }
+
+    .product-card{
+      background:radial-gradient(circle at top,#111827 0%,#020617 55%);
+      border-radius:var(--radius);
+      box-shadow:var(--card-shadow);
+      transition:all .35s cubic-bezier(.25,.8,.25,1);
+      border:1px solid rgba(148,163,184,.26);
+      overflow:hidden;
+      height:100%;
+      position:relative;
+    }
+    html[data-theme="light"] .product-card{
+      background:#ffffff;
+      border-color:#e2e8f0;
+    }
+    .product-card:hover{
+      transform:translateY(-6px);
+      box-shadow:var(--card-shadow-hover);
+    }
+    .product-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:conic-gradient(from 180deg,#22d3ee33,#a855f733,#4c1d9533,#22c55e33,#22d3ee33);
+      opacity:0;
+      transition:opacity .35s;
+      pointer-events:none;
+    }
+    .product-card:hover::before{opacity:1;}
+    .product-card > *{position:relative; z-index:1;}
+
+    .product-icon{
+      width:64px;height:64px;
+      border-radius:18px;
+      display:flex;align-items:center;justify-content:center;
+      background:rgba(15,23,42,.9);
+      border:1px solid rgba(148,163,184,.45);
+      margin:0 auto .9rem;
+    }
+    html[data-theme="light"] .product-icon{
+      background:#ffffff;
+      border-color:#e2e8f0;
+    }
+    .product-card:hover .product-icon{
+      background:var(--gradient);
+      border-color:transparent;
+    }
+    .product-icon i{
+      font-size:1.55rem;
+      color:#e5e7eb;
+    }
+    .product-card:hover .product-icon i{ color:#0f172a; }
+
+    .product-title{
+      font-weight:900;
+      margin-bottom:.35rem;
+      text-align:center;
+      font-size:1.02rem;
+      min-height:2.6em;
+    }
+    .product-desc{
+      color:var(--muted);
+      font-size:.9rem;
+      text-align:center;
+      min-height:3.2em;
+    }
+
+    .product-actions{
+      display:flex;
+      gap:.55rem;
+      margin-top:1rem;
+    }
+    .btn-detail-wide{
+      width:100%;
+      height:44px;
+      border-radius:14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:.55rem;
+      font-weight:900;
+      border:1px solid rgba(148,163,184,.55);
+      background:rgba(15,23,42,.75);
+      color:var(--text-main);
+    }
+    html[data-theme="light"] .btn-detail-wide{
+      background:#f9fafb;
+      border-color:#e2e8f0;
+      color:#0f172a;
+    }
+    .btn-detail-wide:hover{ transform:translateY(-1px); }
+
+    .btn-add{
+      height:44px;
+      min-width:52px;
+      border-radius:14px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      border:1px solid rgba(168,85,247,.65);
+      background:rgba(88,28,135,.55);
+      color:#e9d5ff;
+    }
+    html[data-theme="light"] .btn-add{
+      background:#eef2ff;
+      border-color:#c7d2fe;
+      color:#3730a3;
+    }
+
+    /* MODAL / OFFCANVAS */
+    .modal-content{
+      border-radius:var(--radius);
+      border:none;
+      box-shadow:0 25px 50px -12px rgba(0,0,0,.85);
+      background:radial-gradient(circle at top,#020617 0%,#020617 60%,#020617 100%);
+      color:var(--text-main);
+    }
+    html[data-theme="light"] .modal-content{
+      background:#ffffff;
+      box-shadow:0 18px 40px rgba(15,23,42,.2);
+      color:#0b1220;
+    }
+    .modal-header{
+      background:var(--gradient);
+      color:#0f172a;
+      border-radius:var(--radius) var(--radius) 0 0;
+      padding:1.05rem;
+    }
+    .btn-close{filter:brightness(0) invert(1)}
+    html[data-theme="light"] .btn-close{filter:none}
+    .modal-body{padding:1rem;}
+    .modal-footer{
+      padding:1rem;
+      border-top:1px solid rgba(148,163,184,.28);
+    }
+
+    html[data-theme="dark"] .offcanvas,
+    html[data-theme="dark"] .dropdown-menu{
+      background:#020617;
+      color:#e5e7eb;
+      border-color:#1f2937;
+    }
+
+    .form-control,.form-select{
+      border-radius:14px;
+      border:1px solid rgba(148,163,184,.35);
+      background:rgba(15,23,42,.6);
+      color:var(--text-main);
+      padding:.7rem .85rem;
+    }
+    html[data-theme="light"] .form-control,
+    html[data-theme="light"] .form-select{
+      background:#ffffff;
+      color:#0f172a;
+      border-color:#e2e8f0;
+    }
+    .form-control:focus,.form-select:focus{
+      outline:2px solid var(--secondary);
+      outline-offset:2px;
+      box-shadow:none;
+    }
+
+    .mini-note{
+      font-size:.88rem;
+      color:var(--muted);
+    }
+
+    /* FLOATING BUTTONS */
+    .floating-cart{
+      position:fixed;
+      right:16px; bottom:16px;
+      z-index:1200;
+      background:var(--gradient);
+      border:none;
+      color:#0f172a;
+      border-radius:999px;
+      padding:.85rem 1.05rem;
+      box-shadow:0 18px 45px rgba(0,0,0,.78);
+      display:flex;
+      align-items:center;
+      gap:.6rem;
+      font-weight:900;
+    }
+    .floating-cart .count{
+      background:#0f172a;
+      color:#e5e7eb;
+      font-weight:900;
+      padding:.1rem .55rem;
+      border-radius:999px;
+      min-width:28px;
+      text-align:center;
+    }
+
+    .floating-dark{
+      position:fixed;
+      left:16px; bottom:16px;
+      z-index:1200;
+      border:1px solid rgba(148,163,184,.6);
+      background:rgba(15,23,42,.85);
+      border-radius:999px;
+      width:48px;height:48px;
+      display:flex;align-items:center;justify-content:center;
+      box-shadow:0 18px 45px rgba(0,0,0,.78);
+      color:#e5e7eb;
+    }
+    html[data-theme="light"] .floating-dark{
+      background:#ffffff;
+      border-color:#e2e8f0;
+      color:#0f172a;
+    }
+
+    /* FOOTER */
+    .footer-mini{
+      border-top:1px solid rgba(148,163,184,.25);
+      padding:1rem 0;
+      font-size:.85rem;
+      color:var(--muted);
+      text-align:center;
+    }
+    .footer-mini strong{
+      color:var(--text-main);
+    }
+    .heart{ color:#fb7185; }
+
+    /* Safe area for modals on mobile */
+    .modal{ z-index:1300; }
+    .offcanvas{ z-index:1300; }
+    @supports (padding: max(0px)) {
+      .modal{
+        padding-top:max(env(safe-area-inset-top,0px),calc(var(--nav-h) + 10px));
+        padding-left:max(8px,env(safe-area-inset-left,0px));
+        padding-right:max(8px,env(safe-area-inset-right,0px));
+        padding-bottom:max(8px,env(safe-area-inset-bottom,0px));
+      }
+    }
+  </style>
 </head>
 
 <body>
+  <div class="container-fluid">
+    <!-- NAV -->
+    <nav class="navbar navbar-expand-lg nav-glass" id="mainNavbar">
+      <div class="container py-1">
+        <div class="d-flex flex-column">
+          <a class="navbar-brand" href="#home">Retail-Cortex.io</a>
+          <div class="brand-sub">Service Modules</div>
+        </div>
 
-<!-- NAV -->
-<div class="nav">
-  <div class="container nav-inner">
-    <div class="brand">
-      <img src="retail-cortex-logo.png">
-      RETAIL-CORTEX.IO
-    </div>
-    <div class="nav-actions">
-      <div class="icon-btn">🌓</div>
-      <div class="icon-btn">🛒</div>
+        <div class="d-flex align-items-center d-lg-none ms-auto gap-2">
+          <button id="navDarkBtn" class="nav-icon-btn position-relative" title="Toggle Mode" type="button">
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="nav-icon-btn position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" title="Keranjang">
+            <i class="fa-solid fa-bag-shopping"></i>
+            <span id="navCartCount" class="nav-cart-count">0</span>
+          </button>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Menu">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+        </div>
+
+        <div class="collapse navbar-collapse" id="mainNav">
+          <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-1">
+            <li class="nav-item"><a class="nav-link active" data-scroll href="#modules">Modules</a></li>
+            <li class="nav-item"><a class="nav-link" data-scroll href="#cara-order">Cara Order</a></li>
+          </ul>
+
+          <div class="d-none d-lg-flex align-items-center gap-2 ms-lg-3">
+            <button id="navDarkBtnDesk" class="nav-icon-btn position-relative" title="Toggle Mode" type="button">
+              <i class="fa-solid fa-moon"></i>
+            </button>
+            <button class="nav-icon-btn position-relative" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart" title="Keranjang">
+              <i class="fa-solid fa-bag-shopping"></i>
+              <span id="navCartCountDesk" class="nav-cart-count">0</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="home">
+      <div class="container">
+        <div class="hero-badge">
+          <i class="fa-solid fa-shield-check"></i>
+          <span>Portal layanan pendampingan dan eksekusi retail.</span>
+        </div>
+
+        <h1 class="hero-title">Retail-Cortex</h1>
+        <p class="hero-sub">
+          Membantu toko bekerja lebih rapi, mencapai target secara terukur, dan mempersiapkan jenjang karier.
+          Semua pesanan tersusun otomatis melalui WhatsApp.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#modules" data-scroll class="btn btn-grad">
+            <i class="fa-solid fa-grid-2 me-2"></i> Lihat Modules
+          </a>
+          <button class="btn btn-outline-soft" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+            <i class="fa-solid fa-bag-shopping me-2"></i> Buka Keranjang
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODULES -->
+    <main id="modules" class="section">
+      <div class="container">
+        <h2 class="section-title">Cortex Service Modules</h2>
+        <p class="section-sub">Pilih modul, tambahkan ke keranjang, lalu checkout via WhatsApp.</p>
+
+        <div class="row g-3" id="moduleGrid"></div>
+
+        <div class="footer-mini mt-4">
+          <div>
+            Crafted <span class="heart">♥</span> <strong>D&amp;D</strong> • <strong>Retail-Cortex.io</strong>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- CARA ORDER (singkat) -->
+    <section class="section pt-0" id="cara-order">
+      <div class="container">
+        <h2 class="section-title">Cara Order</h2>
+        <p class="section-sub">Langkah ringkas untuk memesan modul.</p>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <div class="product-card p-3">
+              <div class="product-icon"><i class="fa-solid fa-hand-pointer"></i></div>
+              <div class="product-title">1) Pilih Modul</div>
+              <div class="product-desc">Klik Detail untuk melihat informasi dan opsi (jika ada).</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="product-card p-3">
+              <div class="product-icon"><i class="fa-solid fa-cart-plus"></i></div>
+              <div class="product-title">2) Tambah Keranjang</div>
+              <div class="product-desc">Tambahkan item yang diperlukan ke keranjang.</div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="product-card p-3">
+              <div class="product-icon"><i class="fa-brands fa-whatsapp"></i></div>
+              <div class="product-title">3) Checkout WhatsApp</div>
+              <div class="product-desc">Format pesan tersusun otomatis. Tinggal kirim.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-mini mt-4">
+          <div>
+            Crafted <span class="heart">♥</span> <strong>D&amp;D</strong> • <strong>Retail-Cortex.io</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- MODAL DETAIL -->
+  <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+      <div class="modal-content" id="detailModalContent">
+        <div class="modal-header">
+          <h5 class="modal-title" id="detailTitle">
+            <i class="fa-solid fa-circle-info me-2"></i> Detail Modul
+          </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
+        </div>
+        <div class="modal-body" id="detailBody"></div>
+        <div class="modal-footer">
+          <button class="btn btn-outline-primary" id="btnAddFromModal">
+            <i class="fa-solid fa-cart-plus me-2"></i><span>Keranjang</span>
+          </button>
+          <button class="btn btn-success" id="btnQuickWA">
+            <i class="fa-brands fa-whatsapp me-2"></i><span>Kirim WA (langsung)</span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-</div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="container">
-    <h1>Sistem Terstruktur<br>untuk Performa Retail</h1>
-    <p>
-      Retail-Cortex adalah sistem kerja dan pendampingan operasional retail
-      yang membantu toko bekerja lebih rapi, mencapai target secara terukur,
-      serta mempersiapkan jenjang karier melalui modul dan presentasi siap pakai.
-    </p>
-
-    <div class="hero-points">
-      <div>• Pendampingan target PPS dan Suegeerrr secara sistematis</div>
-      <div>• Modul kerja dan presentasi untuk evaluasi dan review karier</div>
-      <div>• Dibangun dari praktik lapangan operasional retail</div>
+  <!-- OFFCANVAS CART -->
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasCart" aria-labelledby="offcanvasCartLabel">
+    <div class="offcanvas-header">
+      <button class="btn btn-link text-decoration-none d-inline d-md-none me-2" data-bs-dismiss="offcanvas" aria-label="Kembali">
+        <i class="fa-solid fa-chevron-left"></i>
+      </button>
+      <h5 class="offcanvas-title" id="offcanvasCartLabel">
+        <i class="fa-solid fa-basket-shopping me-2"></i>Keranjang
+      </h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Tutup"></button>
     </div>
 
-    <div class="hero-cta">
-      <button class="btn btn-primary" onclick="scrollToModules()">Lihat Modul</button>
-      <button class="btn btn-ghost">Cara Kerja Sistem</button>
-    </div>
-  </div>
-</section>
-
-<!-- MODULES -->
-<section id="modules">
-  <div class="container">
-    <div class="section-title">
-      <h2>Cortex Service Modules</h2>
-      <p>Setiap modul memiliki alur pemesanan dan format WhatsApp otomatis.</p>
-    </div>
-
-    <div class="grid">
-
-      <div class="card">
-        <h3>NEW MEMBER FRESH</h3>
-        <p>Tambah member baru dengan proses sederhana, cepat, dan terkontrol.</p>
-        <div class="card-actions">
-          <button class="cart-btn">Tambah ke Keranjang</button>
+    <div class="offcanvas-body d-flex flex-column">
+      <div id="cartItems" class="mb-3">
+        <div class="text-center py-4 mini-note">
+          Keranjang kosong
         </div>
       </div>
 
-      <div class="card">
-        <h3>DESIGN AREA COVERAGE</h3>
-        <p>Update Area Coverage terbaru dengan detail mapping sesuai radius toko.</p>
-        <div class="card-actions">
-          <button class="cart-btn">Tambah ke Keranjang</button>
-          <span class="link-btn"
-            onclick="window.open('/samples/area-coverage-sample-landscape.pdf','_blank')">
-            Lihat Contoh
-          </span>
-        </div>
+      <div class="d-flex justify-content-between fw-bold fs-5 mt-auto">
+        <span>Total</span>
+        <span id="cartTotal">Rp0</span>
       </div>
 
-      <div class="card">
-        <h3>PANDUAN TOP 10 PPS</h3>
-        <p>Pendampingan dan coaching untuk meningkatkan performa PPS toko.</p>
-        <div class="card-actions">
-          <button class="cart-btn">Tambah ke Keranjang</button>
-        </div>
+      <div class="mt-3 d-grid gap-2">
+        <button class="btn btn-outline-danger" id="btnClearCart">
+          <i class="fa-solid fa-trash me-2"></i>Hapus Keranjang
+        </button>
+        <a href="#" target="_blank" id="btnCheckoutWA" class="btn btn-success">
+          <i class="fa-brands fa-whatsapp me-2"></i>Checkout via WhatsApp
+        </a>
       </div>
 
-      <div class="card">
-        <h3>PANDUAN TOP 10 SUEGEERRR</h3>
-        <p>Coaching terarah untuk membantu pencapaian target Suegeerrr.</p>
-        <div class="card-actions">
-          <button class="cart-btn">Tambah ke Keranjang</button>
-        </div>
+      <div class="mini-note mt-3">
+        Catatan: Informasi kontak tidak ditampilkan di halaman. Semua checkout diarahkan ke WhatsApp.
       </div>
-
-      <div class="card">
-        <h3>TUGAS PPT</h3>
-        <p>Presentasi rapi dan terstruktur untuk review karier dan laporan toko.</p>
-        <div class="card-actions">
-          <button class="cart-btn">Tambah ke Keranjang</button>
-        </div>
-      </div>
-
     </div>
   </div>
-</section>
 
-<footer>
-  Crafted ♥ D&D • Retail-Cortex.io
-</footer>
+  <!-- FLOATING -->
+  <button class="floating-cart" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasCart" aria-controls="offcanvasCart">
+    <i class="fa-solid fa-bag-shopping"></i> <span class="count" id="cartCount">0</span>
+  </button>
+  <button class="floating-dark" id="floatingDarkBtn" title="Toggle Mode">
+    <i class="fa-solid fa-moon"></i>
+  </button>
 
-<script>
-function scrollToModules(){
-  document.getElementById("modules")
-    .scrollIntoView({behavior:"smooth"});
-}
-</script>
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
+  <script>
+    // ===== CONFIG =====
+    const DEFAULT_WA = "6287809236556";
+    const CART_KEY = "rc_cart";
+    const THEME_KEY = "rc_theme";
+
+    // PDF sample paths (pastikan file ada di repo pada folder /samples/)
+    const PDF_LANDSCAPE = "./samples/area-coverage-sample-landscape.pdf";
+    const PDF_PORTRAIT  = "./samples/area-coverage-sample-portrait.pdf";
+
+    // ===== DATA MODULES =====
+    const modules = [
+      {
+        id: "member",
+        title: "New Member Fresh",
+        icon: "fa-user-plus",
+        desc: "Tambah member baru, tanpa harus pusing mencari member baru.",
+        type: "form_member"
+      },
+      {
+        id: "area",
+        title: "Design Area Coverage",
+        icon: "fa-map-location-dot",
+        desc: "Update Area Coverage terbaru, detail mapping sesuai radius toko.",
+        type: "form_area"
+      },
+      {
+        id: "ppt",
+        title: "Tugas PPT",
+        icon: "fa-file-powerpoint",
+        desc: "Pembuatan presentasi untuk review jenjang karier (IP COS, DP COS, Crew), LPJ NSB, LPJ PPS, dan kebutuhan laporan lainnya. Disusun rapi, jelas, dan siap digunakan.",
+        type: "simple"
+      },
+      {
+        id: "pps",
+        title: "Panduan Rahasia Top 10 PPS",
+        icon: "fa-chart-line",
+        desc: "Pendampingan dan coaching melalui Google Meet untuk membantu toko mencapai dan menjaga performa PPS.",
+        type: "simple"
+      },
+      {
+        id: "suegerr",
+        title: "Panduan Rahasia Top 10 Suegeerrr",
+        icon: "fa-bullseye",
+        desc: "Pendampingan terarah untuk membantu toko mencapai target Suegeerrr.",
+        type: "simple"
+      }
+    ];
+
+    // ===== HELPERS =====
+    const money = n => `Rp${(Number(n)||0).toLocaleString('id-ID')}`;
+    const getStorage = (k,f)=>{try{return JSON.parse(localStorage.getItem(k)) ?? f;}catch{return f;}};
+    const setStorage = (k,v)=>localStorage.setItem(k,JSON.stringify(v));
+
+    function setNavH(){
+      const nav = document.getElementById("mainNavbar");
+      const h = nav ? (nav.offsetHeight || 64) : 64;
+      document.documentElement.style.setProperty("--nav-h", h + "px");
+    }
+
+    // ===== THEME =====
+    function applyTheme(mode){
+      document.documentElement.setAttribute("data-theme", mode);
+      localStorage.setItem(THEME_KEY, mode);
+      const iconClass = (mode === "dark") ? "fa-sun" : "fa-moon";
+      const html = `<i class="fa-solid ${iconClass}"></i>`;
+      const f = document.getElementById("floatingDarkBtn");
+      const n1 = document.getElementById("navDarkBtn");
+      const n2 = document.getElementById("navDarkBtnDesk");
+      if (f) f.innerHTML = html;
+      if (n1) n1.innerHTML = html;
+      if (n2) n2.innerHTML = html;
+    }
+    function toggleTheme(){
+      const cur = document.documentElement.getAttribute("data-theme") || "dark";
+      applyTheme(cur === "dark" ? "light" : "dark");
+    }
+
+    // ===== CART =====
+    function getCart(){ return getStorage(CART_KEY, []); }
+    function setCart(c){ setStorage(CART_KEY, c); updateCartUI(); }
+    function clearCart(){ setCart([]); }
+    function addCartItem(item){
+      // item: {name, price, qty, metaTextForWA}
+      const cart = getCart();
+      cart.push({
+        name: item.name,
+        price: Number(item.price)||0,
+        qty: Number(item.qty)||1,
+        metaTextForWA: item.metaTextForWA || ""
+      });
+      setCart(cart);
+    }
+    function removeCartIndex(i){
+      const cart = getCart();
+      cart.splice(i,1);
+      setCart(cart);
+    }
+    function changeQty(i,delta){
+      const cart = getCart();
+      if(!cart[i]) return;
+      cart[i].qty = Math.max(1, (cart[i].qty||1) + delta);
+      setCart(cart);
+    }
+
+    function buildCheckoutText(cart){
+      let total = 0;
+      const lines = cart.map((it,idx)=>{
+        const sub = (it.price||0) * (it.qty||1);
+        total += sub;
+
+        // Meta text (formal) — only for Member & Area Coverage
+        const extra = (it.metaTextForWA || "").trim();
+        const extraBlock = extra ? `\n${extra}\n` : "";
+
+        return `• ${it.name}\n  Qty : ${it.qty}\n  Subtotal : ${money(sub)}${extraBlock}`;
+      }).join("\n");
+
+      const text =
+`Halo,
+Saya ingin melakukan checkout layanan berikut:
+
+${lines}
+
+Total : ${money(total)}
+
+Terima kasih.`;
+
+      return {text, total};
+    }
+
+    function updateCartUI(){
+      const cart = getCart();
+      const totalQty = cart.reduce((a,b)=>a+(b.qty||1),0);
+
+      const cartCount = document.getElementById("cartCount");
+      const navCount = document.getElementById("navCartCount");
+      const navCountDesk = document.getElementById("navCartCountDesk");
+      if(cartCount) cartCount.textContent = totalQty;
+      if(navCount) navCount.textContent = totalQty;
+      if(navCountDesk) navCountDesk.textContent = totalQty;
+
+      const wrap = document.getElementById("cartItems");
+      const totalEl = document.getElementById("cartTotal");
+      const checkoutBtn = document.getElementById("btnCheckoutWA");
+
+      if(!wrap || !totalEl || !checkoutBtn) return;
+
+      if(cart.length === 0){
+        wrap.innerHTML = `<div class="text-center py-4 mini-note">Keranjang kosong</div>`;
+        totalEl.textContent = money(0);
+        checkoutBtn.href = "#";
+        return;
+      }
+
+      let total = 0;
+      wrap.innerHTML = cart.map((it,idx)=>{
+        const sub = (it.price||0) * (it.qty||1);
+        total += sub;
+
+        return `
+          <div class="d-flex align-items-start justify-content-between border rounded-3 p-2 mb-2">
+            <div class="me-2">
+              <div class="fw-bold">${it.name}</div>
+              <div class="mini-note">${money(it.price)} × ${it.qty} = <strong>${money(sub)}</strong></div>
+              ${it.metaTextForWA ? `<div class="mini-note mt-1">${it.metaTextForWA.replace(/\n/g,"<br>")}</div>` : ``}
+            </div>
+            <div class="d-flex flex-column align-items-end gap-2">
+              <div class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-secondary" data-qtyminus="${idx}">-</button>
+                <button class="btn btn-sm btn-outline-secondary" data-qtyplus="${idx}">+</button>
+              </div>
+              <button class="btn btn-sm btn-outline-danger" data-remove="${idx}">
+                <i class="fa-solid fa-trash"></i>
+              </button>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      totalEl.textContent = money(total);
+
+      const {text} = buildCheckoutText(cart);
+      checkoutBtn.href = `https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`;
+    }
+
+    // ===== RENDER MODULES =====
+    function renderModules(){
+      const grid = document.getElementById("moduleGrid");
+      if(!grid) return;
+
+      grid.innerHTML = modules.map((m,idx)=>`
+        <div class="col-lg-4 col-md-6">
+          <div class="product-card p-3 h-100">
+            <div class="product-icon"><i class="fa-solid ${m.icon}"></i></div>
+            <div class="product-title">${m.title}</div>
+            <div class="product-desc">${m.desc}</div>
+
+            <div class="product-actions">
+              <button class="btn-detail-wide" data-detail="${m.id}">
+                <i class="fa-solid fa-circle-info"></i><span>Detail</span>
+              </button>
+              <button class="btn-add" title="Tambah ke keranjang" data-add="${m.id}">
+                <i class="fa-solid fa-cart-plus"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      `).join("");
+    }
+
+    // ===== DETAIL MODAL =====
+    const modalEl = document.getElementById("detailModal");
+    const bsModal = modalEl ? new bootstrap.Modal(modalEl) : null;
+
+    let currentModuleId = null;
+
+    function memberPricePer(qty){
+      const n = Number(qty)||0;
+      if(n >= 10) return 4500;
+      if(n > 0) return 5000;
+      return 0;
+    }
+
+    function buildMemberWA(qty){
+      const n = Number(qty)||0;
+      const p = memberPricePer(n);
+      const total = n * p;
+
+      return `Halo,
+Saya ingin memesan layanan New Member Fresh.
+
+Jumlah member : ${n || ""}
+Harga / member : ${p ? money(p) : ""}
+Total : ${total ? money(total) : ""}
+
+Kode toko :
+Pin / tgl lahir :
+Jumlah qty member : ${n || ""}`;
+    }
+
+    function buildAreaWA(form){
+      return `Halo,
+Saya ingin memesan layanan Design Area Coverage.
+
+Nama toko : ${form.namaToko || ""}
+Kode toko : ${form.kodeToko || ""}
+Berapa sub : ${form.sub || ""}
+Sharelok toko : ${form.sharelok || ""}
+Format : ${form.format || ""}`;
+    }
+
+    function openDetail(moduleId){
+      const mod = modules.find(x=>x.id===moduleId);
+      if(!mod || !bsModal) return;
+
+      currentModuleId = moduleId;
+
+      document.getElementById("detailTitle").innerHTML =
+        `<i class="fa-solid fa-circle-info me-2"></i> ${mod.title}`;
+
+      const body = document.getElementById("detailBody");
+      const addBtn = document.getElementById("btnAddFromModal");
+      const quickBtn = document.getElementById("btnQuickWA");
+
+      if(!body || !addBtn || !quickBtn) return;
+
+      // Default actions
+      addBtn.disabled = false;
+      quickBtn.disabled = false;
+
+      if(mod.type === "simple"){
+        body.innerHTML = `
+          <div class="mb-2"><strong>Ringkasan</strong></div>
+          <div class="mini-note">${mod.desc}</div>
+          <hr class="my-3">
+          <div class="mini-note">
+            Item ini dapat langsung ditambahkan ke keranjang, lalu checkout via WhatsApp.
+          </div>
+        `;
+
+        addBtn.onclick = ()=>{
+          addCartItem({
+            name: mod.title,
+            price: 0,
+            qty: 1,
+            metaTextForWA: ""
+          });
+          bsModal.hide();
+          new bootstrap.Offcanvas('#offcanvasCart').show();
+        };
+
+        quickBtn.onclick = ()=>{
+          const text =
+`Halo,
+Saya ingin memesan layanan ${mod.title}.
+
+Terima kasih.`;
+          window.open(`https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`, "_blank");
+        };
+      }
+
+      if(mod.type === "form_member"){
+        body.innerHTML = `
+          <div class="mb-2"><strong>Ringkasan</strong></div>
+          <div class="mini-note">${mod.desc}</div>
+
+          <hr class="my-3">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Jumlah member</label>
+              <input type="number" min="1" step="1" class="form-control" id="memberQty" placeholder="Contoh: 12">
+              <div class="mini-note mt-2">
+                Ketentuan harga:
+                <ul class="mb-0">
+                  <li>Di bawah 10 member: <strong>Rp5.000</strong> / member</li>
+                  <li>10 member atau lebih: <strong>Rp4.500</strong> / member</li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <div class="product-card p-3">
+                <div class="fw-bold mb-1">Ringkasan</div>
+                <div class="mini-note">Harga / member: <strong id="memberUnit">-</strong></div>
+                <div class="mini-note">Total: <strong id="memberTotal">-</strong></div>
+                <div class="mini-note mt-2">Format pesan akan ditambahkan otomatis saat checkout.</div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const qtyEl = () => document.getElementById("memberQty");
+        const unitEl = () => document.getElementById("memberUnit");
+        const totEl  = () => document.getElementById("memberTotal");
+
+        function recalc(){
+          const q = Number(qtyEl().value)||0;
+          const p = memberPricePer(q);
+          const t = q * p;
+          unitEl().textContent = p ? money(p) : "-";
+          totEl().textContent  = t ? money(t) : "-";
+        }
+
+        setTimeout(()=>{
+          qtyEl().addEventListener("input", recalc);
+          recalc();
+        },0);
+
+        addBtn.onclick = ()=>{
+          const q = Number(qtyEl().value)||0;
+          if(q <= 0){
+            qtyEl().focus();
+            return;
+          }
+          const p = memberPricePer(q);
+          const total = q * p;
+
+          addCartItem({
+            name: `New Member Fresh`,
+            price: total,
+            qty: 1,
+            metaTextForWA:
+`Jumlah member : ${q}
+Harga / member : ${money(p)}
+Kode toko :
+Pin / tgl lahir :
+Jumlah qty member : ${q}`
+          });
+
+          bsModal.hide();
+          new bootstrap.Offcanvas('#offcanvasCart').show();
+        };
+
+        quickBtn.onclick = ()=>{
+          const q = Number(qtyEl().value)||0;
+          const text = buildMemberWA(q);
+          window.open(`https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`, "_blank");
+        };
+      }
+
+      if(mod.type === "form_area"){
+        body.innerHTML = `
+          <div class="mb-2"><strong>Ringkasan</strong></div>
+          <div class="mini-note">${mod.desc}</div>
+
+          <hr class="my-3">
+
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold">Nama toko</label>
+              <input class="form-control" id="areaNamaToko" placeholder="Nama toko">
+
+              <label class="form-label fw-semibold mt-2">Kode toko</label>
+              <input class="form-control" id="areaKodeToko" placeholder="Kode toko">
+
+              <label class="form-label fw-semibold mt-2">Berapa sub</label>
+              <input class="form-control" id="areaSub" placeholder="Contoh: 3">
+
+              <label class="form-label fw-semibold mt-2">Sharelok toko</label>
+              <input class="form-control" id="areaSharelok" placeholder="Link sharelok / maps">
+
+              <label class="form-label fw-semibold mt-2">Format</label>
+              <select class="form-select" id="areaFormat">
+                <option value="">Pilih format</option>
+                <option value="Landscape">Landscape</option>
+                <option value="Portrait">Portrait</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <div class="product-card p-3">
+                <div class="fw-bold mb-2">Lihat Contoh PDF</div>
+                <div class="mini-note mb-2">File harus berada di repo pada folder <strong>/samples/</strong>.</div>
+
+                <div class="d-grid gap-2">
+                  <a class="btn btn-outline-primary" href="${PDF_LANDSCAPE}" target="_blank" rel="noopener">
+                    <i class="fa-regular fa-file-pdf me-2"></i> Contoh Landscape
+                  </a>
+                  <a class="btn btn-outline-primary" href="${PDF_PORTRAIT}" target="_blank" rel="noopener">
+                    <i class="fa-regular fa-file-pdf me-2"></i> Contoh Portrait
+                  </a>
+                </div>
+
+                <div class="mini-note mt-3">
+                  Jika tautan tidak terbuka: pastikan file ada di repo dan GitHub Pages sudah ter-deploy.
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+
+        const getForm = ()=>{
+          return {
+            namaToko: document.getElementById("areaNamaToko")?.value?.trim() || "",
+            kodeToko: document.getElementById("areaKodeToko")?.value?.trim() || "",
+            sub: document.getElementById("areaSub")?.value?.trim() || "",
+            sharelok: document.getElementById("areaSharelok")?.value?.trim() || "",
+            format: document.getElementById("areaFormat")?.value?.trim() || ""
+          };
+        };
+
+        function validateArea(form){
+          // Minimal wajib: nama toko + kode toko + format
+          return (form.namaToko && form.kodeToko && form.format);
+        }
+
+        addBtn.onclick = ()=>{
+          const f = getForm();
+          if(!validateArea(f)){
+            // fokus ke field pertama kosong yang penting
+            if(!f.namaToko) document.getElementById("areaNamaToko")?.focus();
+            else if(!f.kodeToko) document.getElementById("areaKodeToko")?.focus();
+            else document.getElementById("areaFormat")?.focus();
+            return;
+          }
+
+          addCartItem({
+            name: `Design Area Coverage`,
+            price: 0,
+            qty: 1,
+            metaTextForWA:
+`Nama toko : ${f.namaToko}
+Kode toko : ${f.kodeToko}
+Berapa sub : ${f.sub}
+Sharelok toko : ${f.sharelok}
+Format : ${f.format}`
+          });
+
+          bsModal.hide();
+          new bootstrap.Offcanvas('#offcanvasCart').show();
+        };
+
+        quickBtn.onclick = ()=>{
+          const f = getForm();
+          const text = buildAreaWA(f);
+          window.open(`https://wa.me/${encodeURIComponent(DEFAULT_WA)}?text=${encodeURIComponent(text)}`, "_blank");
+        };
+      }
+
+      bsModal.show();
+    }
+
+    // ===== EVENTS =====
+    document.addEventListener("click",(e)=>{
+      const a = e.target.closest("a[data-scroll][href^='#']");
+      if(a){
+        e.preventDefault();
+        const sel = a.getAttribute("href");
+        const el = document.querySelector(sel);
+        if(el) el.scrollIntoView({behavior:"smooth", block:"start"});
+        const coll = document.getElementById("mainNav");
+        if(coll && coll.classList.contains("show")) new bootstrap.Collapse(coll).hide();
+      }
+
+      const detail = e.target.closest("[data-detail]");
+      if(detail){
+        openDetail(detail.dataset.detail);
+        return;
+      }
+
+      const add = e.target.closest("[data-add]");
+      if(add){
+        const id = add.dataset.add;
+        const mod = modules.find(x=>x.id===id);
+        if(!mod) return;
+
+        // Form-based modules -> open detail (agar input keisi)
+        if(mod.type === "form_member" || mod.type === "form_area"){
+          openDetail(id);
+          return;
+        }
+
+        // Simple modules -> langsung masuk keranjang
+        addCartItem({name: mod.title, price:0, qty:1, metaTextForWA:""});
+        new bootstrap.Offcanvas('#offcanvasCart').show();
+        return;
+      }
+
+      const cartAction = e.target.closest("[data-remove],[data-qtyminus],[data-qtyplus]");
+      if(cartAction){
+        if(cartAction.dataset.remove !== undefined){
+          removeCartIndex(Number(cartAction.dataset.remove));
+        }else if(cartAction.dataset.qtyminus !== undefined){
+          changeQty(Number(cartAction.dataset.qtyminus), -1);
+        }else if(cartAction.dataset.qtyplus !== undefined){
+          changeQty(Number(cartAction.dataset.qtyplus), +1);
+        }
+      }
+    });
+
+    document.getElementById("btnClearCart")?.addEventListener("click", clearCart);
+
+    document.getElementById("floatingDarkBtn")?.addEventListener("click", toggleTheme);
+    document.getElementById("navDarkBtn")?.addEventListener("click", toggleTheme);
+    document.getElementById("navDarkBtnDesk")?.addEventListener("click", toggleTheme);
+
+    // ===== INIT =====
+    document.addEventListener("DOMContentLoaded", ()=>{
+      const saved = localStorage.getItem(THEME_KEY) || "dark";
+      applyTheme(saved);
+
+      renderModules();
+      updateCartUI();
+      setNavH();
+
+      window.addEventListener("resize", setNavH);
+      window.addEventListener("orientationchange", setNavH);
+      document.addEventListener("shown.bs.collapse", setNavH);
+      document.addEventListener("hidden.bs.collapse", setNavH);
+      document.addEventListener("shown.bs.modal", setNavH);
+    });
+  </script>
 </body>
 </html>
