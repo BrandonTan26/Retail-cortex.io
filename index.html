@@ -732,15 +732,7 @@
               <h4>Alur Order</h4>
               <p>Pilih modul → isi seperlunya → masuk keranjang → checkout → pembayaran (QRIS/TF) → upload bukti → WhatsApp.</p>
             </div>
-            <div class="miniCard">
-              <h4>Status</h4>
-              <p>Mode: <b id="modeLabel">DARK</b> • Sistem: <b>READY</b> • Checkout: <b>PAY + FORM + WA</b></p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
+            
     <!-- Modules -->
     <section class="section">
       <div class="container">
@@ -1939,37 +1931,35 @@ REVISI GRATIS: 1 x 24 JAM`;
       });
     }
 
-  async function postToSpreadsheet({ buyerName, paymentMethod, orderNo, ringkasan, proofFile }) {
-  const dataUrl = await fileToDataUrl(proofFile);
+    async function postToSpreadsheet({buyerName, paymentMethod, orderNo, ringkasan, proofFile}){
+      const dataUrl = await fileToDataUrl(proofFile);
+      const payload = {
+        nama: buyerName,
+        sheetName: "Sheet1",
+        metode: paymentMethod,
+        order: orderNo,
+        ringkasan: ringkasan,
+        fileName: proofFile.name,
+        fileType: proofFile.type || "application/octet-stream",
+        fileDataUrl: dataUrl
+      };
 
-  const payload = {
-    nama: (buyerName || "").trim(),
-    metode: paymentMethod,
-    order: orderNo,
-    ringkasan,
-    fileName: proofFile?.name || "bukti.png",
-    fileType: proofFile?.type || "image/png",
-    fileDataUrl: dataUrl
-  };
+      const res = await fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        // gunakan text/plain biar tidak kena preflight CORS
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify(payload)
+      });
 
-  const res = await fetch(APPS_SCRIPT_URL, {
-    method: "POST",
-    headers: { "Content-Type": "text/plain;charset=utf-8" },
-    body: JSON.stringify(payload)
-  });
-
-  const text = await res.text();
-
-  let json;
-  try { json = JSON.parse(text); }
-  catch { throw new Error(text); }
-
-  if (!res.ok || json.status !== "ok") {
-    throw new Error(json.message || "Gagal kirim ke Spreadsheet");
-  }
-
-  return json.buktiUrl || "";
-}
+      const text = await res.text();
+      let json = null;
+      try { json = JSON.parse(text); } catch(e) {}
+      if(!res.ok){
+        throw new Error("Gagal kirim ke Spreadsheet");
+      }
+      if(json && json.status === "error"){
+        throw new Error(json.message || "Gagal kirim");
+      }
       const pickedUrl = (json && (json.buktiUrl || json.url || json.fileUrl || json.fileURL || json.link)) ? (json.buktiUrl || json.url || json.fileUrl || json.fileURL || json.link) : "";
     if(pickedUrl) return pickedUrl;
 
@@ -2033,7 +2023,8 @@ REVISI GRATIS: 1 x 24 JAM`;
 
     // 4) Redirect ke WA di TAB YANG SAMA (anti pop-up blocker)
     const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
-window.location.href = waUrl;
+    setTimeout(() => {
+      window.location.href = waUrl;
     }, 150);
 
   } catch(err){
@@ -2057,3 +2048,4 @@ window.location.href = waUrl;
     renderCart();
   </script>
 </body>
+</html>
