@@ -1952,12 +1952,28 @@ REVISI GRATIS: 1 x 24 JAM`;
         fileDataUrl: dataUrl
       };
 
-      const res = await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        // gunakan text/plain biar tidak kena preflight CORS
-        headers: { "Content-Type": "text/plain;charset=utf-8" },
-        body: JSON.stringify(payload)
-      });
+ fetch(APPS_SCRIPT_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'text/plain;charset=utf-8'
+  },
+  body: JSON.stringify(payload)
+})
+.then(res => res.json())
+.then(json => {
+  if (json.status === 'ok') {
+    alert(
+      'TRANSAKSI BERHASIL\n\n' +
+      'Waktu : ' + json.timestamp + '\n' +
+      'Link Bukti:\n' + json.buktiUrl
+    );
+  } else {
+    alert('GAGAL: ' + json.message);
+  }
+})
+.catch(err => {
+  alert('ERROR KONEKSI: ' + err.message);
+});
 
       const text = await res.text();
       let json = null;
