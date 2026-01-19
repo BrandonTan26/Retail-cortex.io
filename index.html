@@ -1894,7 +1894,7 @@ REVISI GRATIS: 1 x 24 JAM`;
       openOverlay("pay");
     });
 
-    // Pilih bukti -> buka file picker
+    // Upload Bukti Tf -> buka file picker
     payUploadForm.addEventListener("click", () => {
       const cart = getCart();
       if(cart.length === 0){
@@ -1970,89 +1970,81 @@ REVISI GRATIS: 1 x 24 JAM`;
       return (json && json.buktiUrl) ? json.buktiUrl : "";
     }
 
-    // Konfirmasi payment -> kirim ke Spreadsheet+Drive, lalu WA
-    payConfirm.addEventListener("click", async () => {
-      if(payConfirm.classList.contains("disabledBtn")){
-        alert("Lengkapi dulu: metode, nama pemesan, dan upload bukti pembayaran.");
-        return;
-      }
+    // ===============================
+// KONFIRMASI PAYMENT -> KIRIM SPREADSHEET + LEMPAR KE WA (TANPA WA API)
+// ===============================
+const WA_NUMBER = "6287809236556"; // NO WA LU (WAJIB FORMAT 62... TANPA +)
 
-      const cart = getCart();
-      if(cart.length === 0){
-        alert("Keranjang masih kosong.");
-        return;
-      }
+payConfirm.addEventListener("click", async () => {
+  // validasi tombol masih disabled?
+  if (payConfirm.classList.contains("disabledBtn")) {
+    alert("Lengkapi dulu: metode, nama pemesan, dan upload bukti pembayaran.");
+    return;
+  }
 
-      const buyerName = (payBuyerName.value || "").trim();
-      const ringkasan = buildRingkasanOrderText(selectedPay);
+  const cart = getCart();
+  if (!cart || cart.length === 0) {
+    alert("Keranjang masih kosong.");
+    return;
+  }
 
-      // pastikan ada file
-      const proofFile = selectedProof;
-      if(!proofFile){
-        alert("Upload bukti pembayaran dulu.");
-        return;
-      }
+  const buyerName = (payBuyerName.value || "").trim();
+  const ringkasan = buildRingkasanOrderText(selectedPay);
 
-      // Tutup modal payment biar gak balik ke sini
-try { closePay(); } catch(e){}
+  // wajib ada file bukti
+  const proofFile = selectedProof;
+  if (!proofFile) {
+    alert("Upload bukti pembayaran dulu.");
+    return;
+  }
 
-// Redirect langsung ke WhatsApp (anti pop-up blocker)
-window.location.href = waUrl;
-return;
+  // UI lock
+  payConfirm.classList.add("disabledBtn");
+  const oldText = payConfirm.textContent;
+  payConfirm.textContent = "MENGIRIM...";
 
-      // UI lock
-      payConfirm.classList.add("disabledBtn");
-      const oldText = payConfirm.textContent;
-      payConfirm.textContent = "MENGIRIM...";
-
-      try {
-        const buktiUrl = await postToSpreadsheet({
-          buyerName: buyerName.toUpperCase(),
-          paymentMethod: selectedPay,
-          orderNo: currentOrderNo,
-          ringkasan,
-          proofFile
-        });
-
-        // bikin pesan WA (tambah link bukti jika ada)
-        let msg = buildWAMessageAfterConfirm({
-          orderNo: currentOrderNo,
-          buyerName,
-          paymentMethod: selectedPay
-        });
-        if(buktiUrl){
-          msg += "\n\nLINK BUKTI (DRIVE):\n" + buktiUrl;
-        }
-
-        const waUrl = `https://wa.me/${encodeURIComponent(WA_NUMBER)}?text=${encodeURIComponent(msg)}`;
-
-        // Arahkan tab yang sudah dibuka (atau fallback ke tab ini)
-        if(waWin && !waWin.closed){
-          waWin.location.href = waUrl;
-        } else {
-          window.location.href = waUrl;
-        }
-
-        // close payment
-        closeOverlay("pay");
-
-        // clear cart setelah sukses
-        setCart([]);
-
-        // reset
-        resetPayState();
-
-      } catch(err){
-        // kalau gagal, tutup tab kosong yang kebuka
-        if(typeof waWin !== 'undefined' && waWin && !waWin.closed){
-          try{ waWin.close(); }catch(e){}
-        }
-        alert("GAGAL: " + (err && err.message ? err.message : err));
-      } finally {
-        payConfirm.textContent = oldText;
-        refreshConfirmBtn();
-      }
+  try {
+    // 1) kirim ke Spreadsheet + Drive dulu
+    const buktiUrl = await postToSpreadsheet({
+      buyerName: buyerName.toUpperCase(),
+      paymentMethod: selectedPay,
+      orderNo: currentOrderNo,
+      ringkasan,
+      proofFile
     });
+
+    // 2) susun pesan WA
+    let msg = buildWAMessageAfterConfirm({
+      orderNo: currentOrderNo,
+      buyerName,
+      paymentMethod: selectedPay
+    });
+
+    if (buktiUrl) {
+      msg += "\n\nLINK BUKTI (DRIVE):\n" + buktiUrl;
+    }
+
+    // 3) bikin link WA LANGSUNG (tanpa api.whatsapp.com)
+    const waUrl = `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(msg)}`;
+
+    // 4) tutup modal payment biar gak balik lagi ke situ
+    try { closeOverlay("pay"); } catch(e) {}
+    try { setCart([]); } catch(e) {}
+    try { resetPayState(); } catch(e) {}
+
+    // 5) lempar ke WA (redirect langsung)
+    setTimeout(() => {
+      window.location.href = waUrl;
+    }, 150);
+
+  } catch (err) {
+    alert("GAGAL: " + ((err && err.message) ? err.message : err));
+  } finally {
+    payConfirm.textContent = oldText;
+    payConfirm.classList.remove("disabledBtn");
+    try { refreshConfirmBtn(); } catch(e) {}
+  }
+});
 
     // =========================
     // ====== MENU BTN =========
