@@ -1993,11 +1993,12 @@ REVISI GRATIS: 1 x 24 JAM`;
         return;
       }
 
-      // Buka tab WA lebih dulu biar tidak kena pop-up diblokir
-      const waWin = window.open("about:blank", "_blank");
-      if(waWin){
-        try{ waWin.document.write("<p style='font-family:system-ui;padding:16px'>Mengalihkan ke WhatsApp...</p>"); }catch(e){}
-      }
+      // Tutup modal payment biar gak balik ke sini
+try { closePay(); } catch(e){}
+
+// Redirect langsung ke WhatsApp (anti pop-up blocker)
+window.location.href = waUrl;
+return;
 
       // UI lock
       payConfirm.classList.add("disabledBtn");
