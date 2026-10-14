@@ -1569,8 +1569,8 @@
         <div class="field">
           <div class="label">Ringkasan (WA)</div>
           <textarea id="m_preview" readonly></textarea>
-          <p class="help">Catatan HARGA: Rp6.000/member (JIKA BELI DI BAWAH 10PCS). 
-            JIKA BELI 10PCS HARGA: Rp5.500/member. 
+          <p class="help">Catatan HARGA: Rp6.500/member (JIKA BELI DI BAWAH 10PCS). 
+            JIKA BELI 10PCS HARGA: Rp6.000/member. 
           UNTUK DAFTAR RESELLER / PARTAI BESAR CHAT WA</p>
         </div>
       </div>
@@ -2129,7 +2129,7 @@ welcomeOverlay.addEventListener("click", (e) => {
     const m_addCart = document.getElementById("m_addCart");
 
     function memberPricePer(qty){
-      return (qty >= 10) ? 5500 : 6000;
+      return (qty >= 10) ? 6000 : 6500;
     }
 
     function renderMemberPreview(){
